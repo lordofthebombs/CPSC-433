@@ -93,9 +93,8 @@ public class Parser {
                	 	} catch (Exception e) { throw new ParseError("Error reading name section of file"); }
                 }
                 else if(currentLine.equals("course slots:")){
-                	currentState = ReadState.Course_Slots;
+                    currentState = ReadState.Course_Slots;
                     output = processCourseSlots(output, timeConvert);
-                    return output;
                 }
                 else if(currentLine.equals("lab slots:")){
                     currentState = ReadState.Lab_Slots;
