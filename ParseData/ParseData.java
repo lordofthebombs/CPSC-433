@@ -1,8 +1,6 @@
 package ParseData;
 
-import Slot_Occupant.Course;
-import Slot_Occupant.Lab;
-import Slot_Occupant.*;
+import Slot_Occupant.Slot_Occupant;
 
 import java.util.Vector;
 
