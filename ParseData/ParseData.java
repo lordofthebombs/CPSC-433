@@ -2,6 +2,7 @@ package ParseData;
 
 import Slot_Occupant.Course;
 import Slot_Occupant.Lab;
+import Slot_Occupant.*;
 
 import java.util.Vector;
 
@@ -9,8 +10,8 @@ public class ParseData {
 
     //Reminder: I might need to write my own (pair) class for the dataClasses so I can override the Equals method.
 
-    public Vector<Course> Courses;
-    public Vector<Lab> Labs;
+    public Vector<Slot_Occupant> Courses;
+    public Vector<Slot_Occupant> Labs;
     public Vector<Slot> Course_Slots;
     public Vector<Slot> Lab_Slots;
 
