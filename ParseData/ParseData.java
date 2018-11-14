@@ -1,8 +1,8 @@
 package ParseData;
 
-import Slot_Occupant.*;
+        import Slot_Occupant.*;
 
-import java.util.Vector;
+        import java.util.Vector;
 
 public class ParseData {
 

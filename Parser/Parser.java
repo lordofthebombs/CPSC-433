@@ -4,6 +4,8 @@ import ParseData.ParseData;
 import ParseData.Slot;
 import Slot_Occupant.Slot_Occupant;
 import Slot_Occupant.*;
+import javafx.util.converter.IntegerStringConverter;
+
 import java.util.*;
 import java.io.*;
 
@@ -24,39 +26,19 @@ public class Parser {
 	
 	private static BufferedReader in;
 	private static int currentLineNum = 0;
-	
+	private static TimeConverter timeConvert;
 
     public static ParseData parse(String fileName) throws FileNotFoundException, ParseError{
 
         ReadState currentState = ReadState.Name;
         ParseData output = new ParseData();
         in = new BufferedReader(new FileReader(new File(fileName)));
-        
-        /*
-         * This will be mainly used for converting Time to floats cleanly
-         * Using MashMap:
-         * 		(e.g) timeConvert.get("8:00");   -> (float) 8.0
-         */
-        HashMap<String, Float> timeConvert = new HashMap<String, Float>();
-        timeConvert.put("8:00",  (float) 8.0);  timeConvert.put("8:30",  (float) 8.5);
-        timeConvert.put("9:00",  (float) 9.0);  timeConvert.put("9:30",  (float) 9.5);
-        timeConvert.put("10:00", (float) 10.0); timeConvert.put("10:30", (float) 10.5);
-        timeConvert.put("11:00", (float) 11.0); timeConvert.put("11:30", (float) 11.5);
-        timeConvert.put("12:00", (float) 12.0); timeConvert.put("12:30", (float) 12.5);
-        timeConvert.put("1:00",  (float) 13.0); timeConvert.put("1:30",  (float) 13.5);
-        timeConvert.put("2:00",  (float) 14.0); timeConvert.put("2:30",  (float) 14.5);
-        timeConvert.put("3:00",  (float) 15.0); timeConvert.put("3:30",  (float) 15.5);
-        timeConvert.put("4:00",  (float) 16.0); timeConvert.put("4:30",  (float) 16.5);
-        timeConvert.put("5:00",  (float) 17.0); timeConvert.put("5:30",  (float) 17.5);
-        timeConvert.put("6:00",  (float) 18.0); timeConvert.put("6:30",  (float) 18.5);
-        timeConvert.put("7:00",  (float) 19.0); timeConvert.put("7:30",  (float) 19.5);
-        //timeConvert.put("8:00",  (float) 20.0); timeConvert.put("8:30",  (float) 20.5);
-        //timeConvert.put("9:00",  (float) 21.0); timeConvert.put("9:30",  (float) 21.5);
-        //timeConvert.put("10:00", (float) 22.0); timeConvert.put("10:30", (float) 22.5);
+
+        //This changes strings to floats cleany by using timeConvert.convertTime(string time).
+        timeConvert = new TimeConverter();
         
         try {
-            String currentLine = in.readLine();
-            currentLineNum++;
+            String currentLine = readLine();
 
             /*
                 This main loop is going to dictate the flow of control, and determines
@@ -85,16 +67,15 @@ public class Parser {
 
                 if(currentLine.equals("name:")){
                 	try {
-                		currentLine = in.readLine();
-                        currentLineNum++;
-                        
+                		currentLine = readLine();
+
                         if (currentLine.equals("")) { throw new ParseError("No title in file"); }
                         
                	 	} catch (Exception e) { throw new ParseError("Error reading name section of file"); }
                 }
-                else if(currentLine.equals("course slots:")){
+                else if(currentLine.equals("course slots:")) {
                     currentState = ReadState.Course_Slots;
-                    output = processCourseSlots(output, timeConvert);
+                    output = processCourseSlots(output);
                 }
                 else if(currentLine.equals("lab slots:")){
                     currentState = ReadState.Lab_Slots;
@@ -135,8 +116,7 @@ public class Parser {
                     throw new ParseError("File is ill formatted, met unexpected String: '" + currentLine + "' at line: " + currentLineNum);
                 }
 
-                currentLine = in.readLine();
-                currentLineNum++;
+                currentLine = readLine();
             }
 
         }
@@ -170,11 +150,11 @@ public class Parser {
      * 		Format:		 "MO,  8:00,  3,   2"
      * 		Convert to:	 <Day, float, int, int>
      */
-    private static ParseData processCourseSlots(ParseData data, HashMap<String, Float> timeConvert) throws ParseError{
+    private static ParseData processCourseSlots(ParseData data) throws ParseError{
     	Vector<Slot> vectCourseSlots = new Vector<Slot>();
-    	try{ 
-    		String currentLine = in.readLine();
-	        currentLineNum++;
+
+    	try{
+    		String currentLine = readLine();
 	        
 	        while (!currentLine.equals("")) {
 	        	currentLine = currentLine.replaceAll(" ", "");			//Gets rid of Spaces
@@ -189,21 +169,20 @@ public class Parser {
 	        	} else if (courseSlots[0].equals("FR")) {
 	        		day = Slot.Day.Fri;
 	        	} else {
-	        		throw new ParseError("Error reading Course slots: Day");
+	        		throw new ParseError("Error reading Course slots: Day at line: " + currentLine);
 	        	}
 	        	
-	        	float time = timeConvert.get(courseSlots[1]);			//Converts time to float using HashMap
+	        	float time = timeConvert.convertTime(courseSlots[1]);			//Converts time to float using HashMap
 	        	int max = Integer.valueOf(courseSlots[2]);				//Converts String max to int max
 	        	int min = Integer.valueOf(courseSlots[3]);				//Converts String min to int min
 	        	
 	        	Slot slot = new Slot(day, time, max, min);				//Creates a slot using information
 	        	vectCourseSlots.addElement(slot);						//Places the current slot into a Vector
 	        	
-	        	currentLine = in.readLine();							
-	            currentLineNum++;
+	        	currentLine = readLine();
 	        }
     	} catch (IOException e){
-            System.out.println("Failed to read a new line(Course Slots)");
+            throw new ParseError("Failed to read a new line(Course Slots) at line: " + currentLineNum);
         }
         
         data.setCourse_Slots(vectCourseSlots); 					//Puts vector into ParseData
@@ -220,9 +199,45 @@ public class Parser {
     
     /*Courses
      * 		Format:		 "CPSC 433 LEC 01"
-     * 		Convert to:	 
+     * 		Convert to:	 <String, int, int>
      */
     private static ParseData processCourses(ParseData data) throws ParseError{
+
+        Vector<Slot_Occupant> coursesVect = new Vector<Slot_Occupant>();
+
+        try {
+            String entry = readLine();
+
+            while(entry != ""){
+
+                String tokens[] = entry.split(" ");
+
+                if(tokens.length == 4){
+
+                    if(!tokens[0].equals("SENG") || !tokens[0].equals("CPSC")){
+                        throw new ParseError("Invalid Course Identifier encountered at line: " + currentLineNum);
+                    }
+
+                    coursesVect.add(new Course(
+                            tokens[0],
+                            Integer.parseInt(tokens[1]),
+                            Integer.parseInt(tokens[3])
+                    ));
+                }
+                else
+                    throw new ParseError("Invalid Course description at line: " + currentLineNum);
+
+                entry = readLine();
+            }
+        }
+        catch (IOException e){
+            throw new ParseError("Failed to read a new line(Course) at line: " + currentLineNum);
+        }
+        catch (NumberFormatException e){
+            throw new ParseError("Non int encountered where int was expected on line: " + currentLineNum);
+        }
+
+        data.setCourses(coursesVect);
     	return data;
     }
     
@@ -303,5 +318,11 @@ public class Parser {
 
 
         return newLab;
+    }
+
+    //This makes it so currentLine num doesn't have to be managed.
+    private static String readLine() throws IOException{
+        currentLineNum++;
+        return in.readLine();
     }
 }
