@@ -29,11 +29,11 @@ public class ParseData {
         this.Partial_Assignments = new Partial_Assignments();
     }
 
-    public void setCourses(Vector<Course> courses) {
+    public void setCourses(Vector<Slot_Occupant> courses) {
         this.Courses = courses;
     }
 
-    public void setLabs(Vector<Lab> labs) {
+    public void setLabs(Vector<Slot_Occupant> labs) {
         this.Labs = labs;
     }
 
