@@ -30,4 +30,9 @@ public class Lab extends Slot_Occupant {
     public int hashCode() {
         return Objects.hash(id, courseNum, lectSection, labSect);
     }
+
+    @Override
+    public String toString(){
+        return this.id + courseNum + "LEC " + lectSection + " LAB " + labSect;
+    }
 }

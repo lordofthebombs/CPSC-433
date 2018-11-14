@@ -19,33 +19,52 @@ public class OrTree {
     private ParseData parseData;
 
 
-
+    /**
+     * Constructor for using within this class
+     * meant to use for creating a child node
+     * @param data
+     */
     public OrTree(Map<Slot_Occupant, Slot> data){
         this.data = data;
-
     }
+
+
+    /**
+     * Main Constructor for initializing the OrTree
+     * @param parseData
+     */
     public OrTree(ParseData parseData){
         this.parseData = parseData;
         initializePr();
     }
 
 
+    /**
+     * Method to add a child to a parent node
+     * @param data
+     */
     private void addChild(Map<Slot_Occupant, Slot> data){
         OrTree child = new OrTree(data);
         child.parent = this;
         this.children.add(child);
     }
 
+    /**
+     * This method will create the template for Candidate solution
+     * The size of the map will be equal to Courses + Labs
+     * The slot value for each course or lab will be null unless there is a partial assignment
+     */
     private void initializePr(){
         Vector<Slot_Occupant> all = parseData.Courses;
         all.addAll(parseData.Labs);
 
-        Map<Slot_Occupant, Slot> data = all.stream()
-                .collect(Collectors.toMap( item -> item , null));
+        Map<Slot_Occupant, Slot> data = new LinkedHashMap<>();
+        all.forEach((item) -> data.put(item, null));
 
-        Pair<Slot_Occupant, Slot>[] partialAssignmentsAll = this.parseData.Partial_Assignments.getAll();
 
-        for(Pair<Slot_Occupant, Slot> assignment : partialAssignmentsAll){
+        HashMap<Slot_Occupant, Slot> allPartialAssignments = this.parseData.Partial_Assignments.getAllPartialAssignments();
+
+        for(Map.Entry<Slot_Occupant, Slot> assignment : allPartialAssignments.entrySet()){
             data.computeIfPresent( assignment.getKey(), (k, v) -> assignment.getValue());
         }
 
@@ -73,6 +92,39 @@ public class OrTree {
         return null;
     }
 
+
+    /**
+     * prints the tree in breadth-first traversal
+     * added this for debugging
+     * @return
+     */
+    @Override
+    public String toString(){
+        Queue<OrTree> queue = new LinkedList<OrTree>();
+        queue.add(this);
+        StringBuilder stringBuilder = new StringBuilder();
+        while (!queue.isEmpty())
+        {
+
+            // poll() removes the present head.
+            OrTree tempNode = queue.poll();
+            stringBuilder.append(getStringFormData(tempNode.data) + " ");
+
+            /*Enqueue all children */
+            if (!tempNode.children.isEmpty()) {
+                queue.addAll(tempNode.children);
+            }
+        }
+
+        return stringBuilder.toString();
+    }
+
+    String getStringFormData(Map<Slot_Occupant, Slot> data){
+
+        StringBuilder sb = new StringBuilder();
+        data.entrySet().stream().forEach( entry -> sb.append(entry.getKey() + ": " + entry.getValue() + "\n"));
+        return sb.toString();
+    }
 
 
 }
