@@ -2,13 +2,7 @@ package ParseData;
 
 import java.sql.Time;
 
-enum Day{
-    Mon,
-    Tues,
-    Wed,
-    Thur,
-    Fri
-};
+
 
 public class Slot {
 
@@ -17,6 +11,13 @@ public class Slot {
     public int max;          //The max that this slot can hold for courses (remember slots are separated into two differed lists, one for courses, and one for labs)
     public int min;          //The min that this slot should hold. (Soft Constraint)
 
+    public enum Day{
+        Mon,
+        Tues,
+        Wed,
+        Thur,
+        Fri
+    };
 
     public Slot(Day day, float time, int max, int min){
         this.day = day;
