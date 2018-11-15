@@ -1,5 +1,8 @@
 import ParseData.*;
 import Slot_Occupant.*;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 
 public class Driver {
@@ -11,6 +14,7 @@ public class Driver {
         // the set based search and or tree.
 
 
+        /*  This block if for testing the orTree */
         ParseData parseData = new ParseData();
         Vector<Slot_Occupant> courses = new Vector<>();
         courses.add(new Course("CPSC", 433, 01 ));
@@ -29,8 +33,10 @@ public class Driver {
         parseData.setCourse_Slots(course_slot);
         parseData.setLab_Slots(lab_slot);
 
-        OrTree orTree = new OrTree(parseData);
+        parseData.Partial_Assignments.addEntry(courses.firstElement(), course_slot.firstElement());
 
+        OrTree orTree = new OrTree(parseData);
+        orTree.altern(labs.get(0));
         System.out.println(orTree.toString());
 
 

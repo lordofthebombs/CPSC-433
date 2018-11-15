@@ -25,4 +25,9 @@ public class Slot {
         this.max = max;
         this.min = min;
     }
+
+    @Override
+    public String toString(){
+        return this.day + ", " + this.time;
+    }
 }

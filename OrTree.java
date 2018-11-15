@@ -43,7 +43,7 @@ public class OrTree {
      * Method to add a child to a parent node
      * @param data
      */
-    private void addChild(Map<Slot_Occupant, Slot> data){
+    void addChild(Map<Slot_Occupant, Slot> data){
         OrTree child = new OrTree(data);
         child.parent = this;
         this.children.add(child);
@@ -65,14 +65,39 @@ public class OrTree {
         HashMap<Slot_Occupant, Slot> allPartialAssignments = this.parseData.Partial_Assignments.getAllPartialAssignments();
 
         for(Map.Entry<Slot_Occupant, Slot> assignment : allPartialAssignments.entrySet()){
-            data.computeIfPresent( assignment.getKey(), (k, v) -> assignment.getValue());
+            if(data.containsKey(assignment.getKey())){
+                data.put(assignment.getKey(), assignment.getValue());
+            }
         }
 
         this.data = data;
     }
 
-    private void altern(OrTree parent) {
+    /**
+     * Find all possible slots, s, applicable to the Slot Occupant in the parameter.
+     * Then, for each slot, create a child OrTree such that data.get(slotOccupant) = slot
+     * @param
+     */
+    public void altern(Slot_Occupant slotOccupant) {
+
+        boolean isSlotOccupantCourse = slotOccupant instanceof Course ;
+
+        Vector<Slot> slots = isSlotOccupantCourse ? parseData.Course_Slots : parseData.Lab_Slots;
+
+        // Create successor nodes:
+        for (Slot slot : slots){
+            Map<Slot_Occupant, Slot> new_candidate = new LinkedHashMap<>();
+            new_candidate.putAll(this.data);
+
+            new_candidate.put(slotOccupant, slot);
+
+            // add it to the current node's children
+            /* -------need to check constraints here before adding as a child  ----*/
+                this.addChild(new_candidate);
+        }
+
     }
+
 
     private boolean isPrSolved(OrTree leaf){
 
