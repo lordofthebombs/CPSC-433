@@ -13,7 +13,8 @@ import java.util.stream.Collectors;
  */
 public class OrTree {
 
-    private Map<Slot_Occupant, Slot> data;
+    //private Map<Slot_Occupant, Slot> data;
+	private Map<Slot, Vector<Slot_Occupant>> data;
     private OrTree parent;
     private List<OrTree> children = new ArrayList<>();
     private ParseData parseData;
@@ -24,7 +25,7 @@ public class OrTree {
      * meant to use for creating a child node
      * @param data
      */
-    public OrTree(Map<Slot_Occupant, Slot> data){
+    public OrTree(Map<Slot, Vector<Slot_Occupant>> data){
         this.data = data;
     }
 
@@ -43,10 +44,11 @@ public class OrTree {
      * Method to add a child to a parent node
      * @param data
      */
-    void addChild(Map<Slot_Occupant, Slot> data){
+    void addChild(Map<Slot, Vector<Slot_Occupant>> data){
         OrTree child = new OrTree(data);
         child.parent = this;
         this.children.add(child);
+        this.data = data;
     }
 
     /**
@@ -55,18 +57,22 @@ public class OrTree {
      * The slot value for each course or lab will be null unless there is a partial assignment
      */
     private void initializePr(){
-        Vector<Slot_Occupant> all = parseData.Courses;
-        all.addAll(parseData.Labs);
+        //Vector<Slot_Occupant> all = parseData.Courses;
+       // all.addAll(parseData.Labs);
+    	Vector<Slot> allSlots = parseData.Course_Slots;
+    	allSlots.addAll(parseData.Lab_Slots);
 
-        Map<Slot_Occupant, Slot> data = new LinkedHashMap<>();
-        all.forEach((item) -> data.put(item, null));
+        Map<Slot, Vector<Slot_Occupant>> data = new LinkedHashMap<>();
+        allSlots.forEach((item) -> data.put(item, new Vector<Slot_Occupant>()));
 
 
         HashMap<Slot_Occupant, Slot> allPartialAssignments = this.parseData.Partial_Assignments.getAllPartialAssignments();
 
         for(Map.Entry<Slot_Occupant, Slot> assignment : allPartialAssignments.entrySet()){
-            if(data.containsKey(assignment.getKey())){
-                data.put(assignment.getKey(), assignment.getValue());
+            if(data.containsKey(assignment.getValue())){
+            	Vector<Slot_Occupant> dataValue = data.get(assignment.getValue());	// adds the slot occupant to the corresponding vector
+            	dataValue.add(assignment.getKey());
+                data.put(assignment.getValue(), dataValue);
             }
         }
 
@@ -78,25 +84,39 @@ public class OrTree {
      * Then, for each slot, create a child OrTree such that data.get(slotOccupant) = slot
      * @param
      */
+    // shouldnt be altern, should be fLeaf
     public void altern(Slot_Occupant slotOccupant) {
 
         boolean isSlotOccupantCourse = slotOccupant instanceof Course ;
 
         Vector<Slot> slots = isSlotOccupantCourse ? parseData.Course_Slots : parseData.Lab_Slots;
+        
 
         // Create successor nodes:
         for (Slot slot : slots){
-            Map<Slot_Occupant, Slot> new_candidate = new LinkedHashMap<>();
-            new_candidate.putAll(this.data);
+            Map<Slot, Vector<Slot_Occupant>> new_candidate = new LinkedHashMap<>();
+           // new_candidate.putAll(this.data);
+            //Vector<Slot_Occupant> slotsVector = data.get(slot);
+            
+            
+            //new_candidate.put(slotOccupant, slot);
+            if (isSlotOccupantCourse) {
+                //checkHardConstraint(Map<Slot, Vector<Slot_Occupant>> data, Slot s, Course so, );
 
-            new_candidate.put(slotOccupant, slot);
+            } else {
+                //checkHardConstraint(Map<Slot, Vector<Slot_Occupant>> data, Slot s, Lab so, );
 
+            }
+        
             // add it to the current node's children
             /* -------need to check constraints here before adding as a child  ----*/
-                this.addChild(new_candidate);
         }
+        
+        // add new slot occupant to vector of a slot
 
     }
+    
+    
 
 
     private boolean isPrSolved(OrTree leaf){
@@ -144,7 +164,7 @@ public class OrTree {
         return stringBuilder.toString();
     }
 
-    String getStringFormData(Map<Slot_Occupant, Slot> data){
+    String getStringFormData(Map<Slot, Vector<Slot_Occupant>> data){
 
         StringBuilder sb = new StringBuilder();
         data.entrySet().stream().forEach( entry -> sb.append(entry.getKey() + ": " + entry.getValue() + "\n"));

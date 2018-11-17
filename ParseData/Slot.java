@@ -1,6 +1,9 @@
 package ParseData;
 
 import java.sql.Time;
+import java.util.Objects;
+
+import Slot_Occupant.Course;
 
 
 
@@ -18,7 +21,8 @@ public class Slot {
         Thur,
         Fri
     };
-
+    
+    
     public Slot(Day day, float time, int max, int min){
         this.day = day;
         this.time = time;
@@ -30,4 +34,22 @@ public class Slot {
     public String toString(){
         return this.day + ", " + this.time;
     }
+    
+    @Override
+    public boolean equals(Object o) {
+
+        if (o == this) return true;
+        if (!(o instanceof Slot)) {
+            return false;
+        }
+        Slot otherSlot = (Slot) o;
+        return  this.day == otherSlot.day &&
+                this.time == otherSlot.time;
+    }
+    
+    @Override
+    public int hashCode() {
+        return Objects.hash(day, time, max, min);
+    }
+    
 }
