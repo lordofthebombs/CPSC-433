@@ -2,8 +2,11 @@ package Parser;
 
 import java.security.Key;
 import java.util.HashMap;
+import java.util.regex.PatternSyntaxException;
 
 public class TimeConverter {
+
+    public static class TimeFormatException extends Exception{ } //Needed to simplicity.
 
     private HashMap<String, Float> timeConvert;
 
@@ -34,8 +37,14 @@ public class TimeConverter {
 
     }
 
-     public float convertTime(String Time){
-        return this.timeConvert.get(Time);
+     public float convertTime(String Time) throws TimeFormatException{
+
+        Float t = this.timeConvert.get(Time);
+
+        if(t == null){ //The case where the time is not valid or ill-formatted !!! THIS NEEDS TO BE HANDLED.
+            throw new TimeFormatException();
+        }
+        return t;
      }
 
 }

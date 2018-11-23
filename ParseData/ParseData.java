@@ -8,8 +8,10 @@ public class ParseData {
 
     //Reminder: I might need to write my own (pair) class for the dataClasses so I can override the Equals method.
 
+
     public Vector<Slot_Occupant> Courses;
     public Vector<Slot_Occupant> Labs;
+
     public Vector<Slot> Course_Slots;
     public Vector<Slot> Lab_Slots;
 
@@ -20,6 +22,12 @@ public class ParseData {
     public Partial_Assignments Partial_Assignments;
 
     public ParseData(){
+        this.Courses = new Vector<Slot_Occupant>();
+        this.Labs = new Vector<Slot_Occupant>();
+
+        this.Course_Slots = new Vector<Slot>();
+        this.Lab_Slots = new Vector<Slot>();
+
         this.Non_Compat = new Non_Compatable();
         this.Unwanted = new Unwanted();
         this.Preferences = new Preferences();
@@ -43,5 +51,11 @@ public class ParseData {
         this.Lab_Slots = Lab_Slots;
     }
 
+    public Vector<Slot> getSlots(){
+       Vector<Slot> Time_Slots = new Vector<Slot>();
+        Time_Slots.addAll(this.Course_Slots);
+        Time_Slots.addAll(this.Lab_Slots);
+        return Time_Slots;
+    }
 
 }

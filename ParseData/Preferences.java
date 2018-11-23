@@ -1,7 +1,6 @@
 package ParseData;
 
 import Slot_Occupant.Slot_Occupant;
-import javafx.util.Pair;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -25,8 +24,8 @@ public class Preferences {
             Map.Entry<Pair<Slot_Occupant, Slot>, Integer> temp = iter.next();
             Pair<Slot_Occupant, Slot> p = temp.getKey();
 
-            if(a.equals(p.getValue())){
-                return p.getKey();
+            if(a.equals(p.getRight())){
+                return p.getLeft();
             }
 
         }
@@ -44,8 +43,8 @@ public class Preferences {
             Map.Entry<Pair<Slot_Occupant, Slot>, Integer> temp = iter.next();
             Pair<Slot_Occupant, Slot> p = temp.getKey();
 
-            if(a.equals(p.getKey())){
-                return p.getValue();
+            if(a.equals(p.getLeft())){
+                return p.getRight();
             }
 
         }
@@ -69,7 +68,7 @@ public class Preferences {
     }
 
     public boolean addEntry(Slot_Occupant a, Slot b, int prefValue){
-        if(null != this.Preference_Entries.put(newPair(a,b), prefValue)){ //returns null only on new entries
+        if(null == this.Preference_Entries.put(newPair(a,b), prefValue)){ //returns null only on new entries
             return true;
         }
         return false;
@@ -84,7 +83,7 @@ public class Preferences {
     }
 
     private Pair<Slot_Occupant,Slot> newPair(Slot_Occupant a, Slot b){
-        return new Pair<Slot_Occupant, Slot>(a,b);
+        return new Pair<>(a,b);
     }
 
 }

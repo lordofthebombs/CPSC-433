@@ -1,7 +1,6 @@
 package ParseData;
 
 import Slot_Occupant.Slot_Occupant;
-import javafx.util.Pair;
 import java.util.HashSet;
 import java.util.Iterator;
 
@@ -26,8 +25,8 @@ public class Unwanted {
 
             Pair<Slot_Occupant, Slot> temp = iter.next();
 
-            if(a.equals(temp.getValue())){
-                UnwantedWith.add(temp.getKey());
+            if(a.equals(temp.getRight())){
+                UnwantedWith.add(temp.getLeft());
             }
         }
 
@@ -45,8 +44,8 @@ public class Unwanted {
 
             Pair<Slot_Occupant, Slot> temp = iter.next();
 
-            if(a.equals(temp.getKey())){
-                UnwantedWith.add(temp.getValue());
+            if(a.equals(temp.getLeft())){
+                UnwantedWith.add(temp.getRight());
             }
         }
 
