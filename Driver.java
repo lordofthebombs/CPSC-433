@@ -32,13 +32,11 @@ public class Driver {
         parseData.setLabs(labs);
         parseData.setCourse_Slots(course_slot);
         parseData.setLab_Slots(lab_slot);
-        parseData.resetCourseSlots();
         
-        /*
         Slot courseSlot = parseData.Course_Slots.firstElement();
         int labInd = parseData.Lab_Slots.indexOf(new Slot(courseSlot.day, 12, -1, -1));
         System.out.println(labInd);
-        */
+        
         /*
         parseData.Partial_Assignments.addEntry(courses.get(0), course_slot.firstElement());
 
