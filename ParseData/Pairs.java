@@ -1,7 +1,6 @@
 package ParseData;
 
 import Slot_Occupant.Slot_Occupant;
-import javafx.util.Pair;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -25,8 +24,8 @@ public class Pairs {
 
             Pair<Slot_Occupant, Slot_Occupant> temp = iter.next();
 
-            if(a.equals(temp.getKey())){
-                pairedWith.add(temp.getValue());
+            if(a.equals(temp.getLeft())){
+                pairedWith.add(temp.getRight());
             }
         }
 
@@ -46,7 +45,7 @@ public class Pairs {
     }
 
     private Pair<Slot_Occupant,Slot_Occupant> newPair(Slot_Occupant a, Slot_Occupant b){
-        return new Pair<Slot_Occupant, Slot_Occupant>(a,b);
+        return new Pair<>(a,b);
     }
 
 }

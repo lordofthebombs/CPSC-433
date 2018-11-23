@@ -4,9 +4,9 @@ import java.util.Objects;
 
 public class Lab extends Slot_Occupant {
 
-    public int labSect;     // The lab section i.e. 01, 02 etc.
+    public int labSect;     // The lab section i.e. 01, 02 etc. If none exist it is set to -1
 
-    //Constructors
+    //Constructor
     public Lab(String id, int courseNum, int lectSection, int labSect) {
         super(id, courseNum, lectSection);
         this.labSect = labSect;
@@ -34,5 +34,9 @@ public class Lab extends Slot_Occupant {
     @Override
     public String toString(){
         return this.id + courseNum + "LEC " + lectSection + " LAB " + labSect;
+    }
+    
+    public boolean hasLectSect(){
+        return lectSection == -1;
     }
 }

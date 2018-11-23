@@ -1,8 +1,6 @@
 package ParseData;
 
 import Slot_Occupant.Slot_Occupant;
-import javafx.util.Pair;
-
 
 import java.util.HashMap;
 
@@ -40,9 +38,14 @@ public class Partial_Assignments {
         return (this.Partial_Entries_SO_S.get(a) == b);
     }
 
-    public void addEntry(Slot_Occupant a, Slot b){
-        Partial_Entries_SO_S.put(a,b);
-        Partial_Entries_S_SO.put(b,a);
+    public boolean addEntry(Slot_Occupant a, Slot b){
+
+        boolean s = true;
+
+        if(null != Partial_Entries_SO_S.put(a,b)){s = false;}
+        if(null != Partial_Entries_S_SO.put(b,a)){s = false;}
+
+        return s;
     }
 
     public boolean removeEntry(Slot_Occupant a, Slot b){
