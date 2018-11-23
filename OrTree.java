@@ -95,7 +95,7 @@ public class OrTree {
         // Create successor nodes:
         for (Slot slot : slots){
             Map<Slot, Vector<Slot_Occupant>> new_candidate = new LinkedHashMap<>();
-           // new_candidate.putAll(this.data);
+            new_candidate.putAll(this.data);
             //Vector<Slot_Occupant> slotsVector = data.get(slot);
             
             

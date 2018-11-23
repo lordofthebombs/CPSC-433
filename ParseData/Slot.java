@@ -37,7 +37,7 @@ public class Slot {
     
     @Override
     public boolean equals(Object o) {
-
+    	
         if (o == this) return true;
         if (!(o instanceof Slot)) {
             return false;
