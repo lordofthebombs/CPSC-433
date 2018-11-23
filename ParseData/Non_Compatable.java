@@ -1,7 +1,6 @@
 package ParseData;
 
 import Slot_Occupant.Slot_Occupant;
-import javafx.util.Pair;
 import java.util.HashSet;
 import java.util.Iterator;
 
@@ -29,8 +28,8 @@ public class Non_Compatable {
 
             Pair<Slot_Occupant, Slot_Occupant> temp = iter.next();
 
-            if(a.equals(temp.getKey())){
-                NonCompatableWith.add(temp.getValue());
+            if(a.equals(temp.getLeft())){
+                NonCompatableWith.add(temp.getRight());
             }
         }
 
@@ -50,7 +49,7 @@ public class Non_Compatable {
     }
 
     private Pair<Slot_Occupant,Slot_Occupant> newPair(Slot_Occupant a, Slot_Occupant b){
-        return new Pair<Slot_Occupant, Slot_Occupant>(a,b);
+        return new Pair<>(a,b);
     }
 }
 
