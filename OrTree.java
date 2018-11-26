@@ -18,6 +18,17 @@ public class OrTree {
     private int index;
     private boolean isNotSolvable;
 
+
+    //Comparator anonymous class implementation to compare the val for ortree
+    public static Comparator<OrTree> valComparator = new Comparator<OrTree>(){
+
+        @Override
+        public int compare(OrTree t1, OrTree t2) {
+            return (int) (t2.getRandomVal() - t1.getRandomVal());
+        }
+    };
+
+
     /**
      * Constructor for using within this class
      * meant to use for creating a child node
@@ -31,6 +42,7 @@ public class OrTree {
 
     /**
      * Main Constructor for initializing the OrTree
+     * This should be called outside this class
      * @param parseData
      */
     public OrTree(ParseData parseData){
@@ -39,12 +51,8 @@ public class OrTree {
     }
 
 
-    public int getRandomVal(){
+    private  int getRandomVal(){
         return this.randomVal;
-    }
-
-    public void setRandomVal(int val){
-        this.randomVal = val;
     }
 
 
@@ -98,8 +106,6 @@ public class OrTree {
         for (int i = 0; i < slots.size(); i++){
             Map<Slot_Occupant, Slot> newCandidate = new LinkedHashMap<>();
             newCandidate.putAll(this.data);
-
-            slots.get(i).max--;
             newCandidate.put(slotOccupant, slots.get(i) );
 
             // add it to the current node's children
@@ -114,27 +120,30 @@ public class OrTree {
 
     private boolean isPrSolved( Map<Slot_Occupant, Slot> data){
 
+        //should call constraint check here
         return false;
     }
+
 
     /**
      * This is the search control to create a valid solution for a given OrTree with initial Pr
      * including partial assignment
-     * @return a valid Map<Slot_Occupant, Slot>
+     * @return a valid Map<Slot_Occupant, Slot> which is a complete assignments of courses and labs
      */
-    public  Map<Slot_Occupant, Slot> buildValidCandidateSol(){
+    public Map<Slot_Occupant, Slot> buildValidCandidateSol() {
 
         //using a stack to keep track of which nodes have been visited so far
-        Stack<OrTree>  depthTraversal = new Stack<>();
+        Stack<OrTree> depthTraversal = new Stack<>();
 
         OrTree currentTree = this;
         depthTraversal.push(this);
-        int i = 0 ;
+        int i = 0;
 
-        while(!depthTraversal.empty()) {
+        while (!depthTraversal.empty()) {
             i++;
             Slot_Occupant toExpandOn = null;
             Map<Slot_Occupant, Slot> currentPr = currentTree.data;
+
             // finding the first entry with null value for slot
             for (Map.Entry<Slot_Occupant, Slot> entry : currentPr.entrySet()) {
 
@@ -145,47 +154,59 @@ public class OrTree {
             }
 
             if (toExpandOn != null) {
-                OrTree nextChildToVisit = null;
                 //creating all the possible children
                 currentTree.createSuccessorNodes(toExpandOn);
-                if(currentTree.index < currentTree.children.size()) {
-                    nextChildToVisit = currentTree.children.get(currentTree.index);
-                }
-                currentTree.index++;
-                System.out.println("Next child chosen: " +  nextChildToVisit.toString());
-                currentTree = nextChildToVisit;
-                //putting in the stack to mark it as visited
-                depthTraversal.push(nextChildToVisit);
-
-            }else{   // there is nothing left to expand on, all the slot_occupant in the map has a slot assigned
-                // need to check if all constraints are met here
-                if(i % 2 == 0){
+            }else { // need to check if all constraints are met here since there is nothing to expand on anymore
+                if (i % 2 == 0) {
                     return currentPr;
-                }else{
-                    //getting the leaf out of the stack that was visited last
-                    //OrTree lastVisited = depthTraversal.pop();
-
-                    OrTree nextChildToVisit = getNextLeafToVisit(depthTraversal);
-
-                    if(nextChildToVisit == null) {
-                            continue;
-                    }else {
-                            System.out.println("Next child chosen: " + nextChildToVisit.toString());
-                            currentTree = nextChildToVisit;
-                            depthTraversal.push(nextChildToVisit);
-                        }
-                    }
-
                 }
+            }
+
+
+            //this block will choose the successor node with lowest val that was randomly assigned
+            OrTree nextChildToVisit = null;
+            if(currentTree.children.size() > 0 && currentTree.index < currentTree.children.size()) {
+                    nextChildToVisit = currentTree.children.get(currentTree.index);
+
+                    // so that the index points to the next lowest one in list
+                    currentTree.index++;
+                    System.out.println("Next child chosen: " + nextChildToVisit.toString());
+                    currentTree = nextChildToVisit;
+                    depthTraversal.push(nextChildToVisit);
+
+            } else {   // there is no  successor node for current tree, therefore will go up a level and choose another leaf
+
+
+                //need to get the leaf out of the stack that was visited last
+                // find the next leaf at the same depth first
+               nextChildToVisit = getNextLeafToVisit(depthTraversal);
+
+                if (nextChildToVisit == null) {
+                    continue;
+                } else {
+                    System.out.println("Next child chosen: " + nextChildToVisit.toString());
+                    currentTree = nextChildToVisit;
+                    depthTraversal.push(nextChildToVisit);
+                }
+
 
             }
 
+        }
 
 
         return null;
 
     }
 
+
+    /**
+     * Helper method to find the next leaf to visit
+     * First attempts to get the leaf on the same depth
+     * if not found, goes up one level and gets the next child in sorted array.
+     * @param leafStack
+     * @return
+     */
     private OrTree getNextLeafToVisit(Stack<OrTree> leafStack) {
         OrTree nextChildToVisit = null;
         while(nextChildToVisit == null && !leafStack.empty()) {
@@ -202,26 +223,17 @@ public class OrTree {
     }
 
 
-    //Comparator anonymous class implementation
-    public static Comparator<OrTree> valComparator = new Comparator<OrTree>(){
-
-        @Override
-        public int compare(OrTree t1, OrTree t2) {
-            return (int) (t1.getRandomVal() - t2.getRandomVal());
-        }
-    };
-
-    //utility method to add random data to Queue
-    private void addLeafToQueue(Queue<OrTree> leafPriorityQueue, OrTree leaf) {
-        Random rand = new Random();
-        leaf.setRandomVal(rand.nextInt(1000));
-        leafPriorityQueue.add(leaf);
-
-    }
 
 
+    //TO:DO
+    public  Map<Slot_Occupant, Slot> mutateParentSolution( Map<Slot_Occupant, Slot> parentData){
 
-    private Map<Slot_Occupant, Slot> mutateParentSolution( Map<Slot_Occupant, Slot> parentData){
+        //choose the slot_occupant to mutate on
+        Map<Slot_Occupant, Slot> blankData = this.data;
+        Slot_Occupant [] allCoursesAndLabs = blankData.keySet().stream().toArray(Slot_Occupant []::new);
+
+        int randomIndex = Driver.random.nextInt(allCoursesAndLabs.length);
+        Slot_Occupant randomSlotOccupantToMutateOn = allCoursesAndLabs[randomIndex];
 
         return null;
     }
