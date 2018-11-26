@@ -8,11 +8,14 @@ public class ParseData {
 
     //Reminder: I might need to write my own (pair) class for the dataClasses so I can override the Equals method.
 
-
+	
     public Vector<Slot_Occupant> Courses;
     public Vector<Slot_Occupant> Labs;
 
+    private Vector<Slot> Course_Slots_Orig;
     public Vector<Slot> Course_Slots;
+    
+    private Vector<Slot> Lab_Slots_Orig;
     public Vector<Slot> Lab_Slots;
 
     public Non_Compatable Non_Compat;
@@ -42,13 +45,17 @@ public class ParseData {
     public void setLabs(Vector<Slot_Occupant> labs) {
         this.Labs = labs;
     }
-
+    
+    // creates two copies of slots
     public void setCourse_Slots(Vector<Slot> Course_Slots){
-        this.Course_Slots = Course_Slots;
+    	this.Course_Slots_Orig = Course_Slots;
+        this.Course_Slots = cloneSlots(Course_Slots_Orig);
     }
-
+    
+    // creates two copies of slots
     public void setLab_Slots(Vector<Slot> Lab_Slots){
-        this.Lab_Slots = Lab_Slots;
+    	this.Lab_Slots_Orig = Lab_Slots;
+        this.Lab_Slots = cloneSlots(Lab_Slots_Orig);
     }
 
     public Vector<Slot> getSlots(){
@@ -56,6 +63,43 @@ public class ParseData {
         Time_Slots.addAll(this.Course_Slots);
         Time_Slots.addAll(this.Lab_Slots);
         return Time_Slots;
+    }
+    
+    // **ENSURE THAT THIS FUNCTION IS ONLY CALLED WHEN A NEW CANDIDATE SOLUTION IS CREATED**
+    // resets the value of the maximum courses for all slots in Lab_Slots and Course_Slots
+    // used because courseMax will be decremented whenever a new course is added to a slot
+    public void resetTimeSlots() {
+    	// j counter accounts for the copy of time slots having different amount of slots in it
+    	// since some slots will be removed due to the hard constraint
+    	int j = 0;
+    	for(int i = 0; i < Course_Slots_Orig.size(); i++) {
+    		if (Course_Slots.get(i).equals(Course_Slots_Orig.get(j))) {
+    			Slot currentSlot = Course_Slots.get(i);
+    			currentSlot.max = Course_Slots_Orig.get(i).max;
+    			j++;
+    		}
+    	}
+    	
+    	j = 0;
+    	for(int i = 0; i < Lab_Slots_Orig.size(); i++) {
+    		if (Lab_Slots.get(i).equals(Lab_Slots_Orig.get(j))) {
+    			Slot currentSlot = Lab_Slots.get(i);
+    			currentSlot.max = Lab_Slots_Orig.get(i).max;
+    		}
+    	}
+
+    }
+    
+    // helper function for duplicating the time slots for courses and labs
+    // relevant for checking hard constraints
+    private Vector<Slot> cloneSlots(Vector<Slot> vSlot) {
+    	Vector<Slot> copyVSlot = new Vector<Slot>();
+    	
+    	for(Slot currentSlot : vSlot) {
+    		copyVSlot.add(new Slot(currentSlot.day, currentSlot.time, currentSlot.max, currentSlot.min));
+    	}
+    	
+    	return copyVSlot;
     }
 
 }

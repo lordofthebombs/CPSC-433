@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public class OrTree {
 
     //private Map<Slot_Occupant, Slot> data;
-	private Map<Slot, Vector<Slot_Occupant>> data;
+	private Map<Slot_Occupant, Slot> data;
     private OrTree parent;
     private List<OrTree> children = new ArrayList<>();
     private ParseData parseData;
@@ -25,7 +25,7 @@ public class OrTree {
      * meant to use for creating a child node
      * @param data
      */
-    public OrTree(Map<Slot, Vector<Slot_Occupant>> data){
+    public OrTree(Map<Slot_Occupant, Slot> data){
         this.data = data;
     }
 
@@ -44,11 +44,10 @@ public class OrTree {
      * Method to add a child to a parent node
      * @param data
      */
-    void addChild(Map<Slot, Vector<Slot_Occupant>> data){
+    void addChild(Map<Slot_Occupant, Slot> data){
         OrTree child = new OrTree(data);
         child.parent = this;
         this.children.add(child);
-        this.data = data;
     }
 
     /**
@@ -62,17 +61,15 @@ public class OrTree {
     	Vector<Slot> allSlots = parseData.Course_Slots;
     	allSlots.addAll(parseData.Lab_Slots);
 
-        Map<Slot, Vector<Slot_Occupant>> data = new LinkedHashMap<>();
-        allSlots.forEach((item) -> data.put(item, new Vector<Slot_Occupant>()));
+    	Map<Slot_Occupant, Slot> data = new LinkedHashMap<>();
+        allSlots.forEach((item) -> data.put(null, item));
 
 
         HashMap<Slot_Occupant, Slot> allPartialAssignments = this.parseData.Partial_Assignments.getAllPartialAssignments();
 
         for(Map.Entry<Slot_Occupant, Slot> assignment : allPartialAssignments.entrySet()){
             if(data.containsKey(assignment.getValue())){
-            	Vector<Slot_Occupant> dataValue = data.get(assignment.getValue());	// adds the slot occupant to the corresponding vector
-            	dataValue.add(assignment.getKey());
-                data.put(assignment.getValue(), dataValue);
+                data.put(assignment.getKey(), assignment.getValue());
             }
         }
 
@@ -112,7 +109,6 @@ public class OrTree {
             /* -------need to check constraints here before adding as a child  ----*/
         }
         
-        // add new slot occupant to vector of a slot
 
     }
     
@@ -164,7 +160,7 @@ public class OrTree {
         return stringBuilder.toString();
     }
 
-    String getStringFormData(Map<Slot, Vector<Slot_Occupant>> data){
+    String getStringFormData(Map<Slot_Occupant, Slot> data){
 
         StringBuilder sb = new StringBuilder();
         data.entrySet().stream().forEach( entry -> sb.append(entry.getKey() + ": " + entry.getValue() + "\n"));

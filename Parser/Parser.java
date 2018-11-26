@@ -14,7 +14,7 @@ public class Parser {
 	
 	private static BufferedReader in;
 	private static int currentLineNum = 0;
-	
+	private static TimeConverter timeConvert;
 
     public static ParseData parse(String fileName) throws FileNotFoundException{
 
