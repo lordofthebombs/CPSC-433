@@ -50,6 +50,7 @@ public class TimeConverter {
         timeConvert.put("19:30", (float) 19.5);
         timeConvert.put("20:00", (float) 20.0);
         timeConvert.put("20:30", (float) 20.5);
+
     }
 
      public float convertTime(String Time, Slot.Day day, Class labOrTut) throws TimeFormatException{ //Needs the day to check if it is a valid time
