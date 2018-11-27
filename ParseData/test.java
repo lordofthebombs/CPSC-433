@@ -7,7 +7,7 @@ public class test {
     public static void main(String args[]){
 
         try {
-            ParseData d = Parser.Parser.parse("medfile.txt");
+            ParseData d = Parser.Parser.parse("largefile.txt");
 
 
 
