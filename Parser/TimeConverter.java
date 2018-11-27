@@ -23,16 +23,18 @@ public class TimeConverter {
         timeConvert.put("10:00", (float) 10.0); timeConvert.put("10:30", (float) 10.5);
         timeConvert.put("11:00", (float) 11.0); timeConvert.put("11:30", (float) 11.5);
         timeConvert.put("12:00", (float) 12.0); timeConvert.put("12:30", (float) 12.5);
-        timeConvert.put("1:00",  (float) 13.0); timeConvert.put("1:30",  (float) 13.5);
-        timeConvert.put("2:00",  (float) 14.0); timeConvert.put("2:30",  (float) 14.5);
-        timeConvert.put("3:00",  (float) 15.0); timeConvert.put("3:30",  (float) 15.5);
-        timeConvert.put("4:00",  (float) 16.0); timeConvert.put("4:30",  (float) 16.5);
-        timeConvert.put("5:00",  (float) 17.0); timeConvert.put("5:30",  (float) 17.5);
-        timeConvert.put("6:00",  (float) 18.0); timeConvert.put("6:30",  (float) 18.5);
-        timeConvert.put("7:00",  (float) 19.0); timeConvert.put("7:30",  (float) 19.5);
-        //timeConvert.put("8:00",  (float) 20.0); timeConvert.put("8:30",  (float) 20.5);
-        //timeConvert.put("9:00",  (float) 21.0); timeConvert.put("9:30",  (float) 21.5);
-        //timeConvert.put("10:00", (float) 22.0); timeConvert.put("10:30", (float) 22.5);
+        timeConvert.put("13:00",  (float) 13.0); timeConvert.put("13:30",  (float) 13.5);
+        timeConvert.put("14:00",  (float) 14.0); timeConvert.put("14:30",  (float) 14.5);
+        timeConvert.put("15:00",  (float) 15.0); timeConvert.put("15:30",  (float) 15.5);
+        timeConvert.put("16:00",  (float) 16.0); timeConvert.put("16:30",  (float) 16.5);
+        timeConvert.put("17:00",  (float) 17.0); timeConvert.put("17:30",  (float) 17.5);
+        timeConvert.put("18:00",  (float) 18.0); timeConvert.put("18:30",  (float) 18.5);
+        timeConvert.put("19:00",  (float) 19.0); timeConvert.put("19:30",  (float) 19.5);
+        timeConvert.put("20:00",  (float) 20.0); timeConvert.put("20:30",  (float) 20.5);
+        timeConvert.put("21:00",  (float) 21.0); timeConvert.put("21:30",  (float) 21.5);
+        timeConvert.put("22:00", (float) 22.0); timeConvert.put("22:30", (float) 22.5);
+        timeConvert.put("23:00", (float) 23.0); timeConvert.put("23:30", (float) 23.5);
+        timeConvert.put("24:00", (float) 24.0); timeConvert.put("24:30", (float) 24.5);
 
 
     }
