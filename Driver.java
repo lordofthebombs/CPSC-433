@@ -1,6 +1,7 @@
 import ParseData.*;
 import Slot_Occupant.*;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.Vector;
@@ -42,19 +43,38 @@ public class Driver {
 
         parseData.Partial_Assignments.addEntry(courses.firstElement(), course_slot.firstElement());
 
-        OrTree orTree = new OrTree(parseData);
+        OrTreeSearch orTree = new OrTreeSearch(parseData);
        // orTree.createSuccessorNodes(labs.get(0));
         Map<Slot_Occupant, Slot> slot_occupantSlotMap = orTree.buildValidCandidateSol();
-        if(slot_occupantSlotMap != null) {
-            for (Map.Entry<Slot_Occupant, Slot> entry : slot_occupantSlotMap.entrySet()) {
+//        if(slot_occupantSlotMap != null) {
+//            for (Map.Entry<Slot_Occupant, Slot> entry : slot_occupantSlotMap.entrySet()) {
+//                System.out.println(entry.getKey() + ": " + entry.getValue());
+//            }
+//        }else {
+//            System.out.println("Map was null");
+//        }
+
+
+        OrTreeSearch orTree2 = new OrTreeSearch(parseData);
+        System.out.println("Parent Data being passed: ");
+        Map<Slot_Occupant, Slot> parent = new LinkedHashMap<>();
+        parent.put(courses.get(0), course_slot.get(0));
+        parent.put(courses.get(1), course_slot.get(2));
+        parent.put(courses.get(2), course_slot.get(1));
+        parent.put(labs.get(0), lab_slot.get(0));
+
+        for (Map.Entry<Slot_Occupant, Slot> entry : parent.entrySet()) {
+                System.out.println(entry.getKey() + ": " + entry.getValue());
+            }
+            System.out.println();
+        Map<Slot_Occupant, Slot> slot_occupantSlotMap1 = orTree2.mutateParentSolution(parent);
+        if(slot_occupantSlotMap1 != null) {
+            for (Map.Entry<Slot_Occupant, Slot> entry : slot_occupantSlotMap1.entrySet()) {
                 System.out.println(entry.getKey() + ": " + entry.getValue());
             }
         }else {
             System.out.println("Map was null");
         }
-
-
-
 
 
     }
