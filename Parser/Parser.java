@@ -307,6 +307,9 @@ public class Parser {
                 t1 = getOccupant(data,occupants[0]);
                 t2 = getOccupant(data,occupants[1]);
 
+                if(t1.equals(t2)){
+                    throw new ParseError("A course/lab can't be not compatible with itself");
+                }
                 //Add the pairing
                 if(!NonCompat.addEntry(t1,t2)){
                     printWarning("Duplicate Non Compat statement");
@@ -353,7 +356,6 @@ public class Parser {
                 if(!Unwanted.addEntry(t1,s1)){
                     printWarning("Duplicate Unwanted statement");
                 }
-
             }
             else{
                 throw new ParseError("Invalid Unwanted Statement on line: " + currentLineNum);
@@ -427,6 +429,9 @@ public class Parser {
                 t1 = getOccupant(data,occupants[0].trim());
                 t2 = getOccupant(data,occupants[1].trim());
 
+                if(t1.equals(t2)){
+                    printWarning("A course can't be not compatible with itself");
+                }
                 if(!pairs.addEntry(t1,t2)){
                     printWarning("Duplicate pair statement");
                 }
@@ -534,9 +539,6 @@ public class Parser {
         String id = ""; //SENG,CPSC Etc.
 
         int labSect;
-        int courseNum = 0, lectSection = 0, lab = 0; //lab can not exist
-
-        Lab newLab = new Lab(id,courseNum,lectSection,lab);
 
         entry = entry.trim();
         String tokens[] = entry.split("\\s+"); //IMPORTANT ASSUMES THAT DATA IS SEPARATED BY SPACES
@@ -553,10 +555,7 @@ public class Parser {
                 throw new ParseError("Expected TUT or LAB on line " + currentLineNum + " instead of " + tokens[2]);
             }
 
-            newLab.id = tokens[0];
-            newLab.courseNum = parseInt(tokens[1]);
-            newLab.labSect = parseInt(tokens[3]);
-            newLab.lectSection = -1; //It has no specified lecture section.
+            return new Lab(tokens[0],parseInt(tokens[1]),-1,parseInt(tokens[3]));
         }
         else if(tokens.length == 6){
 
@@ -567,17 +566,11 @@ public class Parser {
                 throw new ParseError("Expected TUT or LAB on line " + currentLineNum + " instead of " + tokens[2]);
             }
 
-            newLab.id = tokens[0];
-            newLab.courseNum = parseInt(tokens[1]);
-            newLab.lectSection = parseInt(tokens[3]);
-            newLab.labSect = parseInt(tokens[5]);
-
+            return new Lab(tokens[0],parseInt(tokens[1]),parseInt(tokens[3]),parseInt(tokens[5]));
         }
         else{
             throw new ParseError("Invalid Course description at line: " + currentLineNum);
         }
-
-        return newLab;
     }
 
     /**
@@ -632,26 +625,22 @@ public class Parser {
         entry = entry.trim();
         String tokens[] = entry.split("\\s+"); //assumes spaces split course/lab descriptions.
 
-        Slot_Occupant newOccupant;
-
         if(tokens.length == 4){
 
             if(tokens[2].equals("LEC")){
-                newOccupant = makeCourseFromIdentifier(entry);
+                return makeCourseFromIdentifier(entry);
             }
             else{
-                newOccupant = makeLabFromIdentifier(entry);
+                return makeLabFromIdentifier(entry);
             }
         }
         else if(tokens.length == 6) //must be a lab
         {
-            newOccupant = makeLabFromIdentifier(entry);
+            return makeLabFromIdentifier(entry);
         }
         else{
             throw new ParseError("Encountered invalid slot occupant description on line: " + currentLineNum);
         }
-
-        return newOccupant;
     }
 
     /**

@@ -51,5 +51,12 @@ public class Non_Compatable {
     private Pair<Slot_Occupant,Slot_Occupant> newPair(Slot_Occupant a, Slot_Occupant b){
         return new Pair<>(a,b);
     }
+
+    public void print(){
+
+        for(int x = 0; x < this.Non_Compatable_Entries.toArray().length; x++) {
+            System.out.println(this.Non_Compatable_Entries.toArray()[x].toString());
+        }
+    }
 }
 
