@@ -11,12 +11,15 @@ import java.io.*;
 
 
 public class Parser {
-	
+
 	private static BufferedReader in;
 	private static int currentLineNum = 0;
 	private static TimeConverter timeConvert;
 
     public static ParseData parse(String fileName) throws FileNotFoundException{
+
+        boolean courseSlots,labSlots,courses,labs,notCompat,unwanted,preference,pair,partialAssignments;
+        courseSlots = labSlots = courses = labs = notCompat = unwanted = preference = pair = partialAssignments = false;
 
         ParseData output = new ParseData();
         in = new BufferedReader(new FileReader(new File(fileName)));
@@ -63,15 +66,15 @@ public class Parser {
                 else if(currentLine.equals("")){
                     //Skip Empty Lines
                 }
-                else if(currentLine.equals("course slots:")) { processCourseSlots(output); }
-                else if(currentLine.equals("lab slots:")){ processLabSlots(output); }
-                else if(currentLine.equals("courses:")){ processCourses(output); }
-                else if(currentLine.equals("labs:")){ processLabs(output); }
-                else if(currentLine.equals("not compatible:")){ processNotCompat(output); }
-                else if(currentLine.equals("unwanted:")){ output = processUwanted(output); }
-                else if(currentLine.equals("preferences:")){ processPreferences(output); }
-                else if(currentLine.equals("pair:")){ processPairs(output); }
-                else if(currentLine.equals("partial assignments:")){ processPartialAssignments(output); }
+                else if(currentLine.equals("course slots:")) { processCourseSlots(output); courseSlots = true; }
+                else if(currentLine.equals("lab slots:")){ processLabSlots(output); labSlots = true;}
+                else if(currentLine.equals("courses:")){ processCourses(output); courses = true;}
+                else if(currentLine.equals("labs:")){ processLabs(output); labs = true;}
+                else if(currentLine.equals("not compatible:")){ processNotCompat(output); notCompat = true;}
+                else if(currentLine.equals("unwanted:")){ output = processUwanted(output); unwanted = true;}
+                else if(currentLine.equals("preferences:")){ processPreferences(output); preference = true;}
+                else if(currentLine.equals("pair:")){ processPairs(output); pair = true;}
+                else if(currentLine.equals("partial assignments:")){ processPartialAssignments(output); partialAssignments = true;}
 
                 else{
                     throw new ParseError("File is ill formatted, met unexpected String: '" + currentLine + "' at line: " + currentLineNum);
@@ -80,6 +83,23 @@ public class Parser {
                 currentLine = readLine();
             }
 
+            if(!courseSlots || !labSlots || !courses || !labs || !notCompat || !unwanted || !preference || !pair || !partialAssignments){
+
+                //Case where one of the title areas is missing.
+                String missingTags = "";
+
+                if(!courseSlots){missingTags += " course slots ";}
+                if(!labSlots) {missingTags += " lab slots ";}
+                if(!courses){ missingTags += " courses ";}
+                if(!labs){missingTags += " labs ";}
+                if(!notCompat){missingTags += " not compatible ";}
+                if(!unwanted){missingTags += " unwanted ";}
+                if(!preference){missingTags += " preferences ";}
+                if(!pair){missingTags += " pair ";}
+                if(!partialAssignments){missingTags += " partial assignments ";}
+
+                throw new ParseError("Invalid file format, missing the following tags statements :" + missingTags );
+            }
         }
         catch (IOException e){
             System.out.println("Failed to read a new line at: " + currentLineNum);
@@ -134,7 +154,7 @@ public class Parser {
                     throw new ParseError("Invalid Day Provided for a Course slots at line: " + currentLineNum);
                 }
 	        	
-	        	float time = timeConvert.convertTime(courseSlots[1]);			//Converts time to float using HashMap
+	        	float time = timeConvert.convertTime(courseSlots[1],day,Course.class);			//Converts time to float using HashMap
 	        	int max = parseInt(courseSlots[2]);				                //Converts String max to int max
 	        	int min = parseInt(courseSlots[3]);				                //Converts String min to int min
 
@@ -144,7 +164,7 @@ public class Parser {
                     vectCourseSlots.addElement(slot);						    //Places the current slot into a Vector
                 }
 	        	else
-	        	    throw new ParseError("Duplicate Course Slot declared on line: " + currentLineNum);
+	        	    printWarning("Duplicate Course Slot statement");
 
                 entry = readLine();
 	        }
@@ -183,7 +203,7 @@ public class Parser {
                     throw new ParseError("Invalid Day Provided for a Course slots at line : " + currentLineNum);
                 }
 
-                float time = timeConvert.convertTime(courseSlots[1]);			//Converts time to float using HashMap
+                float time = timeConvert.convertTime(courseSlots[1],day,Lab.class);			//Converts time to float using HashMap
                 int max = parseInt(courseSlots[2]);				        //Converts String max to int max
                 int min = parseInt(courseSlots[3]);				        //Converts String min to int min
 
@@ -193,7 +213,7 @@ public class Parser {
                     vectLabSlots.addElement(slot);						//Places the current slot into a Vector
                 }
                 else
-                    throw new ParseError("Duplicate Lab Slot declared on line: " + currentLineNum);
+                    printWarning("Duplicate Lab Slot statement");
 
                 entry = readLine();
             }
@@ -224,7 +244,7 @@ public class Parser {
                 coursesVect.add(temp);
             }
             else
-                throw new ParseError("Duplicate Course stated on line: " + currentLineNum);
+                printWarning("Duplicate Course statement");
 
             entry = readLine();
         }
@@ -251,7 +271,7 @@ public class Parser {
                     Labs.add(temp);
     	    }
     	    else
-    	        throw new ParseError("Duplicate Lab stated on line: " + currentLineNum);
+    	        printWarning("Duplicate Lab statement");
 
     	    entry = readLine();
     	}
@@ -282,14 +302,14 @@ public class Parser {
 
             //Check to make sure the two arguments are of the same argument length
 
-            if(occupants[0].trim().split("\\s+").length == occupants[1].trim().split("\\s+").length && occupants.length == 2){
+            if(occupants.length == 2){
 
                 t1 = getOccupant(data,occupants[0]);
                 t2 = getOccupant(data,occupants[1]);
 
                 //Add the pairing
                 if(!NonCompat.addEntry(t1,t2)){
-                    throw new ParseError("Duplicate Non Compat statement on line: " + currentLineNum);
+                    printWarning("Duplicate Non Compat statement");
                 }
             }
             else{
@@ -327,11 +347,11 @@ public class Parser {
 
             if(splitValues.length == 3){
 
-                t1 = getOccupant(data,splitValues[0]);
-                s1 = getSlot(data,splitValues[1],splitValues[2],t1.getClass());
+                t1 = getOccupant(data,splitValues[0].trim());
+                s1 = getSlot(data,splitValues[1].trim(),splitValues[2].trim(),t1.getClass());
 
                 if(!Unwanted.addEntry(t1,s1)){
-                    throw new Error("Duplicate Unwanted statement found on line: " + currentLineNum);
+                    printWarning("Duplicate Unwanted statement");
                 }
 
             }
@@ -362,15 +382,15 @@ public class Parser {
             entry = entry.trim();
             String splitValues[] = entry.split(","); //Assumes that the non-compat has comma separated details
 
-            if(splitValues.length != 3){
+            if(splitValues.length == 4){
 
-                t1 = getOccupant(data,splitValues[2]);
-                s1 = getSlot(data,splitValues[0],splitValues[1],t1.getClass());
+                t1 = getOccupant(data,splitValues[2].trim());
+                s1 = getSlot(data,splitValues[0].trim(),splitValues[1].trim(),t1.getClass());
 
-                prefVal = parseInt(splitValues[3]);
+                prefVal = parseInt(splitValues[3].trim());
 
                 if(pref.isPreference(t1,s1) || !pref.addEntry(t1,s1,prefVal) ){
-                    throw new ParseError("Duplicate Preference statement found on line: " + currentLineNum);
+                    printWarning("Duplicate Preference statement");
                 }
             }
             else
@@ -402,13 +422,13 @@ public class Parser {
             int i = occupants[0].trim().split("\\s+").length;
             int j = occupants[1].trim().split("\\s+").length;
 
-            if(occupants[0].trim().split("\\s+").length == occupants[1].trim().split("\\s+").length && occupants.length == 2){
+            if(occupants.length == 2){
 
-                t1 = getOccupant(data,occupants[0]);
-                t2 = getOccupant(data,occupants[1]);
+                t1 = getOccupant(data,occupants[0].trim());
+                t2 = getOccupant(data,occupants[1].trim());
 
                 if(!pairs.addEntry(t1,t2)){
-                    throw new ParseError("Duplicate pair statement on line: " + currentLineNum);
+                    printWarning("Duplicate pair statement");
                 }
 
             }
@@ -443,16 +463,16 @@ public class Parser {
 
             if(splitValues.length == 3){
 
-                t1 = getOccupant(data,splitValues[0]);
-                s1 = getSlot(data,splitValues[1],splitValues[2],t1.getClass());
+                t1 = getOccupant(data,splitValues[0].trim());
+                s1 = getSlot(data,splitValues[1].trim(),splitValues[2].trim(),t1.getClass());
 
                 if(!partials.addEntry(t1,s1)){
-                    throw new Error("Duplicate partial assignment statement found on line: " + currentLineNum);
+                    printWarning("Duplicate partial assignment statement found");
                 }
 
             }
             else{
-                throw new ParseError("Invalid Unwanted Statement on line: " + currentLineNum);
+                throw new ParseError("Invalid partial assignment Statement on line: " + currentLineNum);
             }
 
             entry = readLine();
@@ -654,12 +674,15 @@ public class Parser {
 
         try {
             int i = -1;
-            Slot temp = new Slot(Slot.toDay(day.trim()), timeConvert.convertTime(time.trim()), 0, 0); //
+            Slot.Day d = Slot.toDay(day);
+            Slot temp;
 
             if(ctype == Course.class){
+                temp = new Slot(Slot.toDay(day.trim()), timeConvert.convertTime(time.trim(),d,Course.class), 0, 0); //
                 i = data.Course_Slots.indexOf(temp); //This has to be done, otherwise course min/max will be lost. The reason this works is because the equals method is overriden.
             }
             else{
+                temp = new Slot(Slot.toDay(day.trim()), timeConvert.convertTime(time.trim(),d,Lab.class), 0, 0); //
                 i = data.Lab_Slots.indexOf(temp);
             }
 
@@ -706,5 +729,9 @@ public class Parser {
     private static String readLine() throws IOException{
         currentLineNum++;
         return in.readLine();
+    }
+
+    private static void printWarning(String str){
+        System.out.println("Warning: " + str + " on line: " + currentLineNum);
     }
 }
