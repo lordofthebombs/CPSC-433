@@ -10,7 +10,10 @@ import java.util.*;
  */
 public class OrTreeSearch {
 
-    public class OrTree {
+    /**
+     * Inner class for the actual OrTree data Structure
+     */
+    class OrTree {
 
         private Map<Slot_Occupant, Slot> data;
         private OrTree parent;
@@ -22,7 +25,7 @@ public class OrTreeSearch {
             this.data = data;
         }
         //Comparator anonymous class implementation to compare the val for ortree
-        public Comparator<OrTree> valComparator = new Comparator<OrTree>() {
+        private Comparator<OrTree> valComparator = new Comparator<OrTree>() {
 
             @Override
             public int compare(OrTree t1, OrTree t2) {
@@ -93,9 +96,11 @@ public class OrTreeSearch {
 
 
 
+
     /**
      * Main Constructor for initializing the OrTreeSearch
-     * This should be called outside this class
+     * This should be called outside this class in order to call one of the
+     * search controls in the Set Based Search
      * @param parseData
      */
     public OrTreeSearch(ParseData parseData){
@@ -105,6 +110,7 @@ public class OrTreeSearch {
         this.initialPr = new LinkedHashMap<>();
         this.initialPr.putAll(initialMap);
     }
+
 
 
 
@@ -132,12 +138,14 @@ public class OrTreeSearch {
         return data;
     }
 
+
     /**
      * Find all possible slots, s, applicable to the Slot Occupant in the parameter.
-     * Then, for each slot, create a child OrTreeSearch such that data.get(slotOccupant) = slot
-     * @param
+     * Then, for each slot, create a child OrTree such that data.get(slotOccupant) = slot
+     * @param currentTree orTree to add the child nodes
+     * @param slotOccupant the slot_occupant to apply altern on
      */
-    public void createSuccessorNodes(Slot_Occupant slotOccupant) {
+    public void createSuccessorNodes(OrTree currentTree, Slot_Occupant slotOccupant) {
 
         boolean isSlotOccupantCourse = slotOccupant instanceof Course ;
 
@@ -146,24 +154,29 @@ public class OrTreeSearch {
         // Create successor nodes:
         for (int i = 0; i < slots.size(); i++){
             Map<Slot_Occupant, Slot> newCandidate = new LinkedHashMap<>();
-            newCandidate.putAll(this.orTree.data);
+            newCandidate.putAll(currentTree.data);
             newCandidate.put(slotOccupant, slots.get(i) );
 
             // add it to the current node's children
             /* -------need to check constraints here before adding as a child  ----*/
 
-                this.orTree.addChild(newCandidate, 0);
+            currentTree.addChild(newCandidate, 0);
         }
 
-        Collections.shuffle(this.orTree.children, Driver.random);
+        Collections.shuffle(currentTree.children, Driver.random);
 
     }
 
 
     /**
+     * This method will be used in the mutatant building search control
      * Find all possible slots, s, applicable to the Slot Occupant in the parameter.
-     * Then, for each slot, create a child OrTreeSearch such that data.get(slotOccupant) = slot
-     * @param
+     * Calculates the score for the new child nodes based on the similarly to parent solution
+     *
+     * @param parentTree to immitate
+     * @param slotOccupantToMutateOn the course/lab that needs to be different from the parent
+     * @param slotOccupantToAltern  the course/lab to create alternative solutions for
+     * @param currentTree current node to add successors to
      */
     public void createSuccessorsForMutation(Map<Slot_Occupant, Slot> parentTree,
                                             Slot_Occupant slotOccupantToMutateOn,
@@ -193,6 +206,16 @@ public class OrTreeSearch {
     }
 
 
+    /**
+     * This method gives score to the new child created
+     * If a course/lab does not have the  same slot as parent, then -1
+     * If the course/slot that is supposed to be mutated is same as parent -1
+     * If the course/slot that is supposed to be mutated is NOT same as parent +1;
+     * @param parentTree
+     * @param newChild
+     * @param slotOccupantToMutateOn
+     * @return
+     */
     private int getMutationScore(Map<Slot_Occupant, Slot> parentTree,
                                  Map<Slot_Occupant, Slot> newChild,
                                  Slot_Occupant slotOccupantToMutateOn){
@@ -243,7 +266,7 @@ public class OrTreeSearch {
         while (!depthTraversal.empty()) {
             i++;
             currentTree = depthTraversal.pop();
-            //System.out.println("Next child chosen: " + currentTree.toString());
+            System.out.println("Next child chosen: " + currentTree.toString());
             Slot_Occupant toExpandOn = null;
             Map<Slot_Occupant, Slot> currentPr = currentTree.data;
 
@@ -259,12 +282,12 @@ public class OrTreeSearch {
 
             if (toExpandOn != null) {
                 //creating all the possible children
-                this.createSuccessorNodes(toExpandOn);
+                this.createSuccessorNodes(currentTree, toExpandOn);
                 for(int j = 0 ; j < currentTree.children.size(); j++){
                     depthTraversal.push(currentTree.children.get(j));
                 }
             }else { // need to check if all constraints are met here since there is nothing to expand on anymore
-                if (false) {
+                if (i % 2 == 0) {
                     return currentPr;
                 }
             }

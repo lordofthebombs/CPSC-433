@@ -31,12 +31,9 @@ public class Lab extends Slot_Occupant {
         return Objects.hash(id, courseNum, lectSection, labSect);
     }
 
-    public boolean hasLectSect(){
-        return lectSection == -1;
-    }
 
     @Override
     public String toString(){
-        return this.id + courseNum + "LEC " + lectSection + " LAB " + labSect;
+        return this.id + " " +  courseNum + " " + "LEC " + lectSection + " LAB " + labSect;
     }
 }
