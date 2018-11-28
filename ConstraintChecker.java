@@ -48,15 +48,26 @@ import ParseData.*;
 */
 public class ConstraintChecker {
 	private int EVENING_SECTION = 9;
+	private float EVENING_TIME = 18.0f;
 	private ParseData parseData;
-	// contains labs for a course
-	private Map<Course, Vector<Lab>> correspondingLabs;
+	// contains all the corresponding labs of any course, if it exists
+	private Map<Slot_Occupant, Vector<Slot_Occupant>> correspondingLabs = new HashMap<>();
+	
 	// contains all courses corresponding to a lab without section #
-	private Map<Lab, Vector<Course>> correspondingCourses;
+	private Map<Slot_Occupant, Vector<Slot_Occupant>> correspondingCourses = new HashMap<>();
+	
+	private Vector<Slot_Occupant> allSlot_Occupants = new Vector<>();
+	private Vector<Slot_Occupant> courses500 = new Vector<>();
+	private Vector<Slot_Occupant> all313Courses = new Vector<>();
+	private Vector<Slot_Occupant> all413Courses = new Vector<>();
+
 
 	
     public ConstraintChecker(ParseData parseData){
     	this.parseData = parseData;
+    	
+    	this.allSlot_Occupants = parseData.Courses;
+    	allSlot_Occupants.addAll(parseData.Labs);
     	
     	// removes time slots at tuesdays 11.0f
     	// unsure about start time
@@ -70,36 +81,50 @@ public class ConstraintChecker {
         
         // pairs courses to its corresponding labs
         for (Slot_Occupant c : parseData.Courses) {
-        	Vector<Lab> correspondingL = new Vector<>();
+        	Vector<Slot_Occupant> correspondingL = new Vector<Slot_Occupant>();
+        	
+        	// add 500-level courses to a vector
+        	if (c.courseNum >= 500 && c.courseNum < 600) courses500.add(c);
+        	// add 313 course sections to a vector
+        	if (c.id.equals("CPSC") && c.courseNum == 313) all313Courses.add(c);
+        	// add 413 course sections to a vector
+        	if (c.id.equals("CPSC") && c.courseNum == 413) all413Courses.add(c);
+        	
         	// 813, 913 have no corresponding labs
         	// skip maybe
         	for (Slot_Occupant l : parseData.Labs) {
+        		
         		// adds to corresponding labs for each courses
         		if (c.id.equals(l.id) && c.courseNum == l.courseNum) {
-        			correspondingL.add((Lab)l);
+        			// no lab section or same lab section
+        			if (!((Lab)l).hasLectSect() || l.lectSection == c.lectSection) {
+        				correspondingL.add(l);
+        			}
         		}
  
         	}
         	
-        	this.correspondingLabs.put((Course)c, correspondingL);
+        	if (correspondingL != null) this.correspondingLabs.put(c, correspondingL);
+        	
         }
         
         // pairs labs that have no lecture sections to all its corresponding courses
         for (Slot_Occupant l : parseData.Labs) {
         	if (((Lab)l).hasLectSect()) continue;
         	
-        	Vector<Course> correspondingC = new Vector<>();
+        	Vector<Slot_Occupant> correspondingC = new Vector<>();
         	for (Slot_Occupant c : parseData.Courses) {
         		if (c.id.equals(l.id) && c.courseNum == l.courseNum) {
-        			correspondingC.add((Course)c);
+        			correspondingC.add(c);
         		}
         	}
         	
-        	this.correspondingCourses.put((Lab)l, correspondingC);
+        	this.correspondingCourses.put(l, correspondingC);
         }
         
     }
     
+    /*
     // pairs a slot occupant to a slot on the hashmap
     // decrements the amount max courses the slot can take
     // CAREFUL : doesnt care if max dips below 0 
@@ -107,6 +132,7 @@ public class ConstraintChecker {
     	data.put(sl, s);
     	s.max--;
     }
+    */
     
     // computes hard coded stuff such as:
     // adding part-assignments
@@ -125,7 +151,7 @@ public class ConstraintChecker {
 
         for(Map.Entry<Slot_Occupant, Slot> assignment : allPartialAssignments.entrySet()){
             if(data.containsKey(assignment.getKey())){
-            	pairSlotOccupantToSlot(data, assignment.getKey(), assignment.getValue());
+            	data.put(assignment.getKey(), assignment.getValue());
             }
         }
         
@@ -139,45 +165,165 @@ public class ConstraintChecker {
         // add 813 to lab slots
         Slot_Occupant specialC = parseData.Courses.get(parseData.Course_Slots.size()-2);
         Slot tue18 = parseData.Lab_Slots.get(parseData.Lab_Slots.indexOf(new Slot(Day.Tues, 18.0f, -1, -1)));	// lab slots only compare day and time
-        pairSlotOccupantToSlot(data, specialC, tue18);
+        data.put(specialC, tue18);
         
         // add 913 to lab slots
         specialC = parseData.Courses.get(parseData.Course_Slots.size() - 1);
-        pairSlotOccupantToSlot(data, specialC, tue18);
+        data.put(specialC, tue18);
         
         return data;
     }
     
+    /*
+    public boolean checkHardConstraints(Map<Slot_Occupant, Slot> data) {
+    	
+    }
+    */
     
-    public boolean checkHardConstraints(Map<Slot_Occupant, Slot> data, Slot s, Course so) {
+    // checks if all the slots can be paired to their corresponding courses
+    public boolean isSlotMaxValid(Map<Slot_Occupant, Slot> data) {
+    	boolean output = true;
     	
+    	Iterator<Slot_Occupant> soIter = allSlot_Occupants.iterator();
     	
+    	while (soIter.hasNext()) {
+    		Slot currentSlot = data.get(soIter.next());
+    		if (currentSlot == null) continue;
+    		
+    		if (currentSlot.max > 0) {
+    			currentSlot.max--;
+    		} else {
+    			output = false;
+    			break;
+    		}
+    	}
     	
-    	return true;
+    	// reset counter for time slots
+    	parseData.resetTimeSlots();
+    	
+    	return output;
     }
     
-    public boolean checkHardConstraints(Map<Slot_Occupant, Slot> data, Slot s, Lab so) {
-    	
-    	
-    	
-    	return true;
-    }
-   
-   // checks if the current slot still has room for a course/lab
-   private boolean isSlotFull(Slot s) {
-	   return s.max < 1;
-   }
    
    // checks if a course overlaps with its corresponding labs
-   private boolean isOverlap(Map<Slot_Occupant, Slot> data, Slot s, Course so) {
-	   Slot correspondingSlot = findLabSlot(s);
-	   // implies no corresponding lab slot
-	   if (correspondingSlot == null) return false;
-
+   // 
+   public boolean isOverlapValid(Map<Slot_Occupant, Slot> data) {
+	   Iterator<Slot_Occupant> slIterator = allSlot_Occupants.iterator();
+	   
+	   while (slIterator.hasNext()) {
+		   Slot_Occupant currentSO = slIterator.next();
+		   Slot currentSO_Slot = data.get(currentSO);
+		   
+		   if (currentSO_Slot == null) continue;
+		   
+		   if (isCourseObject(currentSO)) {
+			   // compare corresponding labs
+			   Vector<Slot_Occupant> matchingLabs = correspondingLabs.get(currentSO);
+			   Iterator<Slot_Occupant> matchingLabsIter = matchingLabs.iterator();
+			   
+			   while (matchingLabsIter.hasNext()) {
+				   Slot currentSlot = data.get(matchingLabsIter.next());
+				   if (currentSlot == null) continue;
+				   
+				   if (currentSO_Slot.equals(currentSlot)) return false;
+				   
+			   }
+			   
+		   }
+	   }
+	 
+	   return true;
    }
-    
-    
-    
+   
+   // checks if any of the assigned slot_occupants are incompatible with other assigned slot_occupants
+   public boolean isCompatibleValid(Map<Slot_Occupant, Slot> data) {
+	   Iterator<Slot_Occupant> soIter = allSlot_Occupants.iterator();
+	   
+	   while (soIter.hasNext()) {
+		   Slot_Occupant currentSO = soIter.next();
+		   Slot currentSO_Slot = data.get(currentSO);
+		   
+		   // ensures that current slot_occupant is assigned a slot
+		   if (currentSO_Slot != null) {
+			   HashSet<Slot_Occupant> non_compatibles = parseData.Non_Compat.isNonCompatableWith(currentSO);
+			   
+			   Iterator<Slot_Occupant> non_compat_iter = non_compatibles.iterator();
+			   while (non_compat_iter.hasNext()) {
+				   Slot_Occupant nonCompat_currentSO = non_compat_iter.next();
+				   Slot nonCompat_currentS = data.get(nonCompat_currentSO);
+				   
+				   if (nonCompat_currentS != null && nonCompat_currentS.equals(currentSO_Slot)) return false;
+					   
+			   }
+			   
+		   }
+	   }
+	   
+	   return true;
+	   
+   }
+   
+   // checks if any unwanted(a, s) is in the data
+   public boolean isUnwantedValid(Map<Slot_Occupant, Slot> data) {
+	   Iterator<Slot_Occupant> soIter = allSlot_Occupants.iterator();
+	   
+	   while (soIter.hasNext()) {
+		   Slot_Occupant currentSO = soIter.next();
+		   Slot currentSO_Slot = data.get(currentSO);
+		   
+		   if (currentSO_Slot != null) {
+			   HashSet<Slot_Occupant> unwanteds = parseData.Unwanted.isUnwantedWith(currentSO_Slot);
+			   
+			   // unsure if this works
+			   if (unwanteds.contains(currentSO)) return false;
+		   }
+	   }
+	   
+	   return true;
+   }
+   
+   // checks if all evening sections are scheduled into evening slots
+   public boolean isEveningSlotsValid(Map<Slot_Occupant, Slot> data) {
+	   Iterator<Slot_Occupant> soIter = allSlot_Occupants.iterator();
+	   
+	   while (soIter.hasNext()) {
+		   Slot_Occupant currentSO = soIter.next();
+		   Slot currentSO_Slot = data.get(currentSO);
+		   
+		   if (currentSO_Slot != null) {
+			   if (currentSO.lectSection == EVENING_SECTION && currentSO_Slot.time < EVENING_TIME) return false;
+		   }
+	   }
+	   
+	   return true;
+   }
+   
+   // checks that all 500 courses have different time slots
+   public boolean is500CoursesValid(Map<Slot_Occupant, Slot> data) {
+	   Iterator<Slot_Occupant> iter500 = courses500.iterator();
+	   HashSet<Slot> slSet = new HashSet<>();
+	   int assigned500Courses = 0;
+	   
+	   while (iter500.hasNext()) {
+		   Slot_Occupant currentSO = iter500.next();
+		   Slot currentSO_Slot = data.get(currentSO);
+		   
+		   if (currentSO_Slot != null) {
+			   slSet.add(currentSO_Slot);
+			   assigned500Courses++;
+		   }
+	   }
+	   
+	   return slSet.size() == assigned500Courses;
+   }
+   
+   /*
+   // cannot overlap with 313 labs and course
+   public boolean is813Valid(Map<Slot_Occupant, Slot> data) {
+	   Slot slot813 = data.get
+   }
+   */
+   
     /*
     // assumes that our time slot is the same as the time slot of cpsc 813
     // checks if the given lab is compatible with the time slot
@@ -197,52 +343,6 @@ public class ConstraintChecker {
     // checks if a time slot is the same time and day as cpsc 813
     private boolean is813Slot(Slot s) {
     	return (s.day == Slot.Day.Tues && s.time == 18.0f);
-    }
-    
-    
-    
-    // labmax and courseMax unecessary since slots are separated already
-    // assumes that slot and slot_occupant are from the same group (courses/labs)
-    private boolean isMax(Map<Slot, Vector<Slot_Occupant>> data, Slot s, Slot_Occupant so) {
-    	Vector<Slot_Occupant> slotsVector = data.get(s);
-    	return s.max > slotsVector.size();
-    }
-    
-    // checks if a course overlaps with its respective tutorials
-    private boolean isOverlap(Map<Slot, Vector<Slot_Occupant>> data, Slot s, Course so) {
-    	Slot correspondingSlot = findLabSlot(s);
-    	if (correspondingSlot == null) {				// means there's no corresponding lab slot
-    		return true;
-    	} else {
-    		Vector<Slot_Occupant> slotsVector = data.get(correspondingSlot);
-    		Iterator<Slot_Occupant> vecIterator = slotsVector.iterator();
-    		while(vecIterator.hasNext()) {
-    			Slot_Occupant currentSO = vecIterator.next();
-    			if (currentSO.id.equals(so.id) && currentSO.courseNum == so.courseNum) {
-    				return false;
-    			}
-    		}
-    		return true;
-    	}
-    }
-    
-    // checks if a lab overlaps with its respective courses
-    private boolean isOverlap(Map<Slot, Vector<Slot_Occupant>> data, Slot s, Lab so) {
-    	Slot correspondingSlot = findCourseSlot(s);
-    	if (correspondingSlot == null) {		// means there's no corresponding course slot
-    		return true;
-    	} else {
-    		Vector<Slot_Occupant> slotsVector = data.get(correspondingSlot);
-    		Iterator<Slot_Occupant> vecIterator = slotsVector.iterator();
-    		while(vecIterator.hasNext()) {
-    			Slot_Occupant currentSO = vecIterator.next();
-    			if (currentSO.id.equals(so.id) && currentSO.courseNum == so.courseNum) {
-    				return false;
-    			}
-    		}
-    		return true;
-    	}
-    	
     }
     
     // checks if the given slot_occupant is compatible with all the slot_occupants in the given time slot
@@ -285,7 +385,8 @@ public class ConstraintChecker {
     }
     
     */
-   
+   	
+   /*
     // helper function that finds the corresponding lab_slot given the course_slot
     // used for checking if labs and courses are in the same slots
     private Slot findLabSlot(Slot courseSlot) {
@@ -308,6 +409,11 @@ public class ConstraintChecker {
     	} else {
     		return courseSlots.get(courseInd);
     	}
+    }
+    */
+   
+    private boolean isCourseObject(Slot_Occupant so) {
+    	return (so instanceof Course);
     }
 	
     

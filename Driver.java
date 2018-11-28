@@ -18,6 +18,7 @@ public class Driver {
         ParseData parseData = new ParseData();
         Vector<Slot_Occupant> courses = new Vector<>();
         courses.add(new Course("CPSC", 433, 01 ));
+        courses.add(new Course("CPSC", 449, 01));
 
         Vector<Slot_Occupant> labs = new Vector<>();
         labs.add(new Lab("CPSC", 433, 00, 01));
@@ -27,15 +28,40 @@ public class Driver {
 
         Vector<Slot> course_slot = new Vector<>();
         course_slot.add(new Slot(Slot.Day.Mon, 12, 1, 1));
+        
 
         parseData.setCourses(courses);
         parseData.setLabs(labs);
         parseData.setCourse_Slots(course_slot);
         parseData.setLab_Slots(lab_slot);
         
-        Vector<Slot> timeSlots = parseData.getSlots();
-        timeSlots.get(0).max = 0;
-        System.out.println(timeSlots.get(0).max);
+       // parseData.Non_Compat.addEntry(courses.get(0), courses.get(1));
+        
+        
+        Map<Slot_Occupant, Slot> m = new HashMap<>();
+        m.put(courses.get(0), course_slot.get(0));
+        m.put(courses.get(1), course_slot.get(0));
+        
+        m.put(labs.get(0), lab_slot.get(0));
+
+        
+        ConstraintChecker cc = new ConstraintChecker(parseData);
+        System.out.println("slotMax should be false");
+        System.out.println(cc.isSlotMaxValid(m));
+         
+        System.out.println("overlap should be false");
+        System.out.println(cc.isOverlapValid(m));
+        
+        System.out.println("non-compat should be false");
+        System.out.println(cc.isCompatibleValid(m));
+        
+        
+        
+        
+        
+        //Vector<Slot> timeSlots = parseData.getSlots();
+        //timeSlots.get(0).max = 0;
+        //System.out.println(timeSlots.get(0).max);
         //System.out.println(parseData.Course_Slots_Orig.get(0).max);
        // System.out.println(labInd);
         
