@@ -8,10 +8,7 @@ public class Lab extends Slot_Occupant {
 
     //Constructor
     public Lab(String id, int courseNum, int lectSection, int labSect) {
-        super(id,courseNum,lectSection);
-        this.id = id;
-        this.courseNum = courseNum;
-        this.lectSection = lectSection;
+        super(id, courseNum, lectSection);
         this.labSect = labSect;
     }
 

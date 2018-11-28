@@ -58,4 +58,9 @@ public class Slot {
              throw new DayConvertError();
          }
      }
+
+    @Override
+    public String toString(){
+        return this.day + ", " + this.time;
+    }
 }
