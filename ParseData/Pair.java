@@ -1,5 +1,7 @@
 package ParseData;
 
+import java.util.Objects;
+
 public class Pair<L,R>{
 
     private final L left;
@@ -14,7 +16,7 @@ public class Pair<L,R>{
     public R getRight(){return this.right;}
 
     @Override
-    public int hashCode() { return left.hashCode() ^ right.hashCode();}
+    public int hashCode() {return left.hashCode() ^ right.hashCode();}
 
 
     //This is done because I want thew pairs (a,b) and (b,a) to be equal.
@@ -27,5 +29,10 @@ public class Pair<L,R>{
                 (this.left.equals(otherPair.getRight()) &&
                         this.right.equals(otherPair.getLeft()));
 
+    }
+
+    @Override
+    public String toString(){
+        return left.toString() + " / " + right.toString();
     }
 }
