@@ -71,6 +71,9 @@ public class SetSearch{
     return new Integer(0);
   }
 
+  //adds solution to set if it is not contained already
+  //returns true if succesfull
+  //MAY WANT TO MAKE THIS SORTED OR SOMETHING TO MAKE TRIM EASIER
   private boolean addToSet(Map<Slot_Occupant, Slot> solution){
     Integer score = eval(solution);
     Pair<Map<Slot_Occupant, Slot>, Integer> fin = new Pair(solution, score);
@@ -83,7 +86,7 @@ public class SetSearch{
   //mutates upon a random fact
   private void mutate(){
     int repeats = 0;
-    Map<Slot_Occupant, Slot> parent = workingSet.get(randGen.nextInt(workingSet.size()));
+    Map<Slot_Occupant, Slot> parent = workingSet.get(randGen.nextInt(workingSet.size())).getKey();
 
     for(int i = 0; i < MAX_CHILDREN_PER_PARENT && repeats < MAX_REPEATS && workingSet.size() < MAX_FACTS; i++){
       Map<Slot_Occupant, Slot> child = solGen.mutateParentSolution(parent);
