@@ -1,34 +1,44 @@
+import java.util.ArrayList;
 import java.util.List;
 import javafx.util.Pair;
 import java.util.Map;
+import java.util.Random;
 import Slot_Occupant.*;
 import ParseData.*;
 
 public class SetSearch{
 
-  private static final INIT_POPULATION = 100;
-  private static final MAX_FACTS = 1000;
+  private static final int INIT_POPULATION = 100;
+  private static final int MAX_FACTS = 1000;
+  private static final int MAX_REPEATS = 3;
+  private static final int MAX_CHILDREN_PER_PARENT = 10;
 
   //possibly use a heap?
   private List<Pair<Map<Slot_Occupant, Slot>, Integer>> workingSet;
   // Map<Slot_Occupant, Slot> is waht the or tree outputs
   // Integer is what the eval function gives
-  private ParseData data
+  private ParseData data;
+  private OrTree solGen;
+  private Random randGen;
   private int generation;
 
 
   public SetSearch(ParseData data){
     this.data = data;
-    OrTree init = new OrTree(data);
-    for(int i = 0; i < INIT_POPULATION; i++){
-      Map<Slot_Occupant, Slot> out = init.buildValidCandidateSolution();
-      //MAKE SURE IT IS NOT INSIDE ALREADY!!!
-      //READ THIS
-      Integer score = eval(out);
-      Pair<Map<Slot_Occupant, Slot>, Integer> fin = new Pair(out, score)
-      workingSet.add(fin);
-    }
+    solGen = new OrTree(data);
+    workingSet = new ArrayList<Pair<Map<Slot_Occupant, Slot>, Integer>>();
+    randGen = new Random(System.currentTimeMillis());
     generation = 1;
+    int repeats = 0;
+
+    for(int i = 0; i < INIT_POPULATION && repeats < INIT_POPULATION/2; i++){ //stop genaration if ortree cant produce different solutions
+      Map<Slot_Occupant, Slot> out = solGen.buildValidCandidateSolution();
+      if(!addToSet(out)){
+        i--;
+        repeats++;
+      }
+    }
+
   }
 
   //keeps running untill a genaration has passed
@@ -61,9 +71,27 @@ public class SetSearch{
     return new Integer(0);
   }
 
+  private boolean addToSet(Map<Slot_Occupant, Slot> solution){
+    Integer score = eval(solution);
+    Pair<Map<Slot_Occupant, Slot>, Integer> fin = new Pair(solution, score);
+    if(workingSet.contains(fin)){
+      return false;
+    }
+    workingSet.add(fin);
+  }
+
   //mutates upon a random fact
   private void mutate(){
-    
+    int repeats = 0;
+    Map<Slot_Occupant, Slot> parent = workingSet.get(randGen.nextInt(workingSet.size()));
+
+    for(int i = 0; i < MAX_CHILDREN_PER_PARENT && repeats < MAX_REPEATS && workingSet.size() < MAX_FACTS; i++){
+      Map<Slot_Occupant, Slot> child = solGen.mutateParentSolution(parent);
+      if(!addToSet(child)){
+        i--;
+        repeats++;
+      }
+    }
   }
 
   //removes facts with lowest scores
