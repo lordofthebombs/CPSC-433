@@ -813,6 +813,23 @@ public class Parser {
                 }
             }
         }
+        
+        
+        /*
+         * Dealing with the Hard Constraint: Lectures starting with 9.. should be placed into evening slots
+         * Evening slots begin at 18:00 (equivalent to (float) 18.00 from timeConvert)
+         */
+		for(Slot_Occupant c : p.Courses){
+			if (c.courseNum >= 900) {
+				for(Slot s : p.Course_Slots){
+					if (s.time < (float) 18.00) {
+						p.Unwanted.addEntry(c, s);			//Adds 900lvl courses with non-evening slots to unwanted
+					}
+				}
+			}
+		}
+        
+        
 
         //Should I add an unwanted for every course and every slot that starts at 11:00 on tues?
         for(Slot cs : p.Course_Slots){

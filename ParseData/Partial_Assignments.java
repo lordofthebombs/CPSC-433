@@ -39,13 +39,10 @@ public class Partial_Assignments {
     }
 
     public boolean addEntry(Slot_Occupant a, Slot b){
+        if(null != Partial_Entries_SO_S.put(a,b)){return false;}
+        if(null != Partial_Entries_S_SO.put(b,a)){return false;}
 
-        boolean s = true;
-
-        if(null != Partial_Entries_SO_S.put(a,b)){s = false;}
-        if(null != Partial_Entries_S_SO.put(b,a)){s = false;}
-
-        return s;
+        return true;
     }
 
     public boolean removeEntry(Slot_Occupant a, Slot b){
