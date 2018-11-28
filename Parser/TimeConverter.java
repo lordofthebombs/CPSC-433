@@ -1,6 +1,9 @@
 package Parser;
 
-import java.security.Key;
+import ParseData.Slot;
+import Slot_Occupant.Course;
+import Slot_Occupant.Lab;
+
 import java.util.HashMap;
 
 public class TimeConverter {
