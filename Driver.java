@@ -17,8 +17,13 @@ public class Driver {
         /*  This block if for testing the orTree */
         ParseData parseData = new ParseData();
         Vector<Slot_Occupant> courses = new Vector<>();
-        courses.add(new Course("CPSC", 433, 01 ));
-        courses.add(new Course("CPSC", 449, 01));
+        courses.add(new Course("CPSC", 433, 1 ));
+        courses.add(new Course("CPSC", 449, 1));
+        courses.add(new Course("CPSC", 231, 9));
+        courses.add(new Course("CPSC", 501, 1));
+        courses.add(new Course("CPSC", 502, 1)); 
+        
+        Slot_Occupant clone433 = new Course("CPSC", 433, 1);
 
         Vector<Slot_Occupant> labs = new Vector<>();
         labs.add(new Lab("CPSC", 433, 00, 01));
@@ -28,6 +33,7 @@ public class Driver {
 
         Vector<Slot> course_slot = new Vector<>();
         course_slot.add(new Slot(Slot.Day.Mon, 12, 1, 1));
+        course_slot.add(new Slot(Slot.Day.Mon, 18, 1, 1));
         
 
         parseData.setCourses(courses);
@@ -36,10 +42,12 @@ public class Driver {
         parseData.setLab_Slots(lab_slot);
         
        // parseData.Non_Compat.addEntry(courses.get(0), courses.get(1));
+        //parseData.Unwanted.addEntry(courses.get(0), course_slot.get(0));
         
         
         Map<Slot_Occupant, Slot> m = new HashMap<>();
-        m.put(courses.get(0), course_slot.get(0));
+        m.put(courses.get(3), course_slot.get(1));
+        m.put(courses.get(4), course_slot.get(0));
         m.put(courses.get(1), course_slot.get(0));
         
         m.put(labs.get(0), lab_slot.get(0));
@@ -55,7 +63,17 @@ public class Driver {
         System.out.println("non-compat should be false");
         System.out.println(cc.isCompatibleValid(m));
         
+        System.out.println("Unwanted should be false");
+        System.out.println(cc.isUnwantedValid(m));
         
+        System.out.println("Evening slot should be true");
+        System.out.println(cc.isEveningSlotsValid(m));
+        
+        System.out.println("is500Course should be false");
+        System.out.println(cc.is500CoursesValid(m));
+        
+        
+        System.out.println(clone433.equals(courses.get(0)));
         
         
         
