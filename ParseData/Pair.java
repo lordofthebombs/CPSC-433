@@ -16,7 +16,7 @@ public class Pair<L,R>{
     public R getRight(){return this.right;}
 
     @Override
-    public int hashCode() {return Objects.hash(left,right);}
+    public int hashCode() {return left.hashCode() ^ right.hashCode();}
 
 
     //This is done because I want thew pairs (a,b) and (b,a) to be equal.
