@@ -23,9 +23,9 @@ public class OrTree {
     }
     public void altern(Slot_Occupant slotOccupant){
     }
-    private Map<Slot_Occupant, Slot> buildValidCandidateSolution(){
+    public Map<Slot_Occupant, Slot> buildValidCandidateSolution(){
     }
-    private Map<Slot_Occupant, Slot> mutateParentSolution( Map<Slot_Occupant, Slot> parentData){
+    public Map<Slot_Occupant, Slot> mutateParentSolution( Map<Slot_Occupant, Slot> parentData){
         return null;
     }
 

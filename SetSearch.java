@@ -10,6 +10,7 @@ public class SetSearch{
 
   private static final int INIT_POPULATION = 100;
   private static final int MAX_FACTS = 1000;
+  private static final int TRIM_NUM = 800; //number of facts after trim, maxfacts-trimnum=num of facts removed
   private static final int MAX_REPEATS = 3;
   private static final int MAX_CHILDREN_PER_PARENT = 10;
 
@@ -26,7 +27,7 @@ public class SetSearch{
   public SetSearch(ParseData data){
     this.data = data;
     solGen = new OrTree(data);
-    workingSet = new ArrayList<Pair<Map<Slot_Occupant, Slot>, Integer>>();
+    workingSet = new ArrayList<Pair<Map<Slot_Occupant, Slot>, Integer>>(MAX_FACTS);
     randGen = new Random(System.currentTimeMillis());
     generation = 1;
     int repeats = 0;
@@ -62,10 +63,11 @@ public class SetSearch{
 
   //returns... the best solution...
   public Pair<Map<Slot_Occupant, Slot>, Integer> getBestSolution(){
-    return null;
+    return workingSet.get(0);
   }
 
   //evaluates a particular solution
+  //TODO: everything
   private Integer eval(Map<Slot_Occupant, Slot> solution){
     //SHOULD USE PARSEDATA TO EVALUATE IT
     return new Integer(0);
@@ -73,14 +75,27 @@ public class SetSearch{
 
   //adds solution to set if it is not contained already
   //returns true if succesfull
-  //MAY WANT TO MAKE THIS SORTED OR SOMETHING TO MAKE TRIM EASIER
+  //SORTS IN DECENDING ORDER BASED ON EVAL SCORE
+  //did it in decending order because we SHOULD be getting higher scores as we go
+  //so that shortens the loop
   private boolean addToSet(Map<Slot_Occupant, Slot> solution){
     Integer score = eval(solution);
     Pair<Map<Slot_Occupant, Slot>, Integer> fin = new Pair(solution, score);
     if(workingSet.contains(fin)){
       return false;
     }
-    workingSet.add(fin);
+
+    int setsize = workingSet.size();
+    for(int i = 0; i <= setsize; i++){
+      if(i == setsize){
+        workingSet.add(fin);      //reached the end, add it to the end
+      }
+      else if(score > workingSet.get(i).getValue()){  //sorted in decending order by eval score
+        workingSet.add(i, fin);
+        break;
+      }
+    }
+
   }
 
   //mutates upon a random fact
@@ -99,7 +114,7 @@ public class SetSearch{
 
   //removes facts with lowest scores
   private void trim(){
-
+    workingSet.removeRange(TRIM_NUM, workingSet.size());
   }
 
 
