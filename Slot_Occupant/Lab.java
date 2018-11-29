@@ -8,7 +8,10 @@ public class Lab extends Slot_Occupant {
 
     //Constructor
     public Lab(String id, int courseNum, int lectSection, int labSect) {
-        super(id, courseNum, lectSection);
+        super(id,courseNum,lectSection);
+        this.id = id;
+        this.courseNum = courseNum;
+        this.lectSection = lectSection;
         this.labSect = labSect;
     }
 
@@ -37,6 +40,6 @@ public class Lab extends Slot_Occupant {
     }
 
     public boolean hasLectSect(){
-        return lectSection == -1;
+        return lectSection != -1;
     }
 }

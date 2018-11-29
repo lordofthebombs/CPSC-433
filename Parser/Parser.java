@@ -249,6 +249,9 @@ public class Parser {
 
             Course temp = makeCourseFromIdentifier(entry);
 
+            if(temp.lectSection > 4){
+                System.out.println("meme");
+            }
             if(!alreadyContains(data,temp)){
                 coursesVect.add(temp);
             }
@@ -271,6 +274,7 @@ public class Parser {
     	Vector<Slot_Occupant> Labs = new Vector<Slot_Occupant>();
 
     	String entry = readLine();
+
 
         while (entry != null && !entry.equals("")) {
 
@@ -749,8 +753,14 @@ public class Parser {
         added813 = added913 = false;
         Lab cpsc813 = new Lab("CPSC",813,-1,1);
         Lab cpsc913 = new Lab("CPSC",913,-1,1);
-        Slot mandatorySlot = getSlot(p, "TU","18:00", Lab.class);
+        Slot mandatorySlot;
 
+        try {
+            mandatorySlot = getSlot(p, "TU", "18:00", Lab.class);
+        }
+        catch (ParseError e){
+            mandatorySlot = null;
+        }
 
         //We need to first check to see if the 813/courses are already in the course list.
         //Can't really use contains in the case the file defines the classes differently.
