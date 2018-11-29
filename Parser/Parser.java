@@ -249,6 +249,9 @@ public class Parser {
 
             Course temp = makeCourseFromIdentifier(entry);
 
+            if(temp.lectSection > 4){
+                System.out.println("meme");
+            }
             if(!alreadyContains(data,temp)){
                 coursesVect.add(temp);
             }
@@ -271,6 +274,7 @@ public class Parser {
     	Vector<Slot_Occupant> Labs = new Vector<Slot_Occupant>();
 
     	String entry = readLine();
+
 
         while (entry != null && !entry.equals("")) {
 
