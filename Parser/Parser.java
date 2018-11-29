@@ -28,7 +28,8 @@ public class Parser {
         timeConvert = new TimeConverter();
         
         try {
-            String currentLine = readLine();
+            String currentLine = in.readLine();
+            currentLineNum++;
 
             /*
                 This main loop is going to dictate the flow of control, and determines
@@ -57,8 +58,9 @@ public class Parser {
 
                 if(currentLine.equals("name:")){
                 	try {
-                		currentLine = readLine();
-
+                		currentLine = in.readLine();
+                        currentLineNum++;
+                        
                         if (currentLine.equals("")) { throw new ParseError("No title in file"); }
                         
                	 	} catch (Exception e) { throw new ParseError("Error reading name section of file"); }
@@ -80,7 +82,8 @@ public class Parser {
                     throw new ParseError("File is ill formatted, met unexpected String: '" + currentLine + "' at line: " + currentLineNum);
                 }
 
-                currentLine = readLine();
+                currentLine = in.readLine();
+                currentLineNum++;
             }
 
             if(!courseSlots || !labSlots || !courses || !labs || !notCompat || !unwanted || !preference || !pair || !partialAssignments){

@@ -3,8 +3,10 @@ import Slot_Occupant.*;
 import Parser.*;
 
 import java.io.FileNotFoundException;
+import java.util.Comparator;
 import java.util.Map;
 import java.util.Random;
+import java.util.TreeMap;
 
 
 public class Driver {
@@ -45,6 +47,30 @@ public class Driver {
             //Output the answers
             //-------------------------------
 
+            ConstraintChecker constraintChecker = new ConstraintChecker(parseData);
+            OrTreeSearch orTreeSearch = new OrTreeSearch(parseData, constraintChecker);
+            Map<Slot_Occupant, Slot> slot_occupantSlotMap = orTreeSearch.buildValidCandidateSol();
+
+            if(slot_occupantSlotMap != null) {
+                Map<Slot_Occupant, Slot> map = new TreeMap<>(new Comparator<Slot_Occupant>() {
+                    @Override
+                    public int compare(Slot_Occupant o1, Slot_Occupant o2) {
+                        if( o1 == o2 )
+                            return 0;
+                        if( o1 == null )
+                            return 1;
+                        if( o2 == null )
+                            return -1;
+                        return o1.toString().compareTo( o2.toString());
+                    }
+                });
+                map.putAll(slot_occupantSlotMap);
+                for (Map.Entry<Slot_Occupant, Slot> entry : map.entrySet()) {
+                    System.out.println(entry.getKey() + " " + entry.getValue());
+                }
+            }else{
+                System.out.println("Result was null");
+            }
 
 
         }

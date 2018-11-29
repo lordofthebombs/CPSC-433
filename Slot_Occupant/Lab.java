@@ -33,7 +33,7 @@ public class Lab extends Slot_Occupant {
 
     @Override
     public String toString(){
-        return this.id + " " + this.courseNum + " " + this.lectSection + " " + labSect;
+        return this.id + " " + this.courseNum + " " + "LEC " + this.lectSection + " " + "LAB " + labSect;
     }
 
     public boolean hasLectSect(){
