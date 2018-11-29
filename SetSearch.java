@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.List;
 import javafx.util.Pair;
 import java.util.Map;
 import java.util.Random;
@@ -15,18 +14,18 @@ public class SetSearch{
   private static final int MAX_CHILDREN_PER_PARENT = 10;
 
   //possibly use a heap?
-  private List<Pair<Map<Slot_Occupant, Slot>, Integer>> workingSet;
+  private ArrayList<Pair<Map<Slot_Occupant, Slot>, Integer>> workingSet;
   // Map<Slot_Occupant, Slot> is waht the or tree outputs
   // Integer is what the eval function gives
   private ParseData data;
-  private OrTree solGen;
+  private OrTreeSearch solGen;
   private Random randGen;
   private int generation;
 
 
   public SetSearch(ParseData data){
     this.data = data;
-    solGen = new OrTree(data);
+    solGen = new OrTreeSearch(data);
     workingSet = new ArrayList<Pair<Map<Slot_Occupant, Slot>, Integer>>(MAX_FACTS);
     randGen = new Random(System.currentTimeMillis());
     generation = 1;
