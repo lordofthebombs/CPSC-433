@@ -277,7 +277,15 @@ public class Parser {
     	    Lab temp = makeLabFromIdentifier(entry);
 
     	    if(!alreadyContains(data,temp)){
-                    Labs.add(temp);
+
+    	        if(temp.hasLectSect()){
+    	           Course matchingCourse = new Course(temp.id,temp.courseNum,temp.lectSection);
+    	           if(!data.Courses.contains(matchingCourse)){
+    	               printWarning("Declared Lab has a lecture section which corresponds to no declared course LEC");
+                   }
+                }
+
+                Labs.add(temp);
     	    }
     	    else
     	        printWarning("Duplicate Lab statement");
@@ -735,86 +743,138 @@ public class Parser {
 
     private static void checkCPSC(ParseData p) throws ParseError{
 
+        //Add CPSC 813 / 913
+
+        boolean added813, added913;
+        added813 = added913 = false;
+        Lab cpsc813 = new Lab("CPSC",813,-1,1);
+        Lab cpsc913 = new Lab("CPSC",913,-1,1);
+        Slot mandatorySlot = getSlot(p, "TU","18:00", Lab.class);
+
+
+        //We need to first check to see if the 813/courses are already in the course list.
+        //Can't really use contains in the case the file defines the classes differently.
         for(Slot_Occupant c : p.Courses){
 
-            //No 500 level courses can be in the same time slot, so all are unwanted with each other.
-            if(c.courseNum >= 500 && c.courseNum < 600){
+            if(c.courseNum == 813 && c.id.equals("CPSC")){
+                added813 = true;
+            }
+            else if(c.courseNum == 913 && c.id.equals("CPSC")){
+                added913 = true;
+            }
+            if(added813 && added913){break;}
+        }
 
-                for(Slot_Occupant c2 : p.Courses){
 
-                    if((c2.courseNum >= 500 && c2.courseNum < 600) &&
-                            (!c.id.equals(c2.id) || (c.id.equals(c2.id) && c2.courseNum != c.courseNum)))
-                    {
-                        p.Non_Compat.addEntry(c,c2);
+        //Next we Have to check to see if we have any 313 or 413 courses that don't have a 813/913
+        //And if they don't add them
+        for(Slot_Occupant c : p.Courses){
+
+            if((c.courseNum == 313 || c.courseNum == 413) && c.id.equals("CPSC")){
+
+                //If they haven't been added and don't exist already then remove them.
+                if(c.courseNum == 313){
+
+                    //add 813 if it doesn't already exist.
+                    if(!added813){
+                        p.Labs.add(cpsc813);
+                        added813 = true;
+                    }
+                }
+                else {
+
+                    //Add 913 if it isn't already in the list.
+                    if(!added913){
+                        p.Labs.add(cpsc913);
+                        added913 = true;
                     }
                 }
             }
-            else if((c.courseNum == 813 || c.courseNum == 913) && c.id.equals("CPSC")){
 
-                Slot hasToBeScheduled = new Slot(Slot.Day.Tues,(float)18.0,0,0);
-
-                //Make a partial assignment for the only time it can be scheduled, if it exists.
-                if(!p.Course_Slots.contains(hasToBeScheduled)){
-                    throw new ParseError("CPSC 813 or 913 is declared but no course slot for tues at 18:00");
+            //Make all evening courses unwanted with all nonevening slots;
+            if(c.lectSection == 9){
+                for(Slot s : p.Course_Slots){
+                    if(s.time < 18){
+                        p.Unwanted.addEntry(c,s);
+                    }
                 }
+            }
+        }
 
-                Slot copyOfActualSlot = getSlot(p,"TUES","18:00",Course.class);
-                p.Partial_Assignments.addEntry(c,copyOfActualSlot);
+        //Create partial Assignments for 813/913 if they exist
+        if(added813){
+            if(mandatorySlot != null){
+                p.Partial_Assignments.addEntry(cpsc813,mandatorySlot);
+            }
+            else{
+                throw new ParseError("813 needs to be assigned but the necessary slot TU, 11:00 hsa not been declared");
+            }
+        }
+        if(added913){
+            if(mandatorySlot != null){
+                p.Partial_Assignments.addEntry(cpsc913,mandatorySlot);
+            }
+            else{
+                throw new ParseError("913 needs to be assigned but the necessary slot TU, 11:00 hsa not been declared");
+            }
+        }
 
-                if(c.courseNum == 813){
-                    //Add not compat statements with all CPSC 313 labs / tutorials and courses
-                    for(Slot_Occupant c2 : p.Courses){
-                        if(c2.id.equals("CPSC") && c2.courseNum == 313){
-                            p.Non_Compat.addEntry(c,c2);
+        //Now make sure the CPSC 313/413 non-compats are generated.
+        //Add not compat statements with all CPSC 413 labs / tutorials and courses
+        for(Slot_Occupant lab : p.Labs){
 
-                            //If something is incompatible with CPSC 313 then it is also incompatible with 813
-                            for(Slot_Occupant so : p.Non_Compat.isNonCompatableWith(c2)){
-                                p.Non_Compat.addEntry(c,so);
-                            }
+            if(lab.equals(cpsc813)){
+                for(Slot_Occupant c2 : p.Courses){
+                    if(c2.id.equals("CPSC") && c2.courseNum == 313){
+                        p.Non_Compat.addEntry(lab,c2);
+
+                        //If something is incompatible with CPSC 313 then it is also incompatible with 813
+                        for(Slot_Occupant so : p.Non_Compat.isNonCompatableWith(c2)){
+                            p.Non_Compat.addEntry(lab,so);
                         }
+
                     }
-                    for(Slot_Occupant lab : p.Labs){
-                        if(lab.id.equals("CPSC") && lab.courseNum == 313){
-                            p.Non_Compat.addEntry(c,lab);
-
-                            //If something is incompatible with CPSC 313 then it is also incompatible with 813
-                            for(Slot_Occupant so : p.Non_Compat.isNonCompatableWith(lab)){
-                                p.Non_Compat.addEntry(c,so);
-                            }
-                        }
-                    }
-
-
-
                 }
-                else if(c.courseNum == 913){
-                    //Add not compat statements with all CPSC 413 labs / tutorials and courses
-                    for(Slot_Occupant c2 : p.Courses){
-                        if(c2.id.equals("CPSC") && c2.courseNum == 413){
-                            p.Non_Compat.addEntry(c,c2);
+                for(Slot_Occupant lab2 : p.Labs){
+                    if(lab.id.equals("CPSC") && lab.courseNum == 313){
+                        p.Non_Compat.addEntry(lab,lab2);
 
-                            //If something is incompatible with CPSC 313 then it is also incompatible with 813
-                            for(Slot_Occupant so : p.Non_Compat.isNonCompatableWith(c2)){
-                                p.Non_Compat.addEntry(c,so);
-                            }
-
+                        //If something is incompatible with CPSC 313 then it is also incompatible with 813
+                        for(Slot_Occupant so : p.Non_Compat.isNonCompatableWith(lab2)){
+                            p.Non_Compat.addEntry(lab,so);
                         }
                     }
-                    for(Slot_Occupant lab : p.Labs){
-                        if(lab.id.equals("CPSC") && lab.courseNum == 413){
-                            p.Non_Compat.addEntry(c,lab);
+                }
+            }
+            else if(lab.equals(cpsc913)){
 
-                            //If something is incompatible with CPSC 313 then it is also incompatible with 813
-                            for(Slot_Occupant so : p.Non_Compat.isNonCompatableWith(lab)){
-                                p.Non_Compat.addEntry(c,so);
-                            }
+                for(Slot_Occupant c2 : p.Courses){
+                    if(c2.id.equals("CPSC") && c2.courseNum == 413){
+                        p.Non_Compat.addEntry(lab,c2);
+
+                        //If something is incompatible with CPSC 413 then it is also incompatible with 913
+                        for(Slot_Occupant so : p.Non_Compat.isNonCompatableWith(c2)){
+                            p.Non_Compat.addEntry(lab,so);
+                        }
+
+                    }
+                }
+                for(Slot_Occupant lab2 : p.Labs){
+                    if(lab.id.equals("CPSC") && lab.courseNum == 413){
+                        p.Non_Compat.addEntry(lab,lab2);
+
+                        //If something is incompatible with CPSC 413 then it is also incompatible with 913
+                        for(Slot_Occupant so : p.Non_Compat.isNonCompatableWith(lab2)){
+                            p.Non_Compat.addEntry(lab,so);
                         }
                     }
                 }
             }
         }
 
+
         //Should I add an unwanted for every course and every slot that starts at 11:00 on tues?
+        /* Handled in Constraint Checker
         for(Slot cs : p.Course_Slots){
 
             if(cs.day == Slot.Day.Tues && cs.time == 11.0){
@@ -823,6 +883,6 @@ public class Parser {
                     p.Unwanted.addEntry(c,cs);
                 }
             }
-        }
+        }*/
     }
 }
