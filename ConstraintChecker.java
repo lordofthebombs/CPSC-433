@@ -187,7 +187,7 @@ public class ConstraintChecker {
  	   	// no keys therefore no courses/labs are assigned
  	   	if (keys.size() == 0) return true;
     	
-    	//if (!isSlotMaxValid(data)) return false;
+//    	if (!isSlotMaxValid(data)) return false;
     	
     	if (!isOverlapValid(data)) {
     		System.out.println("Corresponding courses and labs were scheduled in the same slot.");
