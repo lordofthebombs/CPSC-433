@@ -52,25 +52,22 @@ public class Driver {
             Map<Slot_Occupant, Slot> slot_occupantSlotMap = orTreeSearch.buildValidCandidateSol();
 
             if(slot_occupantSlotMap != null) {
-                Map<Slot_Occupant, Slot> map = new TreeMap<>(new Comparator<Slot_Occupant>() {
-                    @Override
-                    public int compare(Slot_Occupant o1, Slot_Occupant o2) {
-                        if( o1 == o2 )
-                            return 0;
-                        if( o1 == null )
-                            return 1;
-                        if( o2 == null )
-                            return -1;
-                        return o1.toString().compareTo( o2.toString());
-                    }
-                });
-                map.putAll(slot_occupantSlotMap);
-                for (Map.Entry<Slot_Occupant, Slot> entry : map.entrySet()) {
-                    System.out.println(entry.getKey() + " " + entry.getValue());
-                }
+                printSolution(slot_occupantSlotMap);
             }else{
                 System.out.println("Result was null");
             }
+
+
+//            Map<Slot_Occupant, Slot> mutant = orTreeSearch.mutateParentSolution(slot_occupantSlotMap);
+//            System.out.println("Parent passed for mutation ----------->");
+//            printSolution(slot_occupantSlotMap);
+//            System.out.println("MUTATION CREATED ---------------->");
+//            if(mutant != null) {
+//                printSolution(mutant);
+//            }else{
+//                System.out.println("Mutant Result was null");
+//            }
+
 
 
         }
@@ -82,6 +79,24 @@ public class Driver {
 
     }
 
+    private static void printSolution(Map<Slot_Occupant, Slot> mutant) {
+        Map<Slot_Occupant, Slot> map = new TreeMap<>(new Comparator<Slot_Occupant>() {
+            @Override
+            public int compare(Slot_Occupant o1, Slot_Occupant o2) {
+                if( o1 == o2 )
+                    return 0;
+                if( o1 == null )
+                    return 1;
+                if( o2 == null )
+                    return -1;
+                return o1.toString().compareTo( o2.toString());
+            }
+        });
+        map.putAll(mutant);
+        for (Map.Entry<Slot_Occupant, Slot> entry : map.entrySet()) {
+            System.out.println(entry.getKey() + " " + entry.getValue());
+        }
+    }
 
 
 }

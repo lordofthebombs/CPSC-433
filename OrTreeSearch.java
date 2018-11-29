@@ -129,7 +129,11 @@ public class OrTreeSearch {
 
         Map<Slot_Occupant, Slot> initialSolMap = initializePr();
 
-        this.orTree = new OrTree(initialSolMap, this.copyOfLabSlots, this.copyOfCourseSlots);
+        Map<Slot, Integer> initialLabSlots = new LinkedHashMap<>();
+        Map<Slot, Integer> initialCourseSlots = new LinkedHashMap<>();
+        initialLabSlots.putAll(this.copyOfLabSlots);
+        initialCourseSlots.putAll(this.copyOfCourseSlots);
+        this.orTree = new OrTree(initialSolMap, initialLabSlots, initialCourseSlots);
         this.initialPr = new LinkedHashMap<>();
         this.initialPr.putAll(initialSolMap);
     }
@@ -217,7 +221,7 @@ public class OrTreeSearch {
                         currentTree.addChild(newCandidate, score, copyOfLabSlots, copyOfCourseSlots );
                     }
             }else{
-                System.out.println("Unable to add slot reached max already: " +  slots.get(i));
+              //  System.out.println("Unable to add slot reached max already: " +  slots.get(i));
             }
 
 
@@ -305,12 +309,11 @@ public class OrTreeSearch {
         Stack<OrTree> traversalStack = depthTraversal;
 
         OrTree currentTree = null;
-        int i = 0;
 
         while (!traversalStack.empty()) {
-            i++;
+
             currentTree = traversalStack.pop();
-            System.out.println("Next child chosen: " + currentTree.toString());
+          // System.out.println("Next child chosen: " + currentTree.toString());
             Slot_Occupant toExpandOn = null;
             Map<Slot_Occupant, Slot> currentPr = currentTree.data;
 
@@ -331,9 +334,7 @@ public class OrTreeSearch {
                     traversalStack.push(currentTree.children.get(j));
                 }
             }else { // need to check if all constraints are met here since there is nothing to expand on anymore
-                if (i % 2 == 0) { //placeholder check for now
-                    return currentPr;
-                }
+                     return currentPr;
             }
         }
 
@@ -367,13 +368,18 @@ public class OrTreeSearch {
         }
 
 
-        System.out.println("Randomly chosen course to mutate on: " + randomSlotOccupantToMutateOn.toString());
+        System.out.println("------Randomly chosen course to mutate on: " + randomSlotOccupantToMutateOn.toString());
+        System.out.println();
 
         Stack<OrTree> depthTraversal = new Stack<>();
 
-        this.orTree = new OrTree(this.initialPr, this.copyOfLabSlots, this.copyOfCourseSlots);
+        Map<Slot, Integer> initialLabSlots = new LinkedHashMap<>();
+        Map<Slot, Integer> initialCourseSlots = new LinkedHashMap<>();
+        initialLabSlots.putAll(this.copyOfLabSlots);
+        initialCourseSlots.putAll(this.copyOfCourseSlots);
+
+        this.orTree = new OrTree(this.initialPr, initialLabSlots, initialCourseSlots);
         OrTree currentTree = this.orTree;
-        depthTraversal.push(currentTree);
 
         //creating the possible children for the slot we want to mutate first so it given priority
         this.createSuccessorNodes(currentTree, randomSlotOccupantToMutateOn, true , parentData, randomSlotOccupantToMutateOn);
