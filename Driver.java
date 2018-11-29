@@ -2,6 +2,7 @@ import ParseData.*;
 import Slot_Occupant.*;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Vector;
 
@@ -23,13 +24,13 @@ public class Driver {
         courses.add(new Course("CPSC", 501, 1));
         courses.add(new Course("CPSC", 502, 1)); 
         
-        Slot_Occupant clone433 = new Course("CPSC", 433, 1);
-
         Vector<Slot_Occupant> labs = new Vector<>();
         labs.add(new Lab("CPSC", 433, 00, 01));
 
         Vector<Slot> lab_slot = new Vector<>();
         lab_slot.add(new Slot(Slot.Day.Mon, 12, 1, 1));
+        lab_slot.add(new Slot(Slot.Day.Mon, 13, 1, 1));
+
 
         Vector<Slot> course_slot = new Vector<>();
         course_slot.add(new Slot(Slot.Day.Mon, 12, 1, 1));
@@ -46,14 +47,34 @@ public class Driver {
         
         
         Map<Slot_Occupant, Slot> m = new HashMap<>();
-        m.put(courses.get(3), course_slot.get(1));
+       // m.put(courses.get(0), course_slot.get(0));
+
+        m.put(courses.get(3), course_slot.get(0));
         m.put(courses.get(4), course_slot.get(0));
         m.put(courses.get(1), course_slot.get(0));
         
         m.put(labs.get(0), lab_slot.get(0));
-
         
         ConstraintChecker cc = new ConstraintChecker(parseData);
+        System.out.println(cc.checkHardConstraints(m));
+
+        
+
+        
+        //Map<Slot_Occupant, Slot> parentNode = cc.initialize();
+        /*
+        // should be null
+        
+        Iterator<Slot_Occupant> iter = parentNode.keySet().iterator();
+        System.out.println(parentNode.keySet().size());
+        
+        while (iter.hasNext() && parentNode.keySet() != null) {
+        	Slot_Occupant currentSO = iter.next();
+        	System.out.println(currentSO);
+        	System.out.println(parentNode.get(currentSO));
+        }
+        
+        
         System.out.println("slotMax should be false");
         System.out.println(cc.isSlotMaxValid(m));
          
@@ -74,6 +95,18 @@ public class Driver {
         
         
         System.out.println(clone433.equals(courses.get(0)));
+        
+        Iterator<Slot_Occupant> iterM = m.keySet().iterator();
+        System.out.println(m.keySet().size());
+        
+        while (iterM.hasNext() && m.keySet() != null) {
+        	Slot_Occupant currentSO = iterM.next();
+        	System.out.println(currentSO);
+        	System.out.println(m.get(currentSO));
+        }
+      
+        
+        
         
         
         
