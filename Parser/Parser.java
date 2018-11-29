@@ -11,12 +11,15 @@ import java.io.*;
 
 
 public class Parser {
-	
+
 	private static BufferedReader in;
 	private static int currentLineNum = 0;
 	private static TimeConverter timeConvert;
 
     public static ParseData parse(String fileName) throws FileNotFoundException{
+
+        boolean courseSlots,labSlots,courses,labs,notCompat,unwanted,preference,pair,partialAssignments;
+        courseSlots = labSlots = courses = labs = notCompat = unwanted = preference = pair = partialAssignments = false;
 
         ParseData output = new ParseData();
         in = new BufferedReader(new FileReader(new File(fileName)));
@@ -65,15 +68,15 @@ public class Parser {
                 else if(currentLine.equals("")){
                     //Skip Empty Lines
                 }
-                else if(currentLine.equals("course slots:")) { processCourseSlots(output); }
-                else if(currentLine.equals("lab slots:")){ processLabSlots(output); }
-                else if(currentLine.equals("courses:")){ processCourses(output); }
-                else if(currentLine.equals("labs:")){ processLabs(output); }
-                else if(currentLine.equals("not compatible:")){ processNotCompat(output); }
-                else if(currentLine.equals("unwanted:")){ output = processUwanted(output); }
-                else if(currentLine.equals("preferences:")){ processPreferences(output); }
-                else if(currentLine.equals("pair:")){ processPairs(output); }
-                else if(currentLine.equals("partial assignments:")){ processPartialAssignments(output); }
+                else if(currentLine.equals("course slots:")) { processCourseSlots(output); courseSlots = true; }
+                else if(currentLine.equals("lab slots:")){ processLabSlots(output); labSlots = true;}
+                else if(currentLine.equals("courses:")){ processCourses(output); courses = true;}
+                else if(currentLine.equals("labs:")){ processLabs(output); labs = true;}
+                else if(currentLine.equals("not compatible:")){ processNotCompat(output); notCompat = true;}
+                else if(currentLine.equals("unwanted:")){ output = processUwanted(output); unwanted = true;}
+                else if(currentLine.equals("preferences:")){ processPreferences(output); preference = true;}
+                else if(currentLine.equals("pair:")){ processPairs(output); pair = true;}
+                else if(currentLine.equals("partial assignments:")){ processPartialAssignments(output); partialAssignments = true;}
 
                 else{
                     throw new ParseError("File is ill formatted, met unexpected String: '" + currentLine + "' at line: " + currentLineNum);
@@ -82,6 +85,26 @@ public class Parser {
                 currentLine = in.readLine();
                 currentLineNum++;
             }
+
+            if(!courseSlots || !labSlots || !courses || !labs || !notCompat || !unwanted || !preference || !pair || !partialAssignments){
+
+                //Case where one of the title areas is missing.
+                String missingTags = "";
+
+                if(!courseSlots){missingTags += " course slots ";}
+                if(!labSlots) {missingTags += " lab slots ";}
+                if(!courses){ missingTags += " courses ";}
+                if(!labs){missingTags += " labs ";}
+                if(!notCompat){missingTags += " not compatible ";}
+                if(!unwanted){missingTags += " unwanted ";}
+                if(!preference){missingTags += " preferences ";}
+                if(!pair){missingTags += " pair ";}
+                if(!partialAssignments){missingTags += " partial assignments ";}
+
+                throw new ParseError("Invalid file format, missing the following tags statements :" + missingTags );
+            }
+            //Check for the CPSC 813 and CPSC 913 Special Cases and add the non-compats statements if need be
+            checkCPSC(output);
 
         }
         catch (IOException e){
@@ -137,7 +160,13 @@ public class Parser {
                     throw new ParseError("Invalid Day Provided for a Course slots at line: " + currentLineNum);
                 }
 	        	
-	        	float time = timeConvert.convertTime(courseSlots[1]);			//Converts time to float using HashMap
+	        	float time = timeConvert.convertTime(courseSlots[1],day,Course.class);			//Converts time to float using HashMap
+
+                if(day == Slot.Day.Tues && time == 11.0){
+                    printWarning("Course Slot exists for a time a course cannot be scheduled for");
+                }
+
+
 	        	int max = parseInt(courseSlots[2]);				                //Converts String max to int max
 	        	int min = parseInt(courseSlots[3]);				                //Converts String min to int min
 
@@ -147,7 +176,7 @@ public class Parser {
                     vectCourseSlots.addElement(slot);						    //Places the current slot into a Vector
                 }
 	        	else
-	        	    throw new ParseError("Duplicate Course Slot declared on line: " + currentLineNum);
+	        	    printWarning("Duplicate Course Slot statement");
 
                 entry = readLine();
 	        }
@@ -186,7 +215,7 @@ public class Parser {
                     throw new ParseError("Invalid Day Provided for a Course slots at line : " + currentLineNum);
                 }
 
-                float time = timeConvert.convertTime(courseSlots[1]);			//Converts time to float using HashMap
+                float time = timeConvert.convertTime(courseSlots[1],day,Lab.class);			//Converts time to float using HashMap
                 int max = parseInt(courseSlots[2]);				        //Converts String max to int max
                 int min = parseInt(courseSlots[3]);				        //Converts String min to int min
 
@@ -196,7 +225,7 @@ public class Parser {
                     vectLabSlots.addElement(slot);						//Places the current slot into a Vector
                 }
                 else
-                    throw new ParseError("Duplicate Lab Slot declared on line: " + currentLineNum);
+                    printWarning("Duplicate Lab Slot statement");
 
                 entry = readLine();
             }
@@ -223,11 +252,14 @@ public class Parser {
 
             Course temp = makeCourseFromIdentifier(entry);
 
+            if(temp.lectSection > 4){
+                System.out.println("meme");
+            }
             if(!alreadyContains(data,temp)){
                 coursesVect.add(temp);
             }
             else
-                throw new ParseError("Duplicate Course stated on line: " + currentLineNum);
+                printWarning("Duplicate Course statement");
 
             entry = readLine();
         }
@@ -246,15 +278,24 @@ public class Parser {
 
     	String entry = readLine();
 
+
         while (entry != null && !entry.equals("")) {
 
     	    Lab temp = makeLabFromIdentifier(entry);
 
     	    if(!alreadyContains(data,temp)){
-                    Labs.add(temp);
+
+    	        if(temp.hasLectSect()){
+    	           Course matchingCourse = new Course(temp.id,temp.courseNum,temp.lectSection);
+    	           if(!data.Courses.contains(matchingCourse)){
+    	               printWarning("Declared Lab has a lecture section which corresponds to no declared course LEC");
+                   }
+                }
+
+                Labs.add(temp);
     	    }
     	    else
-    	        throw new ParseError("Duplicate Lab stated on line: " + currentLineNum);
+    	        printWarning("Duplicate Lab statement");
 
     	    entry = readLine();
     	}
@@ -285,14 +326,17 @@ public class Parser {
 
             //Check to make sure the two arguments are of the same argument length
 
-            if(occupants[0].trim().split("\\s+").length == occupants[1].trim().split("\\s+").length && occupants.length == 2){
+            if(occupants.length == 2){
 
                 t1 = getOccupant(data,occupants[0]);
                 t2 = getOccupant(data,occupants[1]);
 
+                if(t1.equals(t2)){
+                    throw new ParseError("A course/lab can't be not compatible with itself");
+                }
                 //Add the pairing
                 if(!NonCompat.addEntry(t1,t2)){
-                    throw new ParseError("Duplicate Non Compat statement on line: " + currentLineNum);
+                    printWarning("Duplicate Non Compat statement");
                 }
             }
             else{
@@ -330,13 +374,12 @@ public class Parser {
 
             if(splitValues.length == 3){
 
-                t1 = getOccupant(data,splitValues[0]);
-                s1 = getSlot(data,splitValues[1],splitValues[2],t1.getClass());
+                t1 = getOccupant(data,splitValues[0].trim());
+                s1 = getSlot(data,splitValues[1].trim(),splitValues[2].trim(),t1.getClass());
 
                 if(!Unwanted.addEntry(t1,s1)){
-                    throw new Error("Duplicate Unwanted statement found on line: " + currentLineNum);
+                    printWarning("Duplicate Unwanted statement");
                 }
-
             }
             else{
                 throw new ParseError("Invalid Unwanted Statement on line: " + currentLineNum);
@@ -365,15 +408,15 @@ public class Parser {
             entry = entry.trim();
             String splitValues[] = entry.split(","); //Assumes that the non-compat has comma separated details
 
-            if(splitValues.length != 3){
+            if(splitValues.length == 4){
 
-                t1 = getOccupant(data,splitValues[2]);
-                s1 = getSlot(data,splitValues[0],splitValues[1],t1.getClass());
+                t1 = getOccupant(data,splitValues[2].trim());
+                s1 = getSlot(data,splitValues[0].trim(),splitValues[1].trim(),t1.getClass());
 
-                prefVal = parseInt(splitValues[3]);
+                prefVal = parseInt(splitValues[3].trim());
 
                 if(pref.isPreference(t1,s1) || !pref.addEntry(t1,s1,prefVal) ){
-                    throw new ParseError("Duplicate Preference statement found on line: " + currentLineNum);
+                    printWarning("Duplicate Preference statement");
                 }
             }
             else
@@ -405,13 +448,16 @@ public class Parser {
             int i = occupants[0].trim().split("\\s+").length;
             int j = occupants[1].trim().split("\\s+").length;
 
-            if(occupants[0].trim().split("\\s+").length == occupants[1].trim().split("\\s+").length && occupants.length == 2){
+            if(occupants.length == 2){
 
-                t1 = getOccupant(data,occupants[0]);
-                t2 = getOccupant(data,occupants[1]);
+                t1 = getOccupant(data,occupants[0].trim());
+                t2 = getOccupant(data,occupants[1].trim());
 
+                if(t1.equals(t2)){
+                    printWarning("A course can't be not compatible with itself");
+                }
                 if(!pairs.addEntry(t1,t2)){
-                    throw new ParseError("Duplicate pair statement on line: " + currentLineNum);
+                    printWarning("Duplicate pair statement");
                 }
 
             }
@@ -446,16 +492,16 @@ public class Parser {
 
             if(splitValues.length == 3){
 
-                t1 = getOccupant(data,splitValues[0]);
-                s1 = getSlot(data,splitValues[1],splitValues[2],t1.getClass());
+                t1 = getOccupant(data,splitValues[0].trim());
+                s1 = getSlot(data,splitValues[1].trim(),splitValues[2].trim(),t1.getClass());
 
                 if(!partials.addEntry(t1,s1)){
-                    throw new Error("Duplicate partial assignment statement found on line: " + currentLineNum);
+                    printWarning("Duplicate partial assignment statement found");
                 }
 
             }
             else{
-                throw new ParseError("Invalid Unwanted Statement on line: " + currentLineNum);
+                throw new ParseError("Invalid partial assignment Statement on line: " + currentLineNum);
             }
 
             entry = readLine();
@@ -517,9 +563,6 @@ public class Parser {
         String id = ""; //SENG,CPSC Etc.
 
         int labSect;
-        int courseNum = 0, lectSection = 0, lab = 0; //lab can not exist
-
-        Lab newLab = new Lab(id,courseNum,lectSection,lab);
 
         entry = entry.trim();
         String tokens[] = entry.split("\\s+"); //IMPORTANT ASSUMES THAT DATA IS SEPARATED BY SPACES
@@ -536,10 +579,7 @@ public class Parser {
                 throw new ParseError("Expected TUT or LAB on line " + currentLineNum + " instead of " + tokens[2]);
             }
 
-            newLab.id = tokens[0];
-            newLab.courseNum = parseInt(tokens[1]);
-            newLab.labSect = parseInt(tokens[3]);
-            newLab.lectSection = -1; //It has no specified lecture section.
+            return new Lab(tokens[0],parseInt(tokens[1]),-1,parseInt(tokens[3]));
         }
         else if(tokens.length == 6){
 
@@ -550,17 +590,11 @@ public class Parser {
                 throw new ParseError("Expected TUT or LAB on line " + currentLineNum + " instead of " + tokens[2]);
             }
 
-            newLab.id = tokens[0];
-            newLab.courseNum = parseInt(tokens[1]);
-            newLab.lectSection = parseInt(tokens[3]);
-            newLab.labSect = parseInt(tokens[5]);
-
+            return new Lab(tokens[0],parseInt(tokens[1]),parseInt(tokens[3]),parseInt(tokens[5]));
         }
         else{
             throw new ParseError("Invalid Course description at line: " + currentLineNum);
         }
-
-        return newLab;
     }
 
     /**
@@ -615,26 +649,22 @@ public class Parser {
         entry = entry.trim();
         String tokens[] = entry.split("\\s+"); //assumes spaces split course/lab descriptions.
 
-        Slot_Occupant newOccupant;
-
         if(tokens.length == 4){
 
             if(tokens[2].equals("LEC")){
-                newOccupant = makeCourseFromIdentifier(entry);
+                return makeCourseFromIdentifier(entry);
             }
             else{
-                newOccupant = makeLabFromIdentifier(entry);
+                return makeLabFromIdentifier(entry);
             }
         }
         else if(tokens.length == 6) //must be a lab
         {
-            newOccupant = makeLabFromIdentifier(entry);
+            return makeLabFromIdentifier(entry);
         }
         else{
             throw new ParseError("Encountered invalid slot occupant description on line: " + currentLineNum);
         }
-
-        return newOccupant;
     }
 
     /**
@@ -657,12 +687,15 @@ public class Parser {
 
         try {
             int i = -1;
-            Slot temp = new Slot(Slot.toDay(day.trim()), timeConvert.convertTime(time.trim()), 0, 0); //
+            Slot.Day d = Slot.toDay(day);
+            Slot temp;
 
             if(ctype == Course.class){
+                temp = new Slot(Slot.toDay(day.trim()), timeConvert.convertTime(time.trim(),d,Course.class), 0, 0); //
                 i = data.Course_Slots.indexOf(temp); //This has to be done, otherwise course min/max will be lost. The reason this works is because the equals method is overriden.
             }
             else{
+                temp = new Slot(Slot.toDay(day.trim()), timeConvert.convertTime(time.trim(),d,Lab.class), 0, 0); //
                 i = data.Lab_Slots.indexOf(temp);
             }
 
@@ -709,5 +742,160 @@ public class Parser {
     private static String readLine() throws IOException{
         currentLineNum++;
         return in.readLine();
+    }
+
+    private static void printWarning(String str){
+        System.out.println("Warning: " + str + " on line: " + currentLineNum);
+    }
+
+    private static void checkCPSC(ParseData p) throws ParseError{
+
+        //Add CPSC 813 / 913
+
+        boolean added813, added913;
+        added813 = added913 = false;
+        Lab cpsc813 = new Lab("CPSC",813,-1,1);
+        Lab cpsc913 = new Lab("CPSC",913,-1,1);
+        Slot mandatorySlot;
+
+        try {
+            mandatorySlot = getSlot(p, "TU", "18:00", Lab.class);
+        }
+        catch (ParseError e){
+            mandatorySlot = null;
+        }
+
+        //We need to first check to see if the 813/courses are already in the course list.
+        //Can't really use contains in the case the file defines the classes differently.
+        for(Slot_Occupant c : p.Courses){
+
+            if(c.courseNum == 813 && c.id.equals("CPSC")){
+                added813 = true;
+            }
+            else if(c.courseNum == 913 && c.id.equals("CPSC")){
+                added913 = true;
+            }
+            if(added813 && added913){break;}
+        }
+
+
+        //Next we Have to check to see if we have any 313 or 413 courses that don't have a 813/913
+        //And if they don't add them
+        for(Slot_Occupant c : p.Courses){
+
+            if((c.courseNum == 313 || c.courseNum == 413) && c.id.equals("CPSC")){
+
+                //If they haven't been added and don't exist already then remove them.
+                if(c.courseNum == 313){
+
+                    //add 813 if it doesn't already exist.
+                    if(!added813){
+                        p.Labs.add(cpsc813);
+                        added813 = true;
+                    }
+                }
+                else {
+
+                    //Add 913 if it isn't already in the list.
+                    if(!added913){
+                        p.Labs.add(cpsc913);
+                        added913 = true;
+                    }
+                }
+            }
+
+            //Make all evening courses unwanted with all nonevening slots;
+            if(c.lectSection == 9){
+                for(Slot s : p.Course_Slots){
+                    if(s.time < 18){
+                        p.Unwanted.addEntry(c,s);
+                    }
+                }
+            }
+        }
+
+        //Create partial Assignments for 813/913 if they exist
+        if(added813){
+            if(mandatorySlot != null){
+                p.Partial_Assignments.addEntry(cpsc813,mandatorySlot);
+            }
+            else{
+                throw new ParseError("813 needs to be assigned but the necessary slot TU, 11:00 hsa not been declared");
+            }
+        }
+        if(added913){
+            if(mandatorySlot != null){
+                p.Partial_Assignments.addEntry(cpsc913,mandatorySlot);
+            }
+            else{
+                throw new ParseError("913 needs to be assigned but the necessary slot TU, 11:00 hsa not been declared");
+            }
+        }
+
+        //Now make sure the CPSC 313/413 non-compats are generated.
+        //Add not compat statements with all CPSC 413 labs / tutorials and courses
+        for(Slot_Occupant lab : p.Labs){
+
+            if(lab.equals(cpsc813)){
+                for(Slot_Occupant c2 : p.Courses){
+                    if(c2.id.equals("CPSC") && c2.courseNum == 313){
+                        p.Non_Compat.addEntry(lab,c2);
+
+                        //If something is incompatible with CPSC 313 then it is also incompatible with 813
+                        for(Slot_Occupant so : p.Non_Compat.isNonCompatableWith(c2)){
+                            p.Non_Compat.addEntry(lab,so);
+                        }
+
+                    }
+                }
+                for(Slot_Occupant lab2 : p.Labs){
+                    if(lab.id.equals("CPSC") && lab.courseNum == 313){
+                        p.Non_Compat.addEntry(lab,lab2);
+
+                        //If something is incompatible with CPSC 313 then it is also incompatible with 813
+                        for(Slot_Occupant so : p.Non_Compat.isNonCompatableWith(lab2)){
+                            p.Non_Compat.addEntry(lab,so);
+                        }
+                    }
+                }
+            }
+            else if(lab.equals(cpsc913)){
+
+                for(Slot_Occupant c2 : p.Courses){
+                    if(c2.id.equals("CPSC") && c2.courseNum == 413){
+                        p.Non_Compat.addEntry(lab,c2);
+
+                        //If something is incompatible with CPSC 413 then it is also incompatible with 913
+                        for(Slot_Occupant so : p.Non_Compat.isNonCompatableWith(c2)){
+                            p.Non_Compat.addEntry(lab,so);
+                        }
+
+                    }
+                }
+                for(Slot_Occupant lab2 : p.Labs){
+                    if(lab.id.equals("CPSC") && lab.courseNum == 413){
+                        p.Non_Compat.addEntry(lab,lab2);
+
+                        //If something is incompatible with CPSC 413 then it is also incompatible with 913
+                        for(Slot_Occupant so : p.Non_Compat.isNonCompatableWith(lab2)){
+                            p.Non_Compat.addEntry(lab,so);
+                        }
+                    }
+                }
+            }
+        }
+
+
+        //Should I add an unwanted for every course and every slot that starts at 11:00 on tues?
+        /* Handled in Constraint Checker
+        for(Slot cs : p.Course_Slots){
+
+            if(cs.day == Slot.Day.Tues && cs.time == 11.0){
+
+                for(Slot_Occupant c : p.Courses){
+                    p.Unwanted.addEntry(c,cs);
+                }
+            }
+        }*/
     }
 }

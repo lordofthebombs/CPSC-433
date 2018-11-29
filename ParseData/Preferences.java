@@ -3,8 +3,10 @@ package ParseData;
 import Slot_Occupant.Slot_Occupant;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import javafx.util.Pair;
 
 public class Preferences {
 
@@ -14,44 +16,27 @@ public class Preferences {
         Preference_Entries = new HashMap<>();
     }
 
-    //Get the Occupant of the slot if it exists returns null otherwise.
-    public Slot_Occupant getPreference(Slot a){
+    //Get slots that are preferred with a given Slot_Occupant if none exists returns null
+    public HashSet<Slot> getPreferredWith(Slot_Occupant a){
 
-        Iterator<Map.Entry<Pair<Slot_Occupant, Slot>, Integer>> iter = Preference_Entries.entrySet().iterator();
+        HashSet<Slot> preferredWith = new HashSet<>();
 
-        while(iter.hasNext()){
-
-            Map.Entry<Pair<Slot_Occupant, Slot>, Integer> temp = iter.next();
-            Pair<Slot_Occupant, Slot> p = temp.getKey();
-
-            if(a.equals(p.getRight())){
-                return p.getLeft();
-            }
-
+        for(Pair<Slot_Occupant,Slot> p : Preference_Entries.keySet()){
+            if(p.getKey().equals(a)){ preferredWith.add(p.getValue()); }
         }
 
-        return null;
+        return preferredWith;
     }
+    public HashSet<Slot_Occupant> getPreferredWith(Slot a){
 
-    //Get the Slot of a Slot Occupant if the given Slot
-    public Slot getPreference(Slot_Occupant a){
+        HashSet<Slot_Occupant> preferredWith = new HashSet<>();
 
-        Iterator<Map.Entry<Pair<Slot_Occupant, Slot>, Integer>> iter = Preference_Entries.entrySet().iterator();
-
-        while(iter.hasNext()){
-
-            Map.Entry<Pair<Slot_Occupant, Slot>, Integer> temp = iter.next();
-            Pair<Slot_Occupant, Slot> p = temp.getKey();
-
-            if(a.equals(p.getLeft())){
-                return p.getRight();
-            }
-
+        for(Pair<Slot_Occupant,Slot> p : Preference_Entries.keySet()){
+            if(p.getValue().equals(a)){ preferredWith.add(p.getKey()); }
         }
 
-        return null;
+        return preferredWith;
     }
-
     //gets the entry in the table, if it does not exist 0 is returned.
     public int getPreferenceValue(Slot_Occupant a, Slot b){
 

@@ -28,7 +28,7 @@ public class Course extends Slot_Occupant{
 
     @Override
     public String toString(){
-        return this.id + courseNum + "LEC " + lectSection;
+        return this.id + " " + courseNum + " " + "LEC " + lectSection;
     }
 
 }

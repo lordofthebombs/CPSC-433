@@ -14,4 +14,9 @@ abstract public class Slot_Occupant {
         this.id = id;
     }
 
+    @Override
+    public String toString(){
+        return this.id + " " + this.courseNum + " " + this.lectSection;
+    }
+
 }

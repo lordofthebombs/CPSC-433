@@ -24,8 +24,8 @@ public class Slot {
         Tues,
         Fri
     };
-    
-    
+
+
     public Slot(Day day, float time, int max, int min){
         this.day = day;
         this.time = time;
@@ -33,16 +33,12 @@ public class Slot {
         this.min = min;
     }
 
-    @Override
-    public String toString(){
-        return this.day + ", " + this.time;
-    }
-    
+
     @Override
     public int hashCode() {
         return Objects.hash(day, time, max, min);
     }
-    
+
     //Justification: If two slots are on the same day and at the same time they are "the same slot"
     //e.g the course slot times can't have two slots on tues for 1pm.
     //This way I can detect if there is an invalid redeclaration of a course/lab slot.
@@ -71,4 +67,9 @@ public class Slot {
              throw new DayConvertError();
          }
      }
+
+    @Override
+    public String toString(){
+        return this.day + ", " + this.time;
+    }
 }

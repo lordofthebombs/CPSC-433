@@ -1,134 +1,60 @@
 import ParseData.*;
 import Slot_Occupant.*;
+import Parser.*;
 
-import java.util.HashMap;
-import java.util.Iterator;
+import java.io.FileNotFoundException;
 import java.util.Map;
-import java.util.Vector;
+import java.util.Random;
+
 
 public class Driver {
 
+    public static Random random = new Random();
+    static ParseData parseData;
+
     public static void main(String args[]){
 
+        String configFile;
+        String fileName;
 
-        // This is just the main file, untill everything is made though, I would reccomend making your own driver (main) files to test
-        // the set based search and or tree.
+        // Deal with command line args:
+        System.out.println("Running ...");
 
-
-        /*  This block if for testing the orTree */
-        ParseData parseData = new ParseData();
-        Vector<Slot_Occupant> courses = new Vector<>();
-        courses.add(new Course("CPSC", 433, 1 ));
-        courses.add(new Course("CPSC", 449, 1));
-        courses.add(new Course("CPSC", 231, 9));
-        courses.add(new Course("CPSC", 501, 1));
-        courses.add(new Course("CPSC", 502, 1)); 
-        
-        Vector<Slot_Occupant> labs = new Vector<>();
-        labs.add(new Lab("CPSC", 433, 00, 01));
-
-        Vector<Slot> lab_slot = new Vector<>();
-        lab_slot.add(new Slot(Slot.Day.Mon, 12, 1, 1));
-        lab_slot.add(new Slot(Slot.Day.Mon, 13, 1, 1));
-
-
-        Vector<Slot> course_slot = new Vector<>();
-        course_slot.add(new Slot(Slot.Day.Mon, 12, 1, 1));
-        course_slot.add(new Slot(Slot.Day.Mon, 18, 1, 1));
-        
-
-        parseData.setCourses(courses);
-        parseData.setLabs(labs);
-        parseData.setCourse_Slots(course_slot);
-        parseData.setLab_Slots(lab_slot);
-        
-       // parseData.Non_Compat.addEntry(courses.get(0), courses.get(1));
-        //parseData.Unwanted.addEntry(courses.get(0), course_slot.get(0));
-        
-        
-        Map<Slot_Occupant, Slot> m = new HashMap<>();
-       // m.put(courses.get(0), course_slot.get(0));
-
-        m.put(courses.get(3), course_slot.get(0));
-        m.put(courses.get(4), course_slot.get(0));
-        m.put(courses.get(1), course_slot.get(0));
-        
-        m.put(labs.get(0), lab_slot.get(0));
-        
-        ConstraintChecker cc = new ConstraintChecker(parseData);
-        System.out.println(cc.checkHardConstraints(m));
-
-        
-
-        
-        //Map<Slot_Occupant, Slot> parentNode = cc.initialize();
-        /*
-        // should be null
-        
-        Iterator<Slot_Occupant> iter = parentNode.keySet().iterator();
-        System.out.println(parentNode.keySet().size());
-        
-        while (iter.hasNext() && parentNode.keySet() != null) {
-        	Slot_Occupant currentSO = iter.next();
-        	System.out.println(currentSO);
-        	System.out.println(parentNode.get(currentSO));
+        if(args.length != 2){
+            System.out.println("Please provide the config file followed by the input file");
+            System.out.println("Usage: java Driver [configFilePath] [inputFilePath]");
+            System.exit(0);
         }
-        
-        
-        System.out.println("slotMax should be false");
-        System.out.println(cc.isSlotMaxValid(m));
-         
-        System.out.println("overlap should be false");
-        System.out.println(cc.isOverlapValid(m));
-        
-        System.out.println("non-compat should be false");
-        System.out.println(cc.isCompatibleValid(m));
-        
-        System.out.println("Unwanted should be false");
-        System.out.println(cc.isUnwantedValid(m));
-        
-        System.out.println("Evening slot should be true");
-        System.out.println(cc.isEveningSlotsValid(m));
-        
-        System.out.println("is500Course should be false");
-        System.out.println(cc.is500CoursesValid(m));
-        
-        
-        System.out.println(clone433.equals(courses.get(0)));
-        
-        Iterator<Slot_Occupant> iterM = m.keySet().iterator();
-        System.out.println(m.keySet().size());
-        
-        while (iterM.hasNext() && m.keySet() != null) {
-        	Slot_Occupant currentSO = iterM.next();
-        	System.out.println(currentSO);
-        	System.out.println(m.get(currentSO));
+        configFile = args[0];
+        fileName = args[1];
+
+        try {
+            parseData = Parser.parse(fileName);
+
+            parseData.Non_Compat.print();
+            //Gen the starting states with the Partial Assignments
+            //---- Check to make sure the partial assignment is valid if not post error.
+            //Then start.
+
+            //The Solutions for the OR tree here
+            //-------------------------------
+            //Set Based Search here
+            //-------------------------------
+
+
+            //Output the answers
+            //-------------------------------
+
+
+
         }
-      
-        
-        
-        
-        
-        
-        //Vector<Slot> timeSlots = parseData.getSlots();
-        //timeSlots.get(0).max = 0;
-        //System.out.println(timeSlots.get(0).max);
-        //System.out.println(parseData.Course_Slots_Orig.get(0).max);
-       // System.out.println(labInd);
-        
-        /*
-        parseData.Partial_Assignments.addEntry(courses.get(0), course_slot.firstElement());
-
-        OrTree orTree = new OrTree(parseData);
-        orTree.altern(labs.get(0));
-        System.out.println(orTree.toString());
-		*/
-
-
-
+        catch (FileNotFoundException e){
+            System.out.println("File not found");
+            System.out.println("Invalid argument: try \t java Driver [configFile] [inputFile]");
+            System.exit(0);
+        }
 
     }
-
 
 
 
