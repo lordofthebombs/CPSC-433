@@ -40,6 +40,6 @@ public class Lab extends Slot_Occupant {
     }
 
     public boolean hasLectSect(){
-        return lectSection == -1;
+        return lectSection != -1;
     }
 }
