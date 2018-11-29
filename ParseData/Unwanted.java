@@ -7,7 +7,7 @@ import java.util.Iterator;
 
 public class Unwanted {
 
-    private HashSet<Pair<Slot_Occupant, Slot>> Unwanted_Entries;
+    private HashSet<EqualPair<Slot_Occupant, Slot>> Unwanted_Entries;
 
     public Unwanted(){
         Unwanted_Entries = new HashSet<>();
@@ -19,11 +19,11 @@ public class Unwanted {
 
         HashSet<Slot_Occupant> UnwantedWith = new HashSet<Slot_Occupant>();
 
-        Iterator<Pair<Slot_Occupant, Slot>> iter =  Unwanted_Entries.iterator();
+        Iterator<EqualPair<Slot_Occupant, Slot>> iter =  Unwanted_Entries.iterator();
 
         while(iter.hasNext()){
 
-            Pair<Slot_Occupant, Slot> temp = iter.next();
+            EqualPair<Slot_Occupant, Slot> temp = iter.next();
 
             if(a.equals(temp.getRight())){
                 UnwantedWith.add(temp.getLeft());
@@ -38,11 +38,11 @@ public class Unwanted {
 
         HashSet<Slot> UnwantedWith = new HashSet<Slot>();
 
-        Iterator<Pair<Slot_Occupant, Slot>> iter =  Unwanted_Entries.iterator();
+        Iterator<EqualPair<Slot_Occupant, Slot>> iter =  Unwanted_Entries.iterator();
 
         while(iter.hasNext()){
 
-            Pair<Slot_Occupant, Slot> temp = iter.next();
+            EqualPair<Slot_Occupant, Slot> temp = iter.next();
 
             if(a.equals(temp.getLeft())){
                 UnwantedWith.add(temp.getRight());
@@ -53,10 +53,10 @@ public class Unwanted {
     }
 
     //Returns an array of all Uwanted Pairs
-    public Pair<Slot_Occupant, Slot>[] getAll(){
+    public EqualPair<Slot_Occupant, Slot>[] getAll(){
 
         //This might need to be checked for functionality /todo
-        return (Pair<Slot_Occupant, Slot>[])Unwanted_Entries.toArray();
+        return (EqualPair<Slot_Occupant, Slot>[])Unwanted_Entries.toArray();
     }
 
     public boolean isUnwanted(Slot_Occupant a, Slot b){
@@ -71,8 +71,8 @@ public class Unwanted {
         return this.Unwanted_Entries.remove(newPair(a,b));
     }
 
-    private Pair<Slot_Occupant,Slot> newPair(Slot_Occupant a, Slot b){
-        return new Pair<Slot_Occupant, Slot>(a,b);
+    private EqualPair<Slot_Occupant,Slot> newPair(Slot_Occupant a, Slot b){
+        return new EqualPair<Slot_Occupant, Slot>(a,b);
     }
 
 }

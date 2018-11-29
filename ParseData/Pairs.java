@@ -4,6 +4,7 @@ import Slot_Occupant.Slot_Occupant;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import javafx.util.Pair;
 
 public class Pairs {
 
@@ -24,8 +25,8 @@ public class Pairs {
 
             Pair<Slot_Occupant, Slot_Occupant> temp = iter.next();
 
-            if(a.equals(temp.getLeft())){
-                pairedWith.add(temp.getRight());
+            if(a.equals(temp.getKey())){
+                pairedWith.add(temp.getValue());
             }
         }
 

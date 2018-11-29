@@ -1,13 +1,11 @@
 package ParseData;
 
-import java.util.Objects;
-
-public class Pair<L,R>{
+public class EqualPair<L,R>{
 
     private final L left;
     private final R right;
 
-    public Pair(L left, R right){
+    public EqualPair(L left, R right){
         this.left = left;
         this.right = right;
     }
@@ -22,12 +20,12 @@ public class Pair<L,R>{
     //This is done because I want thew pairs (a,b) and (b,a) to be equal.
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof Pair)) return false;
-        Pair otherPair = (Pair) o;
-        return (this.left.equals(otherPair.getLeft()) &&
-                this.right.equals(otherPair.getRight())) ||
-                (this.left.equals(otherPair.getRight()) &&
-                        this.right.equals(otherPair.getLeft()));
+        if (!(o instanceof EqualPair)) return false;
+        EqualPair otherEqualPair = (EqualPair) o;
+        return (this.left.equals(otherEqualPair.getLeft()) &&
+                this.right.equals(otherEqualPair.getRight())) ||
+                (this.left.equals(otherEqualPair.getRight()) &&
+                        this.right.equals(otherEqualPair.getLeft()));
 
     }
 
