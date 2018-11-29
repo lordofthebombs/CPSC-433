@@ -26,4 +26,9 @@ public class Course extends Slot_Occupant{
         return Objects.hash(id, courseNum, lectSection);
     }
 
+    @Override
+    public String toString(){
+        return this.id + " " + courseNum + " " + "LEC " + lectSection;
+    }
+
 }

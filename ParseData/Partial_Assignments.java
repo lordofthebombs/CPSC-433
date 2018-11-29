@@ -55,4 +55,8 @@ public class Partial_Assignments {
 
         return s;
     }
+
+    public HashMap<Slot_Occupant,Slot> getAllPartialAssignments(){
+        return Partial_Entries_SO_S;
+    }
 }

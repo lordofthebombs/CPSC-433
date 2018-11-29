@@ -4,7 +4,6 @@ import ParseData.Slot;
 import Slot_Occupant.Course;
 import Slot_Occupant.Lab;
 
-import java.sql.Time;
 import java.util.HashMap;
 
 public class TimeConverter {
