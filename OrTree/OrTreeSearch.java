@@ -3,8 +3,6 @@ package OrTree;
 import ParseData.ParseData;
 import ParseData.Slot;
 import Slot_Occupant.*;
-import sun.awt.image.ImageWatched;
-import sun.awt.image.ImageWatched.Link;
 
 import java.util.*;
 
@@ -63,10 +61,13 @@ public class OrTreeSearch {
 
         for(Slot s : workingSlots){
 
-            LinkedHashMap<Slot_Occupant,Slot> attepmtedSolution = new LinkedHashMap<>(currentSolution);
-            attepmtedSolution.put(workingOccupant,s);
+            LinkedHashMap<Slot_Occupant,Slot> attemptedSolution = new LinkedHashMap<>(currentSolution);
+            attemptedSolution.put(workingOccupant,s);
 
-            if(constraints.checkHardConstraints(attepmtedSolution)){
+            if(attemptedSolution == null){
+            	System.out.print("test");
+            }
+            if(constraints.checkHardConstraints(attemptedSolution)){
                 possibleSlots.add(s);
             }
         }

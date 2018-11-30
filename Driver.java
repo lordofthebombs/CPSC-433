@@ -34,9 +34,9 @@ public class Driver {
         //fileName = args[1];
         fileName = "testFile.txt";
         try {
-            parseData = Parser.parse("medfile.txt");
+            parseData = Parser.parse("testFile.txt");
 
-           // parseData.Non_Compat.print();
+            parseData.Non_Compat.print();
             //Gen the starting states with the Partial Assignments
             //---- Check to make sure the partial assignment is valid if not post error.
             //Then start.
@@ -54,7 +54,7 @@ public class Driver {
             HashSet<Map<Slot_Occupant,Slot>> unique = new HashSet<>();
             
             
-            for(int x = 0 ; x < 10 ; x++) {
+            for(int x = 0 ; x < 1000 ; x++) {
                 Map<Slot_Occupant, Slot> slot_occupantSlotMap = orTreeSearch.OrTreeRecursiveSearch();
 
                 if(slot_occupantSlotMap != null) {
