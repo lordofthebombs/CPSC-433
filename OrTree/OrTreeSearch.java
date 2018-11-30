@@ -16,7 +16,7 @@ public class OrTreeSearch {
         private HashMap<Slot,OrTreeNode> transitions;
 
         public OrTreeNode(){
-            possibleSlots = new ArrayList<>();
+            possibleSlots = null;
             transitions = new HashMap<>();
         }
     }
@@ -83,8 +83,9 @@ public class OrTreeSearch {
         }
 
         //
-        root.possibleSlots = getPossibleSlots(solution,workingOccupant);
-
+        if(root.possibleSlots == null) {
+            root.possibleSlots = getPossibleSlots(solution, workingOccupant);
+        }
         while(!root.possibleSlots.isEmpty()){
 
             Slot attemptedSlot = root.possibleSlots.get(randGen.nextInt(root.possibleSlots.size()));
@@ -102,8 +103,10 @@ public class OrTreeSearch {
             else{ // a branch already exists
 
                 //If the path has been made and has no possible slots, then and only then remove the attempted slot
-                if(root.transitions.get(attemptedSlot).possibleSlots.isEmpty()){
-                    root.possibleSlots.remove(attemptedSlot);
+                if(nextNode.possibleSlots != null){
+                    if(nextNode.possibleSlots.isEmpty()) {
+                        root.possibleSlots.remove(attemptedSlot);
+                    }
                 }
             }
 
@@ -133,8 +136,9 @@ public class OrTreeSearch {
         }
 
         //Get a List of all possible Slots for the found Course/Slot ---------------------------------------------------
-        currentNode.possibleSlots = getPossibleSlots(currentSolution,workingOccupant);
-
+        if(currentNode.possibleSlots == null) {
+            currentNode.possibleSlots = getPossibleSlots(currentSolution, workingOccupant);
+        }
         LinkedHashMap<Slot_Occupant,Slot> copyOfCurrentSolution = new LinkedHashMap<>(currentSolution);
 
         //Begin While Loop ---------------------------------------------------------------------------------------------
@@ -159,8 +163,10 @@ public class OrTreeSearch {
             else{ // a branch already exists
 
                 //If the path has been made and has no possible slots, then and only then remove the attempted slot
-                if(currentNode.transitions.get(attemptedSlot).possibleSlots.isEmpty()){
-                    currentNode.possibleSlots.remove(attemptedSlot);
+                if(nextNode.possibleSlots != null){
+                    if(nextNode.possibleSlots.isEmpty()) {
+                        currentNode.possibleSlots.remove(attemptedSlot);
+                    }
                 }
             }
 
