@@ -481,6 +481,7 @@ public class Parser {
 
         String entry = readLine();
 
+        LinkedList<Slot_Occupant> AlreadyAssigned = new LinkedList<>();
 
         while (entry != null && !entry.equals("")) {
 
@@ -490,11 +491,16 @@ public class Parser {
             if(splitValues.length == 3){
 
                 t1 = getOccupant(data,splitValues[0].trim());
+                if(AlreadyAssigned.contains(t1)){
+                    throw new ParseError("You cannot have 2 partial assignments for 1 course/lab");
+                }
                 s1 = getSlot(data,splitValues[1].trim(),splitValues[2].trim(),t1.getClass());
 
                 if(!partials.addEntry(t1,s1)){
                     printWarning("Duplicate partial assignment statement found");
                 }
+
+                AlreadyAssigned.add(t1);
 
             }
             else{

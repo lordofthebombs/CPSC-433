@@ -22,16 +22,16 @@ public class Driver {
         // Deal with command line args:
         System.out.println("Running ...");
 
-        if(args.length != 2){
+        /*if(args.length != 2){
             System.out.println("Please provide the config file followed by the input file");
             System.out.println("Usage: java Driver [configFilePath] [inputFilePath]");
             System.exit(0);
-        }
-        configFile = args[0];
-        fileName = args[1];
-
+        }*/
+        //configFile = args[0];
+        //fileName = args[1];
+        fileName = "testFile.txt";
         try {
-            parseData = Parser.parse(fileName);
+            parseData = Parser.parse("medfile.txt");
 
             parseData.Non_Compat.print();
             //Gen the starting states with the Partial Assignments
@@ -49,13 +49,20 @@ public class Driver {
 
             ConstraintChecker constraintChecker = new ConstraintChecker(parseData);
             OrTreeSearch orTreeSearch = new OrTreeSearch(parseData, constraintChecker);
-            Map<Slot_Occupant, Slot> slot_occupantSlotMap = orTreeSearch.buildValidCandidateSol();
 
-            if(slot_occupantSlotMap != null) {
-                printSolution(slot_occupantSlotMap);
-            }else{
-                System.out.println("Result was null");
+            for(int x = 0 ; x < 100 ; x++) {
+                Map<Slot_Occupant, Slot> slot_occupantSlotMap = orTreeSearch.OrTreeRecursiveSearch(parseData, constraintChecker);
+
+                if(slot_occupantSlotMap != null) {
+                    printSolution(slot_occupantSlotMap);
+                    System.out.println("NOW MUTATING ---------------------------------------------------------------");
+                    slot_occupantSlotMap = orTreeSearch.MutateRecursiveSearch(parseData,constraintChecker,slot_occupantSlotMap);
+                    printSolution(slot_occupantSlotMap);
+                }else{
+                    System.out.println("Result was null");
+                }
             }
+
 
 
 //            Map<Slot_Occupant, Slot> mutant = orTreeSearch.mutateParentSolution(slot_occupantSlotMap);

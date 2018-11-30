@@ -2,6 +2,7 @@ import ParseData.ParseData;
 import ParseData.Slot;
 import Slot_Occupant.Course;
 import Slot_Occupant.Slot_Occupant;
+import sun.awt.image.ImageWatched;
 
 import java.util.*;
 
@@ -110,7 +111,7 @@ public class OrTreeSearch {
     private Map<Slot_Occupant, Slot> initialPr;
     private Map<Slot, Integer> copyOfLabSlots = new LinkedHashMap<>();
     private Map<Slot, Integer> copyOfCourseSlots = new LinkedHashMap<>();
-
+    private Random randGen = new Random();
 
 
 
@@ -139,7 +140,184 @@ public class OrTreeSearch {
     }
 
 
+    /** ------------------------------------------------------------------------------------------------------------------
+     * Ryan's Recursive Solution For the non Mutated Version;
+     *
+     *
+     */
+    public Map<Slot_Occupant,Slot>OrTreeRecursiveSearch(ParseData parseData, ConstraintChecker constraintChecker){
 
+        LinkedHashMap<Slot_Occupant,Slot> solution = new LinkedHashMap<>();
+        solution = initializePr(solution);
+
+        return OrTreeRecursiveSearch(parseData,constraintChecker,solution);
+    }
+
+    public LinkedHashMap<Slot_Occupant,Slot>OrTreeRecursiveSearch(ParseData parseData, ConstraintChecker constraintChecker, LinkedHashMap<Slot_Occupant,Slot> currentSolution){
+
+        //Return the current working solution if it is a solution ------------------------------------------------------
+        if(isSolved(currentSolution)){
+            return currentSolution;
+        }
+
+        //Get first Slot_Occupant to work on, find first non_null element ----------------------------------------------
+        Slot_Occupant workingOccupant = null;
+        for(Map.Entry entry : currentSolution.entrySet()){
+            if(entry.getValue() == null){
+                workingOccupant = (Slot_Occupant)entry.getKey();
+                break;
+            }
+        }
+
+        //Get a List of all possible Slots for the found Course/Slot ---------------------------------------------------
+        Vector<Slot> possibleSlots;
+        if(workingOccupant instanceof Course){
+            possibleSlots = new Vector<>(parseData.Course_Slots);
+        }else{
+            possibleSlots = new Vector<>(parseData.Lab_Slots);
+        }
+
+        //Begin While Loop ---------------------------------------------------------------------------------------------
+        while(possibleSlots.size() != 0){
+
+            //Randomly Select a possible slot
+            Slot attemptedSlot = possibleSlots.elementAt(randGen.nextInt(possibleSlots.size()));
+
+            //make a new solution with the attempted slot
+            LinkedHashMap<Slot_Occupant,Slot> attemptedSolution = new LinkedHashMap<>(currentSolution);
+            attemptedSolution.put(workingOccupant,attemptedSlot);
+
+            //Check Constraints
+            if(constraintChecker.checkHardConstraints(attemptedSolution)){
+
+                //Recursive Step
+                currentSolution = OrTreeRecursiveSearch(parseData,constraintChecker,attemptedSolution);
+
+                //If it is solved then return the solution back up.
+                if(currentSolution != null){
+                    return currentSolution;
+                }
+            }
+            else{
+                //Failed constraints so this slot is not a possible solution.
+                possibleSlots.remove(attemptedSlot);
+            }
+        }
+
+        //No possible solution could be found, return null;
+        return null;
+    }
+
+    /**
+     * Ryan's Mutated Version of the OrTree.
+     *
+     *
+     */
+    public HashMap<Slot_Occupant,Slot> MutateRecursiveSearch(ParseData parseData, ConstraintChecker constraintChecker, Map<Slot_Occupant,Slot> parentSolution){
+
+        LinkedHashMap<Slot_Occupant,Slot> solution = new LinkedHashMap<>();
+        solution = initializePr(solution);
+
+        LinkedHashMap<Slot_Occupant,Slot> startingMap = new LinkedHashMap<>(solution);
+
+        Vector<Slot_Occupant> possibleSlotOccupantsToChange = parseData.getOccupants();
+        Vector<Slot> possibleSlotsToChangeTo = parseData.getSlots();
+
+        //eventually try all Slot_Occupants if a mutation can't be found.
+        do{
+            //Generated a random slot_occupant to mutate on
+            Slot_Occupant mutatedOccupant = possibleSlotOccupantsToChange.elementAt(randGen.nextInt(possibleSlotOccupantsToChange.size()));
+
+            //Remove the ones we have chosen
+            possibleSlotOccupantsToChange.remove(mutatedOccupant);
+
+            //See if it can work.
+            solution = MutateRecursiveSearch(parseData,constraintChecker,parentSolution,startingMap,mutatedOccupant);
+
+            //If it did work return the value as the mutated value
+            if(solution != null){ return solution; }
+
+        }while(!possibleSlotOccupantsToChange.isEmpty());
+
+        return null; //No mutation was possible, this means that no one thing could be changed and a new solution made.
+
+        //THIS COULD BE CHANGE TO GO TO (Try removing 2 things), and (3 things) and so on (until n things is chosen).
+        //That would grantee answers.
+    }
+
+    public LinkedHashMap<Slot_Occupant,Slot> MutateRecursiveSearch(ParseData parseData, ConstraintChecker constraintChecker, Map<Slot_Occupant,Slot> parentSolution, LinkedHashMap<Slot_Occupant,Slot> currentSolution, Slot_Occupant mutatedSlot){
+
+        //Return the current working solution if it is a solution ------------------------------------------------------
+        if(isSolved(currentSolution)){
+            return currentSolution;
+        }
+
+        Slot_Occupant workingOccupant = null;
+        LinkedHashMap<Slot_Occupant, Slot> attemptedSolution = new LinkedHashMap<>(currentSolution);
+
+        if(mutatedSlot == null) { //Mutated slot is made null after it is used once, so only on the first recursion.
+
+            //Get first Slot_Occupant to work on, find first non_null element unless it's the first time which case, work for the mutated element
+            for(Map.Entry entry : currentSolution.entrySet()){
+                if(entry.getValue() == null){
+                    workingOccupant = (Slot_Occupant)entry.getKey();
+                    break;
+                }
+            }
+            //See if we can copy the parent.
+            attemptedSolution.put(workingOccupant, parentSolution.get(workingOccupant));
+            if (constraintChecker.checkHardConstraints(attemptedSolution)) {
+                return MutateRecursiveSearch(parseData, constraintChecker, parentSolution, attemptedSolution, mutatedSlot);
+            }
+        }
+        else {
+            workingOccupant = mutatedSlot;
+        }
+        //If you can't copy the parent get a List of all possible Slots for the found Course/Slot ----------------------
+        Vector<Slot> possibleSlots;
+        if(workingOccupant instanceof Course){
+            possibleSlots = new Vector<>(parseData.Course_Slots);
+        }else{
+            possibleSlots = new Vector<>(parseData.Lab_Slots);
+        }
+
+        //Don't try the parent slot case;
+        possibleSlots.remove(parentSolution.get(workingOccupant));
+
+        //Begin While Loop ---------------------------------------------------------------------------------------------
+        while(possibleSlots.size() != 0){
+
+            //Randomly Select a possible slot
+            Slot attemptedSlot = possibleSlots.elementAt(randGen.nextInt(possibleSlots.size()));
+
+            //make a new solution with the attempted slot
+            attemptedSolution = new LinkedHashMap<>(currentSolution);
+            attemptedSolution.put(workingOccupant,attemptedSlot);
+
+            //Check Constraints
+            if(constraintChecker.checkHardConstraints(attemptedSolution)){
+
+                //Recursive Step
+                currentSolution = MutateRecursiveSearch(parseData,constraintChecker,parentSolution,attemptedSolution,null);
+
+                //If it is solved then return the solution back up.
+                if(currentSolution != null){
+                    return currentSolution;
+                }
+            }
+            else{
+                //Failed constraints so this slot is not a possible solution.
+                possibleSlots.remove(attemptedSlot);
+            }
+        }
+
+        //No possible solution could be found, return null;
+        return null;
+    }
+
+    public boolean isSolved(LinkedHashMap<Slot_Occupant,Slot> map){
+        return !map.containsValue(null);
+    }
     /**
      * This method will create the template for Candidate solution
      * The size of the map will be equal to Courses + Labs
@@ -169,6 +347,32 @@ public class OrTreeSearch {
         }
 
         return data;
+    }
+
+    private LinkedHashMap<Slot_Occupant, Slot> initializePr(LinkedHashMap<Slot_Occupant,Slot> givenData){
+        Vector<Slot_Occupant> all = this.parseData.Courses;
+        all.addAll(this.parseData.Labs);
+
+        Map<Slot_Occupant, Slot> data = new LinkedHashMap<>();
+        all.forEach((item) -> givenData.put(item, null));
+
+
+        HashMap<Slot_Occupant, Slot> allPartialAssignments = this.parseData.Partial_Assignments.getAllPartialAssignments();
+
+        for(Map.Entry<Slot_Occupant, Slot> assignment : allPartialAssignments.entrySet()){
+            if(givenData.containsKey(assignment.getKey())){
+                givenData.put(assignment.getKey(), assignment.getValue());
+                if(assignment.getKey() instanceof Course){
+                    int currentMaxVal = this.copyOfCourseSlots.get(assignment.getValue());
+                    this.copyOfCourseSlots.put(assignment.getValue(), currentMaxVal - 1 );
+                }else{
+                    int currentMaxVal = this.copyOfLabSlots.get(assignment.getValue());
+                    this.copyOfLabSlots.put(assignment.getValue(), currentMaxVal - 1 );
+                }
+            }
+        }
+
+        return givenData;
     }
 
 
@@ -271,14 +475,6 @@ public class OrTreeSearch {
         return score;
     }
 
-    private boolean isPrSolved( Map<Slot_Occupant, Slot> data){
-
-        //should call constraint check here
-        return false;
-    }
-
-
-
     /**
      * This is the search control to be used by Set Based Search to create the initial population
      * This result a single Map<Slot_Occupant, Slot> which has passed all hard constraints check
@@ -356,7 +552,7 @@ public class OrTreeSearch {
         //choose the slot_occupant to mutate on
         Map<Slot_Occupant, Slot> initialDataForChild = new LinkedHashMap<>();
         initialDataForChild.putAll(parentData);
-        Slot_Occupant [] allCoursesAndLabs = parentData.keySet().stream().toArray(Slot_Occupant []::new);
+        Slot_Occupant [] allCoursesAndLabs = null; // parentData.keySet().stream().toArray(Slot_Occupant [] :: new); This errors out I don't know why.
 
         int randomIndex = Driver.random.nextInt(allCoursesAndLabs.length);
         Slot_Occupant randomSlotOccupantToMutateOn = allCoursesAndLabs[randomIndex];
