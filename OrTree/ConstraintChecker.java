@@ -79,12 +79,19 @@ public class ConstraintChecker {
     	//allSlot_Occupants.addAll(parseData.Labs);
     	
     	// removes course time slots at tuesdays 11.0f
+    	
         Iterator<Slot> iter = parseData.Course_Slots.iterator();
+        LinkedList<Slot> toBeRemoved = new LinkedList();
+        
         while (iter.hasNext()) {
         	Slot currentSlot = iter.next();
         	if (currentSlot.day == Day.Tues && currentSlot.time == 11.0f) {
-        		iter.remove();
+        		toBeRemoved.add(currentSlot); 
         	}
+        }
+        
+        for(Slot s : toBeRemoved){
+        	parseData.Course_Slots.remove(s);
         }
         
         // pairs courses to its corresponding labs
@@ -292,14 +299,21 @@ public class ConstraintChecker {
    
    // checks if any of the assigned slot_occupants are incompatible(so, so) with other assigned slot_occupants
    public boolean isCompatibleValid(Map<Slot_Occupant, Slot> data) {
+	   
+	    
 	   Iterator<Slot_Occupant> soIter = data.keySet().iterator();
 	   
+	   
 	   while (soIter.hasNext()) {
+		   
 		   Slot_Occupant currentSO = soIter.next();
 		   Slot currentSO_Slot = data.get(currentSO);
 		   
+		   if(currentSO == null){
+			   System.out.println("NULL CASE"); 
+		   }
 		   // ensures that current slot_occupant is assigned a slot
-		   if (currentSO_Slot != null) {
+		   if (currentSO_Slot != null && currentSO != null) {
 			   HashSet<Slot_Occupant> non_compatibles = parseData.Non_Compat.isNonCompatableWith(currentSO);
 			   
 			   Iterator<Slot_Occupant> non_compat_iter = non_compatibles.iterator();
@@ -307,7 +321,7 @@ public class ConstraintChecker {
 				   Slot_Occupant nonCompat_currentSO = non_compat_iter.next();
 				   Slot nonCompat_currentS = data.get(nonCompat_currentSO);
 				   
-				   if (nonCompat_currentS != null && nonCompat_currentS.equals(currentSO_Slot)) return false;
+				   if (nonCompat_currentS != null && nonCompat_currentS.equals(currentSO_Slot)){ return false;}
 					   
 			   }
 			   
