@@ -187,20 +187,22 @@ public class ConstraintChecker {
  	   	// no keys therefore no courses/labs are assigned
  	   	if (keys.size() == 0) return true;
     	
-//    	if (!isSlotMaxValid(data)) return false;
+    	if (!isSlotMaxValid(data)){
+    		return false;
+    	}
     	
     	if (!isOverlapValid(data)) {
-    		System.out.println("Corresponding courses and labs were scheduled in the same slot.");
+    		//System.out.println("Corresponding courses and labs were scheduled in the same slot.");
     		return false;
     	}
     	
     	if (!isCompatibleValid(data)) {
-    		System.out.println("Incompatible slot_occupants were scheduled in the same slot");
+    		//System.out.println("Incompatible slot_occupants were scheduled in the same slot");
     		return false;
     	}
     	
     	if (!isUnwantedValid(data)) {
-    		System.out.println("Slot_occupant were schedule in an unwanted slot");
+    		//System.out.println("Slot_occupant were schedule in an unwanted slot");
     		return false;
     	}
     	/*
@@ -212,7 +214,7 @@ public class ConstraintChecker {
     	*/
     	
     	if (!(is500CoursesValid(data))) {
-    		System.out.println("500 course/s were scheduled in the same slot");
+    		//System.out.println("500 course/s were scheduled in the same slot");
     		return false;
     	}
     	
@@ -225,27 +227,34 @@ public class ConstraintChecker {
     
     
     // checks if all the slots can be paired to their corresponding courses
-    public boolean isSlotMaxValid(Map<Slot_Occupant, Slot> data) {
-    	boolean output = true;
-    	
-    	// iterate through keys that aren't null
-    	Iterator<Slot_Occupant> soIter = data.keySet().iterator();
-    	
-    	while (soIter.hasNext()) {
-    		Slot currentSlot = data.get(soIter.next());
-    		if (currentSlot == null) continue;
-    		
-    		if (currentSlot.max > 0) {
-    			currentSlot.max--;
-    		} else {
-    			output = false;
-    			break;
-    		}
-    	}
-    	
-    	// reset counter for time slots
-    	parseData.resetTimeSlots();
-    	
+    public boolean isSlotMaxValid(Map<Slot_Occupant, Slot> solution) {
+
+        boolean output = true;
+
+       LinkedHashMap copyOfSolution = new LinkedHashMap(solution);
+       Vector<Slot> copyOfSlots = new Vector<Slot>(parseData.getSlots());
+
+       HashMap<Slot,Integer> Slot_Totals = new HashMap();
+
+        for(Object s : copyOfSolution.values()){
+
+            if(!Slot_Totals.containsKey(s)){
+                Slot_Totals.put((Slot)s,1);
+            }
+            else{
+                int oldTotal = Slot_Totals.get(s);
+                Slot_Totals.put((Slot)s,oldTotal+1);
+            }
+        }
+
+        for(Slot s : copyOfSlots){
+
+            if(Slot_Totals.containsKey(s)){
+                int numberInSolution = Slot_Totals.get(s);
+                if(numberInSolution > s.max){ return false; }
+            }
+        }
+
     	return output;
     }
     

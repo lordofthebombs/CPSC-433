@@ -2,6 +2,7 @@ import ParseData.ParseData;
 import ParseData.Slot;
 import Slot_Occupant.Course;
 import Slot_Occupant.Slot_Occupant;
+import com.sun.istack.internal.NotNull;
 import sun.awt.image.ImageWatched;
 
 import java.util.*;
@@ -112,7 +113,7 @@ public class OrTreeSearch {
     private Map<Slot, Integer> copyOfLabSlots = new LinkedHashMap<>();
     private Map<Slot, Integer> copyOfCourseSlots = new LinkedHashMap<>();
     private Random randGen = new Random();
-
+    private long start,end;
 
 
     /**
@@ -150,11 +151,19 @@ public class OrTreeSearch {
         LinkedHashMap<Slot_Occupant,Slot> solution = new LinkedHashMap<>();
         solution = initializePr(solution);
 
+        start = System.currentTimeMillis();
+
+
         return OrTreeRecursiveSearch(parseData,constraintChecker,solution);
     }
 
     public LinkedHashMap<Slot_Occupant,Slot>OrTreeRecursiveSearch(ParseData parseData, ConstraintChecker constraintChecker, LinkedHashMap<Slot_Occupant,Slot> currentSolution){
 
+        end = System.currentTimeMillis();
+
+        //if(end - start > 6000){
+            //System.out.println("wtf");
+        //}
         //Return the current working solution if it is a solution ------------------------------------------------------
         if(isSolved(currentSolution)){
             return currentSolution;
@@ -177,6 +186,8 @@ public class OrTreeSearch {
             possibleSlots = new Vector<>(parseData.Lab_Slots);
         }
 
+        LinkedHashMap<Slot_Occupant,Slot> copyOfCurrentSolution = new LinkedHashMap<>(currentSolution);
+
         //Begin While Loop ---------------------------------------------------------------------------------------------
         while(possibleSlots.size() != 0){
 
@@ -184,7 +195,8 @@ public class OrTreeSearch {
             Slot attemptedSlot = possibleSlots.elementAt(randGen.nextInt(possibleSlots.size()));
 
             //make a new solution with the attempted slot
-            LinkedHashMap<Slot_Occupant,Slot> attemptedSolution = new LinkedHashMap<>(currentSolution);
+
+            LinkedHashMap<Slot_Occupant,Slot> attemptedSolution = new LinkedHashMap<>(copyOfCurrentSolution);
             attemptedSolution.put(workingOccupant,attemptedSlot);
 
             //Check Constraints
@@ -254,6 +266,7 @@ public class OrTreeSearch {
 
         Slot_Occupant workingOccupant = null;
         LinkedHashMap<Slot_Occupant, Slot> attemptedSolution = new LinkedHashMap<>(currentSolution);
+        LinkedHashMap<Slot_Occupant,Slot> startingMap = new LinkedHashMap<>(currentSolution);
 
         if(mutatedSlot == null) { //Mutated slot is made null after it is used once, so only on the first recursion.
 
@@ -291,7 +304,7 @@ public class OrTreeSearch {
             Slot attemptedSlot = possibleSlots.elementAt(randGen.nextInt(possibleSlots.size()));
 
             //make a new solution with the attempted slot
-            attemptedSolution = new LinkedHashMap<>(currentSolution);
+            attemptedSolution = new LinkedHashMap<>(startingMap);
             attemptedSolution.put(workingOccupant,attemptedSlot);
 
             //Check Constraints

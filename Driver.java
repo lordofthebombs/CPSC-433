@@ -33,7 +33,7 @@ public class Driver {
         try {
             parseData = Parser.parse("medfile.txt");
 
-            parseData.Non_Compat.print();
+           // parseData.Non_Compat.print();
             //Gen the starting states with the Partial Assignments
             //---- Check to make sure the partial assignment is valid if not post error.
             //Then start.
@@ -50,7 +50,7 @@ public class Driver {
             ConstraintChecker constraintChecker = new ConstraintChecker(parseData);
             OrTreeSearch orTreeSearch = new OrTreeSearch(parseData, constraintChecker);
 
-            for(int x = 0 ; x < 100 ; x++) {
+            for(int x = 0 ; x < 1 ; x++) {
                 Map<Slot_Occupant, Slot> slot_occupantSlotMap = orTreeSearch.OrTreeRecursiveSearch(parseData, constraintChecker);
 
                 if(slot_occupantSlotMap != null) {
