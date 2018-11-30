@@ -21,13 +21,15 @@ public class SetSearch{
   private OrTreeSearch solGen;
   private Random randGen;
   private int generation;
+  private Eval eval;
 
 
-  public SetSearch(ParseData data){
+  public SetSearch(ParseData data, double labsmin, double coursemin, double notpaired, double section){
     this.data = data;
     solGen = new OrTreeSearch(data);
     workingSet = new ArrayList<Pair<Map<Slot_Occupant, Slot>, Integer>>(MAX_FACTS);
     randGen = new Random(System.currentTimeMillis());
+    eval = new Eval(labsmin, coursemin, notpaired, section);
     generation = 1;
     int repeats = 0;
 
@@ -65,20 +67,13 @@ public class SetSearch{
     return workingSet.get(0);
   }
 
-  //evaluates a particular solution
-  //TODO: everything
-  private Integer eval(Map<Slot_Occupant, Slot> solution){
-    //SHOULD USE PARSEDATA TO EVALUATE IT
-    return new Integer(0);
-  }
-
   //adds solution to set if it is not contained already
   //returns true if succesfull
   //SORTS IN DECENDING ORDER BASED ON EVAL SCORE
   //did it in decending order because we SHOULD be getting higher scores as we go
   //so that shortens the loop
   private boolean addToSet(Map<Slot_Occupant, Slot> solution){
-    Integer score = eval(solution);
+    Integer score = eval.eval(solution);
     Pair<Map<Slot_Occupant, Slot>, Integer> fin = new Pair(solution, score);
     if(workingSet.contains(fin)){
       return false;
