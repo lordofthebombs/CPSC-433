@@ -193,9 +193,9 @@ public class OrTreeSearch {
 
             //Randomly Select a possible slot
             Slot attemptedSlot = possibleSlots.elementAt(randGen.nextInt(possibleSlots.size()));
+            possibleSlots.remove(attemptedSlot);
 
             //make a new solution with the attempted slot
-
             LinkedHashMap<Slot_Occupant,Slot> attemptedSolution = new LinkedHashMap<>(copyOfCurrentSolution);
             attemptedSolution.put(workingOccupant,attemptedSlot);
 
@@ -209,10 +209,6 @@ public class OrTreeSearch {
                 if(currentSolution != null){
                     return currentSolution;
                 }
-            }
-            else{
-                //Failed constraints so this slot is not a possible solution.
-                possibleSlots.remove(attemptedSlot);
             }
         }
 
