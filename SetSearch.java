@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import javafx.util.Pair;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import Slot_Occupant.*;
@@ -7,7 +8,7 @@ import ParseData.*;
 
 public class SetSearch{
 
-  private static final int INIT_POPULATION = 100;
+  /*private static final int INIT_POPULATION = 100;
   private static final int MAX_FACTS = 1000;
   private static final int TRIM_NUM = 800; //number of facts after trim, maxfacts-trimnum=num of facts removed
   private static final int MAX_REPEATS = 3;
@@ -111,7 +112,7 @@ public class SetSearch{
     workingSet.removeRange(TRIM_NUM, workingSet.size());
   }
 
-
+   */
 
 
 }

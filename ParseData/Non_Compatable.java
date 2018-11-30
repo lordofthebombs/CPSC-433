@@ -11,7 +11,7 @@ import java.util.Iterator;
  */
 public class Non_Compatable {
 
-    private HashSet<Pair<Slot_Occupant, Slot_Occupant>> Non_Compatable_Entries;
+    private HashSet<EqualPair<Slot_Occupant, Slot_Occupant>> Non_Compatable_Entries;
 
     public Non_Compatable(){
         Non_Compatable_Entries = new HashSet<>();
@@ -22,11 +22,11 @@ public class Non_Compatable {
 
         HashSet<Slot_Occupant> NonCompatableWith = new HashSet<Slot_Occupant>();
 
-        Iterator<Pair<Slot_Occupant, Slot_Occupant>> iter =  Non_Compatable_Entries.iterator();
+        Iterator<EqualPair<Slot_Occupant, Slot_Occupant>> iter =  Non_Compatable_Entries.iterator();
 
         while(iter.hasNext()){
 
-            Pair<Slot_Occupant, Slot_Occupant> temp = iter.next();
+            EqualPair<Slot_Occupant, Slot_Occupant> temp = iter.next();
 
             if(a.equals(temp.getLeft())){
                 NonCompatableWith.add(temp.getRight());
@@ -48,8 +48,8 @@ public class Non_Compatable {
         return this.Non_Compatable_Entries.remove(newPair(a,b));
     }
 
-    private Pair<Slot_Occupant,Slot_Occupant> newPair(Slot_Occupant a, Slot_Occupant b){
-        return new Pair<>(a,b);
+    private EqualPair<Slot_Occupant,Slot_Occupant> newPair(Slot_Occupant a, Slot_Occupant b){
+        return new EqualPair<>(a,b);
     }
 
     public void print(){

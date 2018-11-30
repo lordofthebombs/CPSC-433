@@ -1,3 +1,5 @@
+package OrTree;
+
 import ParseData.Slot.Day;
 import Slot_Occupant.Course;
 import Slot_Occupant.Lab;
