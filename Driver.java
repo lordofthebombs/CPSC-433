@@ -1,6 +1,8 @@
+import OrTree.ConstraintChecker;
 import ParseData.*;
 import Slot_Occupant.*;
 import Parser.*;
+import OrTree.*;
 
 import java.io.FileNotFoundException;
 import java.util.Comparator;
@@ -47,17 +49,16 @@ public class Driver {
             //Output the answers
             //-------------------------------
 
-            ConstraintChecker constraintChecker = new ConstraintChecker(parseData);
-            OrTreeSearch orTreeSearch = new OrTreeSearch(parseData, constraintChecker);
+            OrTreeSearch orTreeSearch = new OrTreeSearch(parseData);
 
-            for(int x = 0 ; x < 1 ; x++) {
-                Map<Slot_Occupant, Slot> slot_occupantSlotMap = orTreeSearch.OrTreeRecursiveSearch(parseData, constraintChecker);
+            for(int x = 0 ; x < 10 ; x++) {
+                Map<Slot_Occupant, Slot> slot_occupantSlotMap = orTreeSearch.OrTreeRecursiveSearch();
 
                 if(slot_occupantSlotMap != null) {
                     printSolution(slot_occupantSlotMap);
-                    System.out.println("NOW MUTATING ---------------------------------------------------------------");
-                    slot_occupantSlotMap = orTreeSearch.MutateRecursiveSearch(parseData,constraintChecker,slot_occupantSlotMap);
-                    printSolution(slot_occupantSlotMap);
+                    //System.out.println("NOW MUTATING ---------------------------------------------------------------");
+                    // slot_occupantSlotMap = orTreeSearch.MutateRecursiveSearch(parseData,constraintChecker,slot_occupantSlotMap);
+                    //printSolution(slot_occupantSlotMap);
                 }else{
                     System.out.println("Result was null");
                 }
