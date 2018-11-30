@@ -64,6 +64,13 @@ public class ParseData {
         Time_Slots.addAll(this.Lab_Slots);
         return Time_Slots;
     }
+
+    public Vector<Slot_Occupant> getOccupants(){
+    	Vector<Slot_Occupant> occupants = new Vector<>();
+    	occupants.addAll(this.Courses);
+    	occupants.addAll(this.Labs); 
+    	return occupants; 
+    }
     
     // **ENSURE THAT THIS FUNCTION IS ONLY CALLED WHEN A NEW CANDIDATE SOLUTION IS CREATED**
     // resets the value of the maximum courses for all slots in Lab_Slots and Course_Slots

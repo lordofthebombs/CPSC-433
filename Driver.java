@@ -6,6 +6,7 @@ import OrTree.*;
 
 import java.io.FileNotFoundException;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
 import java.util.TreeMap;
@@ -50,17 +51,31 @@ public class Driver {
             //-------------------------------
 
             OrTreeSearch orTreeSearch = new OrTreeSearch(parseData);
-
+            HashSet<Map<Slot_Occupant,Slot>> unique = new HashSet<>();
+            
+            
             for(int x = 0 ; x < 10 ; x++) {
                 Map<Slot_Occupant, Slot> slot_occupantSlotMap = orTreeSearch.OrTreeRecursiveSearch();
 
                 if(slot_occupantSlotMap != null) {
-                    printSolution(slot_occupantSlotMap);
-                    //System.out.println("NOW MUTATING ---------------------------------------------------------------");
-                    // slot_occupantSlotMap = orTreeSearch.MutateRecursiveSearch(parseData,constraintChecker,slot_occupantSlotMap);
-                    //printSolution(slot_occupantSlotMap);
+                	System.out.println("---------------------------------------------------");
+                	printSolution(slot_occupantSlotMap);
+                   
+            
+                    if(!unique.add(slot_occupantSlotMap)){
+                    	System.out.println("NOT UNIQUE");
+                    	break;
+                    }
+                    
+                    System.out.println("MUTANT ---------------------------------------------------");
+                    Map<Slot_Occupant,Slot> mutant = orTreeSearch.mutateSearch(slot_occupantSlotMap); 
+                    printSolution(mutant);
+                  
+                  
+                    
                 }else{
-                    System.out.println("Result was null");
+                    System.out.println("Every possibility tried " + x);
+                    break; 
                 }
             }
 
@@ -105,6 +120,4 @@ public class Driver {
             System.out.println(entry.getKey() + " " + entry.getValue());
         }
     }
-
-
 }

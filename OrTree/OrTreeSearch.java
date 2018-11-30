@@ -4,6 +4,7 @@ import ParseData.ParseData;
 import ParseData.Slot;
 import Slot_Occupant.*;
 import sun.awt.image.ImageWatched;
+import sun.awt.image.ImageWatched.Link;
 
 import java.util.*;
 
@@ -15,9 +16,19 @@ public class OrTreeSearch {
         private ArrayList<Slot> possibleSlots;
         private HashMap<Slot,OrTreeNode> transitions;
 
+        private OrTreeNode parent; 
+        
         public OrTreeNode(){
             possibleSlots = null;
             transitions = new HashMap<>();
+            this.parent = null;
+        }
+        
+        public OrTreeNode(OrTreeNode parent)
+        {
+        	possibleSlots = null;
+            transitions = new HashMap<>();
+            this.parent = parent; 
         }
     }
 
@@ -25,12 +36,14 @@ public class OrTreeSearch {
     private ParseData parseData;
     private ConstraintChecker constraints;
     private Random randGen;
-
+    private Slot lastTried;
+    private Slot_Occupant mutatedOccupant; 
+    
     public OrTreeSearch(ParseData parseData){
         this.parseData = parseData;
         root = new OrTreeNode();
         constraints = new ConstraintChecker(parseData);
-        randGen = new Random();
+        randGen = new Random(); 
     }
 
     /**
@@ -97,7 +110,7 @@ public class OrTreeSearch {
             nextNode = root.transitions.get(attemptedSlot);
 
             if(nextNode == null){
-                nextNode = new OrTreeNode();
+                nextNode = new OrTreeNode(root);
                 root.transitions.put(attemptedSlot,nextNode);
             }
             else{ // a branch already exists
@@ -110,6 +123,7 @@ public class OrTreeSearch {
                 }
             }
 
+            lastTried = attemptedSlot; 
             attemptedSolution = OrTreeRecursiveSearch(attemptedSolution,nextNode);
 
             if(attemptedSolution != null){
@@ -123,6 +137,8 @@ public class OrTreeSearch {
 
         //Return the current working solution if it is a solution ------------------------------------------------------
         if(isSolved(currentSolution)){
+        	
+        	currentNode.parent.possibleSlots.remove(lastTried);
             return currentSolution;
         }
 
@@ -157,7 +173,7 @@ public class OrTreeSearch {
             nextNode = currentNode.transitions.get(attemptedSlot);
 
             if(nextNode == null){
-                nextNode = new OrTreeNode();
+                nextNode = new OrTreeNode(currentNode);
                 currentNode.transitions.put(attemptedSlot,nextNode);
             }
             else{ // a branch already exists
@@ -170,6 +186,7 @@ public class OrTreeSearch {
                 }
             }
 
+            lastTried = attemptedSlot; 
             attemptedSolution = OrTreeRecursiveSearch(attemptedSolution,nextNode);
 
             if(attemptedSolution == null){
@@ -184,6 +201,137 @@ public class OrTreeSearch {
         return null;
     }
 
+    public LinkedHashMap<Slot_Occupant,Slot> mutateSearch(Map<Slot_Occupant,Slot> parentSolution){
+    
+    	 LinkedHashMap<Slot_Occupant,Slot> solution = new LinkedHashMap<>();
+         solution = initializePr(solution);
+
+         //Get a random course/lab to mutate on
+         mutatedOccupant = parseData.getOccupants().elementAt(randGen.nextInt(parseData.getOccupants().size())); 
+
+         //if the path hasn't been travelled down before generate all alterns. 
+         if(root.possibleSlots == null) {
+             root.possibleSlots = getPossibleSlots(solution, mutatedOccupant); //Altern Function 
+         }
+         while(!root.possibleSlots.isEmpty()){
+
+             Slot attemptedSlot = root.possibleSlots.get(randGen.nextInt(root.possibleSlots.size()));
+             LinkedHashMap<Slot_Occupant,Slot> attemptedSolution = new LinkedHashMap<>(solution);
+             attemptedSolution.put(mutatedOccupant,attemptedSlot);
+             OrTreeNode nextNode;
+
+             //If no branch has been made
+             nextNode = root.transitions.get(attemptedSlot);
+
+             if(nextNode == null){
+                 nextNode = new OrTreeNode(root);
+                 root.transitions.put(attemptedSlot,nextNode);
+             }
+             else{ // a branch already exists
+
+                 //If the path has been made and has no possible slots, then and only then remove the attempted slot
+                 if(nextNode.possibleSlots != null){
+                     if(nextNode.possibleSlots.isEmpty()) {
+                         root.possibleSlots.remove(attemptedSlot);
+                     }
+                 }
+             }
+
+             lastTried = attemptedSlot; 
+             attemptedSolution = mutateSearch(nextNode,parentSolution,attemptedSolution);
+
+             if(attemptedSolution != null){
+                 return attemptedSolution;
+             }
+         }
+
+         return null; //The root's possibleSlots were all empty, no more solutions could be found.
+    	
+    }
+    public LinkedHashMap<Slot_Occupant,Slot> mutateSearch(OrTreeNode currentNode, Map<Slot_Occupant,Slot> parent, LinkedHashMap<Slot_Occupant,Slot> currentSolution){
+    	
+    	//Return the current working solution if it is a solution ------------------------------------------------------
+        if(isSolved(currentSolution)){	
+        	currentNode.parent.possibleSlots.remove(lastTried);
+            return currentSolution;
+        }
+
+        Slot_Occupant workingOccupant = null;
+        
+        if(mutatedOccupant == null){
+	        //Get first Slot_Occupant to work on, find first non_null element ----------------------------------------------
+	        for(Map.Entry entry : currentSolution.entrySet()){
+	            if(entry.getValue() == null){
+	                workingOccupant = (Slot_Occupant)entry.getKey();
+	                break;
+	            }
+	        }
+        }
+        else{
+        	workingOccupant = mutatedOccupant; 
+        	mutatedOccupant = null; 
+        }
+        
+        //Get a List of all possible Slots for the found Course/Slot ---------------------------------------------------
+        if(currentNode.possibleSlots == null) {
+            currentNode.possibleSlots = getPossibleSlots(currentSolution, workingOccupant);
+        }
+        LinkedHashMap<Slot_Occupant,Slot> copyOfCurrentSolution = new LinkedHashMap<>(currentSolution);
+
+        //Begin While Loop ---------------------------------------------------------------------------------------------
+        while(!currentNode.possibleSlots.isEmpty()){
+
+            //Randomly Select a possible slot
+        	//If you can copy the parent, do so, if you can't random selection. 
+        	Slot parentSlot = parent.get(workingOccupant); 
+        	Slot attemptedSlot;
+        	
+        	if(parentSlot != null && currentNode.possibleSlots.contains(parentSlot)){
+        		attemptedSlot = parentSlot; 
+        	}
+        	else{
+        		attemptedSlot = currentNode.possibleSlots.get(randGen.nextInt(currentNode.possibleSlots.size()));
+        	}
+           
+
+            //make a new solution with the attempted slot
+            LinkedHashMap<Slot_Occupant,Slot> attemptedSolution = new LinkedHashMap<>(copyOfCurrentSolution);
+            attemptedSolution.put(workingOccupant,attemptedSlot);
+
+            OrTreeNode nextNode;
+
+            //If no branch has been made
+            nextNode = currentNode.transitions.get(attemptedSlot);
+
+            if(nextNode == null){
+                nextNode = new OrTreeNode(currentNode);
+                currentNode.transitions.put(attemptedSlot,nextNode);
+            }
+            else{ // a branch already exists
+
+                //If the path has been made and has no possible slots, then and only then remove the attempted slot
+                if(nextNode.possibleSlots != null){
+                    if(nextNode.possibleSlots.isEmpty()) {
+                        currentNode.possibleSlots.remove(attemptedSlot);
+                    }
+                }
+            }
+
+            lastTried = attemptedSlot; 
+            attemptedSolution = mutateSearch(nextNode,parent,attemptedSolution);
+
+            if(attemptedSolution == null){
+                return null;
+            }
+            else
+                return attemptedSolution;
+
+        }
+
+        //No possible solution could be found, return null;
+        return null;
+    	
+    }
     public boolean isSolved(LinkedHashMap<Slot_Occupant,Slot> map){
         return !map.containsValue(null);
     }

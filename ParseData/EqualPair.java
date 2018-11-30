@@ -17,7 +17,7 @@ public class EqualPair<L,R>{
     public int hashCode() {return left.hashCode() ^ right.hashCode();}
 
 
-    //This is done because I want thew pairs (a,b) and (b,a) to be equal.
+    //This is done because I want the pairs (a,b) and (b,a) to be equal.
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof EqualPair)) return false;
