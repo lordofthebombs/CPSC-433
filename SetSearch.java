@@ -5,10 +5,11 @@ import java.util.Map;
 import java.util.Random;
 import Slot_Occupant.*;
 import ParseData.*;
+import OrTree.*;
 
 public class SetSearch{
 
-  /*private static final int INIT_POPULATION = 100;
+  private static final int INIT_POPULATION = 100;
   private static final int MAX_FACTS = 1000;
   private static final int TRIM_NUM = 800; //number of facts after trim, maxfacts-trimnum=num of facts removed
   private static final int MAX_REPEATS = 3;
@@ -18,30 +19,45 @@ public class SetSearch{
   private ArrayList<Pair<Map<Slot_Occupant, Slot>, Integer>> workingSet;
   // Map<Slot_Occupant, Slot> is waht the or tree outputs
   // Integer is what the eval function gives
-  private ParseData data;
+
   private OrTreeSearch solGen;
   private Random randGen;
   private int generation;
   private Eval eval;
 
 
-  public SetSearch(ParseData data, double labsmin, double coursemin, double notpaired, double section){
-    this.data = data;
+  public SetSearch(ParseData data, String file){
+    makeEval(data, file);
     solGen = new OrTreeSearch(data);
     workingSet = new ArrayList<Pair<Map<Slot_Occupant, Slot>, Integer>>(MAX_FACTS);
     randGen = new Random(System.currentTimeMillis());
-    eval = new Eval(labsmin, coursemin, notpaired, section);
     generation = 1;
     int repeats = 0;
 
     for(int i = 0; i < INIT_POPULATION && repeats < INIT_POPULATION/2; i++){ //stop genaration if ortree cant produce different solutions
-      Map<Slot_Occupant, Slot> out = solGen.buildValidCandidateSolution();
+      Map<Slot_Occupant, Slot> out = solGen.OrTreeRecursiveSearch();
       if(!addToSet(out)){
         i--;
         repeats++;
       }
     }
 
+  }
+
+  private void makeEval(ParseData data, String file){
+    double labsmin, coursemin, notpaired, section;
+    try{
+      Scanner in = new Scanner(new File(file));
+      labsmin = in.nextInt();
+      coursemin = in.nextInt();
+      notpaired = in.nextInt();
+      section = in.nextInt();
+    }
+    catch(Exception e){
+      System.out.println("Penelties file is bad: " + e);
+      exit(-1);
+    }
+    eval = new Eval(data, labsmin, coursemin, notpaired, section);
   }
 
   //keeps running untill a genaration has passed
@@ -85,7 +101,7 @@ public class SetSearch{
       if(i == setsize){
         workingSet.add(fin);      //reached the end, add it to the end
       }
-      else if(score > workingSet.get(i).getValue()){  //sorted in decending order by eval score
+      else if(score >= workingSet.get(i).getValue()){  //sorted in decending order by eval score
         workingSet.add(i, fin);
         break;
       }
@@ -99,7 +115,7 @@ public class SetSearch{
     Map<Slot_Occupant, Slot> parent = workingSet.get(randGen.nextInt(workingSet.size())).getKey();
 
     for(int i = 0; i < MAX_CHILDREN_PER_PARENT && repeats < MAX_REPEATS && workingSet.size() < MAX_FACTS; i++){
-      Map<Slot_Occupant, Slot> child = solGen.mutateParentSolution(parent);
+      Map<Slot_Occupant, Slot> child = solGen.mutateSearch(parent);
       if(!addToSet(child)){
         i--;
         repeats++;
@@ -109,10 +125,9 @@ public class SetSearch{
 
   //removes facts with lowest scores
   private void trim(){
-    workingSet.removeRange(TRIM_NUM, workingSet.size());
+    workingSet.subList(TRIM_NUM, workingSet.size()).clear();
   }
 
-   */
 
 
 }
