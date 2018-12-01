@@ -397,8 +397,8 @@ public class Parser {
         Preferences pref = new Preferences();
         String entry = readLine();
         int prefVal;
-        Slot s1 = null;
-        Slot_Occupant t1 = null;
+        Slot s1;
+        Slot_Occupant t1;
 
         while (entry != null && !entry.equals("")) {
 
@@ -407,21 +407,13 @@ public class Parser {
 
             if(splitValues.length == 4){
 
-                //if a slot_occupant or slot is invalid in preference list, we will show warning and not add
-                // that entry to Preferences,
-                try {
-                    t1 = getOccupant(data, splitValues[2].trim());
-                    s1 = getSlot(data, splitValues[0].trim(), splitValues[1].trim(), t1.getClass());
-                }catch (ParseError e){
-                    printWarningWithOutLineNum("Invalid Preference entry due to: " + e.getMessage());
-                }
+                t1 = getOccupant(data,splitValues[2].trim());
+                s1 = getSlot(data,splitValues[0].trim(),splitValues[1].trim(),t1.getClass());
 
                 prefVal = parseInt(splitValues[3].trim());
 
-                if(t1 != null && s1 != null) {
-                    if (pref.isPreference(t1, s1) || !pref.addEntry(t1, s1, prefVal)) {
-                        printWarning("Duplicate Preference statement");
-                    }
+                if(pref.isPreference(t1,s1) || !pref.addEntry(t1,s1,prefVal) ){
+                    printWarning("Duplicate Preference statement");
                 }
             }
             else
@@ -757,10 +749,6 @@ public class Parser {
 
     private static void printWarning(String str){
         System.out.println("Warning: " + str + " on line: " + currentLineNum);
-    }
-
-    private static void printWarningWithOutLineNum(String str){
-        System.out.println("Warning: " + str);
     }
 
     private static void checkCPSC(ParseData p) throws ParseError{

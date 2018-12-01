@@ -1,5 +1,6 @@
 package Parser;
 
+import ParseData.ParseData;
 
 public class ParseError extends Exception {
 
@@ -9,10 +10,6 @@ public class ParseError extends Exception {
         this.message = message;
     }
 
-    @Override
-    public String getMessage(){
-       return  this.message;
-    }
     public void print(){
         System.out.println(message);
     }

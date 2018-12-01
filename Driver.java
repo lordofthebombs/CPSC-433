@@ -19,7 +19,7 @@ public class Driver {
 
     public static void main(String args[]){
 
-        String configFile;			// soft constraint values
+        String configFile;
         String fileName;
 
         // Deal with command line args:
@@ -34,10 +34,9 @@ public class Driver {
         //fileName = args[1];
         fileName = "testFile.txt";
         try {
-            parseData = Parser.parse("largefile.txt");
-            
+            parseData = Parser.parse("testFile.txt");
 
-            parseData.Non_Compat.print();
+            //parseData.Non_Compat.print();
             //Gen the starting states with the Partial Assignments
             //---- Check to make sure the partial assignment is valid if not post error.
             //Then start.
@@ -50,36 +49,60 @@ public class Driver {
 
             //Output the answers
             //-------------------------------
+
+            OrTreeSearch orTreeSearchNoMutate = new OrTreeSearch(parseData);
+            HashSet<Map<Slot_Occupant,Slot>> answers = new HashSet<>();
+            for(int x = 0; x < 100; x++){
+
+                Map<Slot_Occupant, Slot> slot_occupantSlotMap = orTreeSearchNoMutate.OrTreeRecursiveSearch();
+                if(!answers.add(slot_occupantSlotMap)){
+                    System.out.println("NOT UNIQUE");
+                    break;
+                }
+            }
+
+            System.out.println("Number of entries = " + answers.size());
+
             OrTreeSearch orTreeSearch = new OrTreeSearch(parseData);
             HashSet<Map<Slot_Occupant,Slot>> unique = new HashSet<>();
-            int x = 0;
-            for(x = 0 ; x < 100 ; x++) {
+
+            for(int x = 0 ; x < 100 ; x++) {
+                long start = System.currentTimeMillis();
                 Map<Slot_Occupant, Slot> slot_occupantSlotMap = orTreeSearch.OrTreeRecursiveSearch();
 
+
                 if(slot_occupantSlotMap != null) {
-                	System.out.println("---------------------------------------------------");
-                	printSolution(slot_occupantSlotMap);
+                    long timeInSeconds = ((System.currentTimeMillis() - start)/1000);
+                	//System.out.println("New Solution Found " + timeInSeconds + "s #"  + x);
+                	//printSolution(slot_occupantSlotMap);
                    
             
                     if(!unique.add(slot_occupantSlotMap)){
                     	System.out.println("NOT UNIQUE");
                     	break;
                     }
-                    
-                    System.out.println("MUTANT ---------------------------------------------------");
-                    Map<Slot_Occupant,Slot> mutant = orTreeSearch.mutateSearch(slot_occupantSlotMap); 
-                    System.out.println("Mutation on " + orTreeSearch.mutatedOccupant);
-                    printSolution(mutant);
-                  
-                  
-                    
+
+
+                    //System.out.println("MUTANT ---------------------------------------------------");
+                    Map<Slot_Occupant,Slot> mutant = orTreeSearch.mutateSearch(slot_occupantSlotMap);
+                    if(mutant != null){
+
+                       // printSolution(mutant);
+
+                        if(!unique.add(mutant)){
+                            System.out.println("NOT UNIQUE");
+                            break;
+                        }
+                    }
+
                 }else{
+                    System.out.println("Every possibility tried " + x);
+                    System.out.println("Amount of mutate enteries = " + unique.size());
+
                     break; 
                 }
             }
-            System.out.println("Possible solutions tried = " + x);
 
-            
 
 
 
