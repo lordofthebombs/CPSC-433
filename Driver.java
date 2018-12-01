@@ -34,7 +34,7 @@ public class Driver {
         //fileName = args[1];
         fileName = "testFile.txt";
         try {
-            parseData = Parser.parse("largefile.txt");
+            parseData = Parser.parse("testfile.txt");
             
 
             parseData.Non_Compat.print();
@@ -52,13 +52,15 @@ public class Driver {
             //-------------------------------
             OrTreeSearch orTreeSearch = new OrTreeSearch(parseData);
             HashSet<Map<Slot_Occupant,Slot>> unique = new HashSet<>();
+            int y = 0;
             int x = 0;
-            for(x = 0 ; x < 100 ; x++) {
+            for(x = 0 ; x < 1000 ; x++) {
                 Map<Slot_Occupant, Slot> slot_occupantSlotMap = orTreeSearch.OrTreeRecursiveSearch();
 
                 if(slot_occupantSlotMap != null) {
                 	System.out.println("---------------------------------------------------");
                 	printSolution(slot_occupantSlotMap);
+                	y++;
                    
             
                     if(!unique.add(slot_occupantSlotMap)){
@@ -68,16 +70,18 @@ public class Driver {
                     
                     System.out.println("MUTANT ---------------------------------------------------");
                     Map<Slot_Occupant,Slot> mutant = orTreeSearch.mutateSearch(slot_occupantSlotMap); 
+                    if (mutant == null) break;		// mutation could be null when all solutions have been exhausted
                     System.out.println("Mutation on " + orTreeSearch.mutatedOccupant);
+             
                     printSolution(mutant);
-                  
+                  	
                   
                     
                 }else{
                     break; 
                 }
             }
-            System.out.println("Possible solutions tried = " + x);
+            System.out.println("Possible solutions tried = " + y);
 
             
 

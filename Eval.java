@@ -10,7 +10,8 @@ public class Eval {
     private double pen_coursemin, pen_preference, pen_notpaired, pen_section;
     private Pairs pairs;
     private Preferences pref;
-
+    
+    /*
     public Eval(ParseData data, double coursemin, double preference, double notpaired, double section) {
         pen_coursemin = coursemin;
         pen_preference = preference;
@@ -19,13 +20,26 @@ public class Eval {
         pairs = data.Pairs;
         pref = data.Preferences;
     }
+	*/
 
-    public double eval(Map<Slot_Occupant, Slot> solution) {
+    
+       
+  public Eval(ParseData data, double labsmin, double coursemin, double notpaired, double section){
+    pen_labsmin = labsmin;
+    pen_coursemin = coursemin;
+    pen_notpaired = notpaired;
+    pen_section = section;
+    pairs = data.Pairs;
+    pref = data.Preferences;
+  }
+ /*
+  public double eval(Map<Slot_Occupant, Slot> solution) {
 
         return evalMinfilled(solution) * pen_coursemin +
                 evalPref(solution) * pen_preference +
                 evalPair(solution) * pen_notpaired +
                 evalSecDiff(solution) * pen_section;
+ 
 
     }
 
@@ -66,7 +80,12 @@ public class Eval {
         return violationCounter;
     }
 
+
     private int evalSecDiff(Map<Slot_Occupant, Slot> solution) {
         return 0;
     }
+
+  }
+  */
+
 }
