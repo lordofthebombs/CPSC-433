@@ -23,7 +23,7 @@ public class Eval {
 	*/
 
     
-       
+  /*
   public Eval(ParseData data, double labsmin, double coursemin, double notpaired, double section){
     pen_labsmin = labsmin;
     pen_coursemin = coursemin;

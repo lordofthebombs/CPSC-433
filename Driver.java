@@ -54,34 +54,35 @@ public class Driver {
             HashSet<Map<Slot_Occupant,Slot>> unique = new HashSet<>();
             int y = 0;
             int x = 0;
-            for(x = 0 ; x < 1000 ; x++) {
-                Map<Slot_Occupant, Slot> slot_occupantSlotMap = orTreeSearch.OrTreeRecursiveSearch();
-
-                if(slot_occupantSlotMap != null) {
-                	System.out.println("---------------------------------------------------");
-                	printSolution(slot_occupantSlotMap);
-                	y++;
-                   
             
-                    if(!unique.add(slot_occupantSlotMap)){
-                    	System.out.println("NOT UNIQUE");
-                    	break;
-                    }
+            Map<Slot_Occupant, Slot> slot_occupantSlotMap = orTreeSearch.OrTreeRecursiveSearch();		// parent
+            if(slot_occupantSlotMap != null) {
+            	System.out.println("PARENT");
+            	printSolution(slot_occupantSlotMap);
+               
+        
+                if(!unique.add(slot_occupantSlotMap)){
+                	System.out.println("NOT UNIQUE");
+                }
+                Map<Slot_Occupant,Slot> mutant = slot_occupantSlotMap;
+            for(x = 0 ; x < 27 ; x++) {
+                
                     
                     System.out.println("MUTANT ---------------------------------------------------");
-                    Map<Slot_Occupant,Slot> mutant = orTreeSearch.mutateSearch(slot_occupantSlotMap); 
+                    mutant = orTreeSearch.mutateSearch(mutant); 
                     if (mutant == null) break;		// mutation could be null when all solutions have been exhausted
                     System.out.println("Mutation on " + orTreeSearch.mutatedOccupant);
              
                     printSolution(mutant);
-                  	
+                    if(!unique.add(mutant)){
+                    	System.out.println("NOT UNIQUE");
+                    	break;
+                    }
                   
                     
-                }else{
-                    break; 
                 }
             }
-            System.out.println("Possible solutions tried = " + y);
+            System.out.println("Possible solutions tried = " + unique.size());
 
             
 
