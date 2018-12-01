@@ -15,7 +15,8 @@ public class Eval{
     pairs = data.Pairs;
     pref = data.Preferences;
   }
-
+ /*
+  
   public double eval(Map<Slot_Occupant, Slot> solution){
 
       return 0;
@@ -38,4 +39,5 @@ public class Eval{
   private int evalSecDiff(Map<Slot_Occupant, Slot> solution)) {
 
   }
+  */
 }
