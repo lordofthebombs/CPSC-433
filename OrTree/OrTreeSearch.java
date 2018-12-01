@@ -10,36 +10,39 @@ import java.util.*;
 public class OrTreeSearch {
 
     public class OrTreeNode{
-
+    	
+    	private Slot_Occupant myWorkingOccupant;
+    	// essentially altern
         private ArrayList<Slot> possibleSlots;
+        // children nodes
         private HashMap<Slot,OrTreeNode> transitions;
-
+        // parent node 
         private OrTreeNode parent; 
         
-        public OrTreeNode(){
-            possibleSlots = null;
-            transitions = new HashMap<>();
-            this.parent = null;
-        }
-        
-        public OrTreeNode(OrTreeNode parent)
+        public OrTreeNode(OrTreeNode parent, Slot_Occupant wo)
         {
+        	this.myWorkingOccupant = wo;
         	possibleSlots = null;
             transitions = new HashMap<>();
             this.parent = parent; 
         }
+        
+        public OrTreeNode(OrTreeNode parent) {
+        	this(parent, null);
+        }
+        
     }
-
-    private OrTreeNode root;
+   
+    private OrTreeNode root;			 // root of all orTrees
     private ParseData parseData;
     private ConstraintChecker constraints;
     private Random randGen;
-    private Slot lastTried;
-    private Slot_Occupant mutatedOccupant; 
+    private Slot lastTried;			// last tried isn't needed anymore really
+    public Slot_Occupant mutatedOccupant; 
     
     public OrTreeSearch(ParseData parseData){
         this.parseData = parseData;
-        root = new OrTreeNode();
+        root = new OrTreeNode(null);
         constraints = new ConstraintChecker(parseData);
         randGen = new Random(); 
     }
@@ -63,10 +66,12 @@ public class OrTreeSearch {
 
             LinkedHashMap<Slot_Occupant,Slot> attemptedSolution = new LinkedHashMap<>(currentSolution);
             attemptedSolution.put(workingOccupant,s);
-
-            if(attemptedSolution == null){
+            
+            /*
+            if(attemptedSolution == null){			// never null ?
             	System.out.print("test");
             }
+            */
             if(constraints.checkHardConstraints(attemptedSolution)){
                 possibleSlots.add(s);
             }
@@ -86,25 +91,30 @@ public class OrTreeSearch {
 
         LinkedHashMap<Slot_Occupant,Slot> solution = new LinkedHashMap<>();
         solution = initializePr(solution);
-
-        //Get the first non null position;
+        
+        // simply checks if partial assignments would lead to a solution
+        if (!constraints.checkHardConstraints(solution)) { return null; }
+        
         Slot_Occupant workingOccupant = null;
-        for(Map.Entry entry : solution.entrySet()){
-            if(entry.getValue() == null){
-                workingOccupant = (Slot_Occupant)entry.getKey();
-                break;
+        if(root.myWorkingOccupant == null) {
+        	//Get the first non null position;
+            for(Map.Entry entry : solution.entrySet()){
+                if(entry.getValue() == null){
+                	workingOccupant = (Slot_Occupant)entry.getKey();
+                    break;
+                }
             }
-        }
-
-        //
-        if(root.possibleSlots == null) {
+            // assign roots working occupant and corresponding possible slots
+            root.myWorkingOccupant = workingOccupant;
             root.possibleSlots = getPossibleSlots(solution, workingOccupant);
         }
+        
         while(!root.possibleSlots.isEmpty()){
-
+        	// find random possible slot
             Slot attemptedSlot = root.possibleSlots.get(randGen.nextInt(root.possibleSlots.size()));
+            // create a new node with new slot and workingOccupant
             LinkedHashMap<Slot_Occupant,Slot> attemptedSolution = new LinkedHashMap<>(solution);
-            attemptedSolution.put(workingOccupant,attemptedSlot);
+            attemptedSolution.put(root.myWorkingOccupant, attemptedSlot);
             OrTreeNode nextNode;
 
             //If no branch has been made
@@ -117,7 +127,7 @@ public class OrTreeSearch {
             else{ // a branch already exists
 
                 //If the path has been made and has no possible slots, then and only then remove the attempted slot
-                if(nextNode.possibleSlots != null){
+                if(nextNode.possibleSlots != null){		// impossible for possibleSlots to be null
                     if(nextNode.possibleSlots.isEmpty()) {
                         root.possibleSlots.remove(attemptedSlot);
                     }
@@ -134,27 +144,30 @@ public class OrTreeSearch {
 
         return null; //The root's possibleSlots were all empty, no more solutions could be found.
     }
+    
     public LinkedHashMap<Slot_Occupant,Slot>OrTreeRecursiveSearch(LinkedHashMap<Slot_Occupant,Slot> currentSolution, OrTreeNode currentNode){
 
         //Return the current working solution if it is a solution ------------------------------------------------------
         if(isSolved(currentSolution)){
         	
-        	currentNode.parent.possibleSlots.remove(lastTried);
+        	currentNode.parent.possibleSlots.remove(lastTried);		// remove from possible slots since it already leads to a solution
             return currentSolution;
         }
 
-        //Get first Slot_Occupant to work on, find first non_null element ----------------------------------------------
-        Slot_Occupant workingOccupant = null;
-        for(Map.Entry entry : currentSolution.entrySet()){
-            if(entry.getValue() == null){
-                workingOccupant = (Slot_Occupant)entry.getKey();
-                break;
-            }
-        }
-
+        
+       // Slot_Occupant workingOccupant = null;
         //Get a List of all possible Slots for the found Course/Slot ---------------------------------------------------
-        if(currentNode.possibleSlots == null) {
-            currentNode.possibleSlots = getPossibleSlots(currentSolution, workingOccupant);
+        if(currentNode.myWorkingOccupant == null) {
+        	//Get first Slot_Occupant to work on, find first non_null element ----------------------------------------------
+            //workingOccupant = null;
+            for(Map.Entry entry : currentSolution.entrySet()){
+                if(entry.getValue() == null){
+                	currentNode.myWorkingOccupant = (Slot_Occupant)entry.getKey();
+                    break;
+                }
+            }
+        	
+            currentNode.possibleSlots = getPossibleSlots(currentSolution, currentNode.myWorkingOccupant);
         }
         LinkedHashMap<Slot_Occupant,Slot> copyOfCurrentSolution = new LinkedHashMap<>(currentSolution);
 
@@ -166,7 +179,7 @@ public class OrTreeSearch {
 
             //make a new solution with the attempted slot
             LinkedHashMap<Slot_Occupant,Slot> attemptedSolution = new LinkedHashMap<>(copyOfCurrentSolution);
-            attemptedSolution.put(workingOccupant,attemptedSlot);
+            attemptedSolution.put(currentNode.myWorkingOccupant, attemptedSlot);
 
             OrTreeNode nextNode;
 
@@ -206,19 +219,46 @@ public class OrTreeSearch {
     
     	 LinkedHashMap<Slot_Occupant,Slot> solution = new LinkedHashMap<>();
          solution = initializePr(solution);
-
-         //Get a random course/lab to mutate on
-         mutatedOccupant = parseData.getOccupants().elementAt(randGen.nextInt(parseData.getOccupants().size())); 
-
+         
+         //Get a random course/lab to mutate on that is not a partial assignments
+         do {
+        	 mutatedOccupant = parseData.getOccupants().get(randGen.nextInt(parseData.getOccupants().size()));
+         } while (solution.get(mutatedOccupant) != null);
+         
          //if the path hasn't been travelled down before generate all alterns. 
          if(root.possibleSlots == null) {
+        	 root.myWorkingOccupant = mutatedOccupant;
              root.possibleSlots = getPossibleSlots(solution, mutatedOccupant); //Altern Function 
          }
+         
+         Slot parentSlot = parentSolution.get(root.myWorkingOccupant);
          while(!root.possibleSlots.isEmpty()){
-
-             Slot attemptedSlot = root.possibleSlots.get(randGen.nextInt(root.possibleSlots.size()));
+        	 
+        	 // checks if root occupant is the mutated occupant
+        	 // tries to pick a different slot unless no other slots are possible
+         	
+         	//Randomly Select a possible slot
+        	//If you can copy the parent, do so, if you can't random selection. 
+        	Slot attemptedSlot;		// will never be null
+        	
+        	// the case where workingOccupant != mutatedOccupant
+        	if(parentSlot != null && root.possibleSlots.contains(parentSlot) && !root.myWorkingOccupant.equals(mutatedOccupant)){
+        		attemptedSlot = parentSlot; 
+        	}
+        	else{
+        		// ensures that mutatedOccupant does not take the same slot
+        		// assuming theres more than 1 option for slots
+        		if (root.possibleSlots.contains(parentSlot) && root.possibleSlots.size() > 1) {
+        			do {
+         				attemptedSlot = root.possibleSlots.get(randGen.nextInt(root.possibleSlots.size()));
+         			} while (parentSlot.equals(attemptedSlot));
+        		} else {
+        			attemptedSlot = root.possibleSlots.get(randGen.nextInt(root.possibleSlots.size()));
+        		}
+        	}
+             
              LinkedHashMap<Slot_Occupant,Slot> attemptedSolution = new LinkedHashMap<>(solution);
-             attemptedSolution.put(mutatedOccupant,attemptedSlot);
+             attemptedSolution.put(root.myWorkingOccupant, attemptedSlot);
              OrTreeNode nextNode;
 
              //If no branch has been made
@@ -238,7 +278,7 @@ public class OrTreeSearch {
                  }
              }
 
-             lastTried = attemptedSlot; 
+             lastTried = attemptedSlot; 		
              attemptedSolution = mutateSearch(nextNode,parentSolution,attemptedSolution);
 
              if(attemptedSolution != null){
@@ -249,16 +289,36 @@ public class OrTreeSearch {
          return null; //The root's possibleSlots were all empty, no more solutions could be found.
     	
     }
+    
+    // does not function correctly unless mutatedOccupant is set to an occupant
     public LinkedHashMap<Slot_Occupant,Slot> mutateSearch(OrTreeNode currentNode, Map<Slot_Occupant,Slot> parent, LinkedHashMap<Slot_Occupant,Slot> currentSolution){
+    	// mutatedOccupant must be defined
+    	if (mutatedOccupant == null) return null;
     	
     	//Return the current working solution if it is a solution ------------------------------------------------------
         if(isSolved(currentSolution)){	
         	currentNode.parent.possibleSlots.remove(lastTried);
+        	
             return currentSolution;
         }
-
-        Slot_Occupant workingOccupant = null;
         
+        
+        //Slot_Occupant workingOccupant = null;				// occupant to assign a slot
+        //Get a List of all possible Slots for the found Course/Slot ---------------------------------------------------
+        if(currentNode.myWorkingOccupant == null) {
+        	//Get the first non null position;
+            for(Map.Entry entry : currentSolution.entrySet()){
+                if(entry.getValue() == null){
+                	currentNode.myWorkingOccupant = (Slot_Occupant)entry.getKey();
+                    break;
+                }
+            }
+            // assign roots working occupant and corresponding possible slots
+            //currentNode.myWorkingOccupant = workingOccupant;
+            currentNode.possibleSlots = getPossibleSlots(currentSolution, currentNode.myWorkingOccupant);
+        }
+        
+        /*
         if(mutatedOccupant == null){
 	        //Get first Slot_Occupant to work on, find first non_null element ----------------------------------------------
 	        for(Map.Entry entry : currentSolution.entrySet()){
@@ -268,15 +328,13 @@ public class OrTreeSearch {
 	            }
 	        }
         }
+        
         else{
         	workingOccupant = mutatedOccupant; 
         	mutatedOccupant = null; 
         }
-        
-        //Get a List of all possible Slots for the found Course/Slot ---------------------------------------------------
-        if(currentNode.possibleSlots == null) {
-            currentNode.possibleSlots = getPossibleSlots(currentSolution, workingOccupant);
-        }
+        */
+       
         LinkedHashMap<Slot_Occupant,Slot> copyOfCurrentSolution = new LinkedHashMap<>(currentSolution);
 
         //Begin While Loop ---------------------------------------------------------------------------------------------
@@ -284,20 +342,29 @@ public class OrTreeSearch {
 
             //Randomly Select a possible slot
         	//If you can copy the parent, do so, if you can't random selection. 
-        	Slot parentSlot = parent.get(workingOccupant); 
+        	Slot parentSlot = parent.get(currentNode.myWorkingOccupant); 
         	Slot attemptedSlot;
         	
-        	if(parentSlot != null && currentNode.possibleSlots.contains(parentSlot)){
+        	// the case where workingOccupant != mutatedOccupant
+        	if(parentSlot != null && currentNode.possibleSlots.contains(parentSlot) && !currentNode.myWorkingOccupant.equals(mutatedOccupant)){
         		attemptedSlot = parentSlot; 
         	}
         	else{
-        		attemptedSlot = currentNode.possibleSlots.get(randGen.nextInt(currentNode.possibleSlots.size()));
+        		// ensures that mutatedOccupant does not take the same slot
+        		// assuming theres more than 1 option for slots
+        		if (currentNode.possibleSlots.contains(parentSlot) && currentNode.possibleSlots.size() > 1) {
+        			do {
+         				attemptedSlot = root.possibleSlots.get(randGen.nextInt(root.possibleSlots.size()));
+         			} while (parentSlot.equals(attemptedSlot));
+        		} else {
+        			attemptedSlot = currentNode.possibleSlots.get(randGen.nextInt(currentNode.possibleSlots.size()));
+        		}
         	}
            
 
             //make a new solution with the attempted slot
             LinkedHashMap<Slot_Occupant,Slot> attemptedSolution = new LinkedHashMap<>(copyOfCurrentSolution);
-            attemptedSolution.put(workingOccupant,attemptedSlot);
+            attemptedSolution.put(currentNode.myWorkingOccupant,attemptedSlot);
 
             OrTreeNode nextNode;
 

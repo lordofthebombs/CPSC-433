@@ -19,7 +19,7 @@ public class Driver {
 
     public static void main(String args[]){
 
-        String configFile;
+        String configFile;			// soft constraint values
         String fileName;
 
         // Deal with command line args:
@@ -34,7 +34,8 @@ public class Driver {
         //fileName = args[1];
         fileName = "testFile.txt";
         try {
-            parseData = Parser.parse("testFile.txt");
+            parseData = Parser.parse("largefile.txt");
+            
 
             parseData.Non_Compat.print();
             //Gen the starting states with the Partial Assignments
@@ -49,12 +50,10 @@ public class Driver {
 
             //Output the answers
             //-------------------------------
-
             OrTreeSearch orTreeSearch = new OrTreeSearch(parseData);
             HashSet<Map<Slot_Occupant,Slot>> unique = new HashSet<>();
-            
-            
-            for(int x = 0 ; x < 1000 ; x++) {
+            int x = 0;
+            for(x = 0 ; x < 100 ; x++) {
                 Map<Slot_Occupant, Slot> slot_occupantSlotMap = orTreeSearch.OrTreeRecursiveSearch();
 
                 if(slot_occupantSlotMap != null) {
@@ -69,15 +68,18 @@ public class Driver {
                     
                     System.out.println("MUTANT ---------------------------------------------------");
                     Map<Slot_Occupant,Slot> mutant = orTreeSearch.mutateSearch(slot_occupantSlotMap); 
+                    System.out.println("Mutation on " + orTreeSearch.mutatedOccupant);
                     printSolution(mutant);
                   
                   
                     
                 }else{
-                    System.out.println("Every possibility tried " + x);
                     break; 
                 }
             }
+            System.out.println("Possible solutions tried = " + x);
+
+            
 
 
 
