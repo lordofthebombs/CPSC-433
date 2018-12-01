@@ -1,11 +1,12 @@
-import java.util.ArrayList;
+import java.io.File;
+import java.util.*;
+
 import javafx.util.Pair;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
 import Slot_Occupant.*;
 import ParseData.*;
 import OrTree.*;
+
+import static java.lang.System.exit;
 
 public class SetSearch{
 
@@ -45,11 +46,11 @@ public class SetSearch{
   }
 
   private void makeEval(ParseData data, String file){
-    double labsmin, coursemin, notpaired, section;
+    double coursemin =0, preference =0, notpaired =0, section =0;
     try{
       Scanner in = new Scanner(new File(file));
-      labsmin = in.nextInt();
       coursemin = in.nextInt();
+      preference = in.nextInt();
       notpaired = in.nextInt();
       section = in.nextInt();
     }
@@ -57,7 +58,7 @@ public class SetSearch{
       System.out.println("Penelties file is bad: " + e);
       exit(-1);
     }
-    eval = new Eval(data, labsmin, coursemin, notpaired, section);
+    eval = new Eval(data,coursemin, preference ,notpaired, section);
   }
 
   //keeps running untill a genaration has passed
@@ -90,7 +91,7 @@ public class SetSearch{
   //did it in decending order because we SHOULD be getting higher scores as we go
   //so that shortens the loop
   private boolean addToSet(Map<Slot_Occupant, Slot> solution){
-    Integer score = eval.eval(solution);
+    double score = eval.eval(solution);
     Pair<Map<Slot_Occupant, Slot>, Integer> fin = new Pair(solution, score);
     if(workingSet.contains(fin)){
       return false;
@@ -106,7 +107,7 @@ public class SetSearch{
         break;
       }
     }
-
+     return true;
   }
 
   //mutates upon a random fact

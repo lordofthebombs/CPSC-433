@@ -1,7 +1,7 @@
 package ParseData;
 
 import java.sql.Time;
-
+import java.util.Objects;
 
 
 public class Slot {
@@ -44,6 +44,11 @@ public class Slot {
          Slot otherSlot = (Slot) o;
          return this.day.equals(otherSlot.day) &&
                  this.time == otherSlot.time;
+     }
+
+     @Override
+     public int hashCode() {
+         return Objects.hash(day, time, max, min);
      }
 
      public static Day toDay(String str) throws DayConvertError{
