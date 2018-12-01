@@ -73,17 +73,15 @@ public class ConstraintChecker {
     public ConstraintChecker(ParseData parseData){
     	this.parseData = parseData;
     	
-    	//this.allSlot_Occupants = parseData.Courses;
-    	//allSlot_Occupants.addAll(parseData.Labs);
-    	
     	// removes course time slots at tuesdays 11.0f
-        Iterator<Slot> iter = parseData.Course_Slots.iterator();
-        while (iter.hasNext()) {
-        	Slot currentSlot = iter.next();
-        	if (currentSlot.day == Day.Tues && currentSlot.time == 11.0f) {
-        		iter.remove();
-        	}
+    	// assumes only 1 course slot at tue 11.0f exists
+        int indexOfTue = parseData.Course_Slots.indexOf(new Slot(Day.Tues, 11.0f, -1, -1));			// finds tues slot, works becuause of slot equal()
+        // if tues slot exists
+        if (indexOfTue != -1) {
+        	parseData.Course_Slots.remove(indexOfTue);
+
         }
+        
         
         // pairs courses to its corresponding labs
         for (Slot_Occupant c : parseData.Courses) {
@@ -122,25 +120,11 @@ public class ConstraintChecker {
         		}
  
         	}
-        	
-        	if (correspondingL != null) this.correspondingLabs.put(c, correspondingL);
+        	// empty vector is acceptable
+        	this.correspondingLabs.put(c, correspondingL);
         	
         }
-        /*
-        // pairs labs that have no lecture sections to all its corresponding courses
-        for (Slot_Occupant l : parseData.Labs) {
-        	if (((Lab)l).hasLectSect()) continue;
-        	
-        	Vector<Slot_Occupant> correspondingC = new Vector<>();
-        	for (Slot_Occupant c : parseData.Courses) {
-        		if (c.id.equals(l.id) && c.courseNum == l.courseNum) {
-        			correspondingC.add(c);
-        		}
-        	}
-        	
-        	this.correspondingCourses.put(l, correspondingC);
-        }
-        */
+        
     }
     
     
@@ -153,19 +137,12 @@ public class ConstraintChecker {
      */
     public Map<Slot_Occupant, Slot> initialize() {
     	// initializes a node data with the required part assigns
-    
-    	/* unnecessary since only one slot occupant is paired since all keys are the same (null)
-    	Vector<Slot> allSlots = parseData.Course_Slots;
-    	allSlots.addAll(parseData.Lab_Slots);
-    	
+    	Map<Slot_Occupant, Slot> data = new LinkedHashMap<Slot_Occupant, Slot>();
 
-        allSlots.forEach((item) -> data.put(null, item));
-		*/
-    	
-        Map<Slot_Occupant, Slot> data = new LinkedHashMap<Slot_Occupant, Slot>();
-
+    	Vector<Slot_Occupant> allSlotOccupants = parseData.getOccupants();
+        allSlotOccupants.forEach((item) -> data.put(item, null));
+		
         HashMap<Slot_Occupant, Slot> allPartialAssignments = this.parseData.Partial_Assignments.getAllPartialAssignments();
-        
         // partial assignments already contain 813/913 into corresponding lab slots
         for(Map.Entry<Slot_Occupant, Slot> assignment : allPartialAssignments.entrySet()){
             if(data.containsKey(assignment.getKey())){
@@ -177,7 +154,7 @@ public class ConstraintChecker {
     }
     
     /**
-     * checks all hard constraints except for max courses/labs per slot 
+     * 
      * 
      * @param data : Map containing the assignments of Slot_Occupant to Slot
      * @return : true if all hard_constraints were passed, false otherwise
@@ -185,7 +162,7 @@ public class ConstraintChecker {
     public boolean checkHardConstraints(Map<Slot_Occupant, Slot> data) {
     	Set<Slot_Occupant> keys = data.keySet();
  	   	// no keys therefore no courses/labs are assigned
- 	   	if (keys.size() == 0) return true;
+ 	   	if (keys.isEmpty()) return true;
     	
     	if (!isSlotMaxValid(data)){
     		return false;
@@ -231,29 +208,23 @@ public class ConstraintChecker {
 
         boolean output = true;
 
-       LinkedHashMap copyOfSolution = new LinkedHashMap(solution);
-       Vector<Slot> copyOfSlots = new Vector<Slot>(parseData.getSlots());
-
-       HashMap<Slot,Integer> Slot_Totals = new HashMap();
-
-        for(Object s : copyOfSolution.values()){
-
-            if(!Slot_Totals.containsKey(s)){
-                Slot_Totals.put((Slot)s,1);
-            }
-            else{
-                int oldTotal = Slot_Totals.get(s);
-                Slot_Totals.put((Slot)s,oldTotal+1);
-            }
-        }
-
-        for(Slot s : copyOfSlots){
-
-            if(Slot_Totals.containsKey(s)){
-                int numberInSolution = Slot_Totals.get(s);
-                if(numberInSolution > s.max){ return false; }
-            }
-        }
+    	// iterate through keys that aren't null
+    	Iterator<Slot_Occupant> soIter = solution.keySet().iterator();
+    	
+    	while (soIter.hasNext()) {
+    		Slot currentSlot = solution.get(soIter.next());
+    		if (currentSlot == null) continue;
+    		
+    		if (currentSlot.max > 0) {
+    			currentSlot.max--;
+    		} else {
+    			output = false;
+    			break;
+    		}
+    	}
+    	
+    	// reset counter for time slots
+    	parseData.resetTimeSlots();
 
     	return output;
     }
@@ -370,6 +341,7 @@ public class ConstraintChecker {
 	   return slSet.size() == assigned500Courses;
    }
    
+   // **USELESS PROBABLY**
    /*
    public boolean is813CourseValid(Map<Slot_Occupant, Slot> data) {
 	   return isSpecialCourseValid(data, course813);
@@ -410,7 +382,6 @@ public class ConstraintChecker {
 		   }
 	   }
 	   
-	   return true;
    }
    */
    
