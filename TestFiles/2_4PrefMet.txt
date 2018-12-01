@@ -1,0 +1,49 @@
+Name:
+NotEnoughSlotsForCourse
+
+Course slots:
+MO, 8:00, 2, 1
+MO,9:00,2,2
+TU,12:30,2,1
+TU,14:00,2,1
+
+Lab slots:
+MO, 8:00, 4, 2
+TU, 12:00,6,1
+
+Courses:
+CPSC 433 LEC 01
+CPSC 433 LEC 02
+CPSC 481 LEC 01
+CPSC 418 LEC 01
+
+
+Labs:
+CPSC 433 LEC 01 TUT 01
+CPSC 433 LEC  02 LAB   02
+CPSC 481 LEC 01 LAB 01
+CPSC 418 LEC 01 LAB 01
+
+
+Not compatible:
+CPSC 433 LEC 01 TUT 01, CPSC 433 LEC 02 LAB 02
+CPSC 481 LEC 01, CPSC 418 LEC 01
+
+
+
+Unwanted:
+CPSC 433 LEC 01, MO, 8:00
+
+Preferences:
+MO, 8:00, CPSC 433 LEC 01, 10
+MO, 9:00, CPSC 433 LEC 02, 10
+MO, 8:00, CPSC 481 LEC 01, 10
+TU, 12:30, CPSC 418 LEC 01, 10
+
+
+Pair:
+
+
+Partial assignments:
+SENG 311 LEC 01, MO, 9:00
+CPSC 481 LEC 01, MO, 8:00
