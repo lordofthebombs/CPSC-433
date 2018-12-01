@@ -1,5 +1,5 @@
 Name:
-All Prefs met
+No pairs given
 
 Course slots:
 MO, 8:00, 3, 2
@@ -29,7 +29,7 @@ Unwanted:
 CPSC 433 LEC 01, MO, 8:00
 
 Preferences:
-TU, 9:30, CPSC 433 LEC 01, 10
+MO, 8:00, CPSC 433 LEC 01, 10
 MO, 8:00, CPSC 433 LEC 01 TUT 01, 3
 TU, 9:30, CPSC 433 LEC 02, 10
 TU, 10:00, CPSC 433 LEC 01 LAB 01, 5
@@ -37,6 +37,7 @@ MO, 8:00, CPSC 433 LEC 02 LAB 02, 1
 Fri, 10:00, CPSC 433 LEC 02 LAB 02, 7
 
 Pair:
+
 
 
 Partial assignments:

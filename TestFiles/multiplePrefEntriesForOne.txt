@@ -1,5 +1,5 @@
 Name:
-ShortExample
+Multiple Entries in Pref for same course
 
 Course slots:
 MO, 8:00, 3, 2

@@ -1,5 +1,5 @@
 Name:
-NotEnoughSlotsForCourse
+Empty Pref list
 
 Course slots:
 MO, 8:00, 2, 1

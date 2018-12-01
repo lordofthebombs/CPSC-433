@@ -4,6 +4,7 @@ import java.util.*;
 
 import OrTree.*;
 import Slot_Occupant.Slot_Occupant;
+import javafx.util.Pair;
 
 public class Eval {
     private double pen_coursemin, pen_preference, pen_notpaired, pen_section;
@@ -51,8 +52,18 @@ public class Eval {
 
     }
 
-    private int evalPair(Map<Slot_Occupant, Slot> solution) {
-        return 0;
+    public int evalPair(Map<Slot_Occupant, Slot> solution) {
+        int violationCounter = 0;
+        HashSet<Pair<Slot_Occupant, Slot_Occupant>> pair_entries = pairs.getPair_Entries();
+        for(Pair<Slot_Occupant, Slot_Occupant> pair : pair_entries){
+            Slot leftCourseSlot = solution.get(pair.getKey());
+            Slot rightCourseSlot = solution.get(pair.getValue());
+            if(!leftCourseSlot.equals(rightCourseSlot)){
+               violationCounter++;
+            }
+        }
+
+        return violationCounter;
     }
 
     private int evalSecDiff(Map<Slot_Occupant, Slot> solution) {

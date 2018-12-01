@@ -49,4 +49,8 @@ public class Pairs {
         return new Pair<>(a,b);
     }
 
+    public  HashSet<Pair<Slot_Occupant, Slot_Occupant>> getPair_Entries(){
+        return this.Pair_Entries;
+    }
+
 }

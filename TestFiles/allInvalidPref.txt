@@ -1,5 +1,5 @@
 Name:
-ShortExample
+All Pref invalid course/slot
 
 Course slots:
 MO, 8:00, 3, 2

@@ -1,5 +1,5 @@
 Name:
-NotEnoughSlotsForCourse
+2 out of 4 Preference met
 
 Course slots:
 MO, 8:00, 2, 1
