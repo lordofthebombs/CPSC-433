@@ -13,7 +13,7 @@ public class TimeConverter {
         public TimeFormatException(String msg){this.Message = msg;}
     }
 
-    private HashMap<String, Float> timeConvert;
+    public HashMap<String, Float> timeConvert;
 
     public TimeConverter() {
 

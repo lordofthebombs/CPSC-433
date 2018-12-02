@@ -50,7 +50,7 @@ public class SetSearch{
         done = true;
         repeats = INIT_POPULATION;
       }
-      if(!addToSet(out)){
+      else if(!addToSet(out)){
         i--;
         repeats++;
       }

@@ -1,7 +1,10 @@
 package ParseData;
 
-import java.sql.Time;
+import Parser.TimeConverter;
+
+import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 
 public class Slot {
@@ -17,9 +20,18 @@ public class Slot {
     }
 
     public enum Day{
-        Mon,
-        Tues,
-        Fri
+        Mon("MO"),
+        Tues("TU"),
+        Fri("FR");
+
+        private String dayString;
+        Day(String dayString){
+            this.dayString = dayString;
+        }
+
+        public String getDayString(){
+            return this.dayString;
+        }
     };
 
     public Slot(Day day, float time, int max, int min){
@@ -64,8 +76,17 @@ public class Slot {
          }
      }
 
+
+
     @Override
     public String toString(){
-        return this.day + ", " + this.time;
+        TimeConverter converter = new TimeConverter();
+
+        Optional<Map.Entry<String, Float>> stringTime = converter.timeConvert.entrySet()
+                .stream()
+                .filter(entry -> Objects.equals(entry.getValue(), this.time))
+                .findAny();
+
+        return this.day.getDayString() + ", " + stringTime.get().getKey();
     }
 }
