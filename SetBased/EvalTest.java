@@ -29,6 +29,7 @@ public class EvalTest {
     public void eval_withAllSoftConstraintAndEqualWeights_shouldReturnExpected() throws FileNotFoundException {
         setUp("EvalTestFiles/allSoftConstraints.txt");
 
+        // evalMinfilled = 5.0
         // evalPref = 24.0
         // evalPair = 2
         //evalSecDiff = 1
@@ -42,7 +43,7 @@ public class EvalTest {
                 1,
                 1);
 
-        double expected = 27.0;
+        double expected = 32.0;
         Map<Slot_Occupant, Slot> sol = new LinkedHashMap<>();
         sol.put(parseData.Courses.get(0), new Slot(Slot.Day.Tues, (float) 9.5 , 2, 1));
         sol.put(parseData.Courses.get(1), new Slot(Slot.Day.Tues, (float) 9.5 , 2, 1));
@@ -59,6 +60,7 @@ public class EvalTest {
     public void eval_withAllSoftConstraintAndVaryingWeights_shouldReturnExpected() throws FileNotFoundException {
         setUp("EvalTestFiles/allSoftConstraints.txt");
 
+        // evalMinFilled = 5.0
         // evalPref = 24.0
         // evalPair = 2
         //evalSecDiff = 1
@@ -78,7 +80,7 @@ public class EvalTest {
                 1,
                 1);
 
-        double expected = 58.0;
+        double expected = 63.0;
         Map<Slot_Occupant, Slot> sol = new LinkedHashMap<>();
         sol.put(parseData.Courses.get(0), new Slot(Slot.Day.Tues, (float) 9.5 , 2, 1));
         sol.put(parseData.Courses.get(1), new Slot(Slot.Day.Tues, (float) 9.5 , 2, 1));
@@ -90,6 +92,8 @@ public class EvalTest {
         double result = eval.eval(sol);
         assertEquals(expected, result);
     }
+
+
 
 
     @Test
@@ -536,6 +540,54 @@ public class EvalTest {
         double result = eval.evalSecDiff(sol);
         assertEquals(expected, result);
     }
+
+    @Test
+    public void evalMinFilled_allMinMetForCoursesAndLabs_shouldReturnZero() throws FileNotFoundException {
+        setUp("EvalTestFiles/allMinCourseAndLabsMet.txt");
+        Eval eval = new Eval(parseData, 1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1);
+        double expected = 0.0;
+
+        Map<Slot_Occupant, Slot> sol = new LinkedHashMap<>();
+        sol.put(parseData.Courses.get(0), new Slot(Slot.Day.Tues, (float) 9.5 , 2, 1));
+        sol.put(parseData.Courses.get(1), new Slot(Slot.Day.Tues, (float) 9.5 , 2, 1));
+        sol.put(parseData.Labs.get(0), new Slot(Slot.Day.Tues, (float) 10 , 2, 1));
+        sol.put(parseData.Labs.get(1), new Slot(Slot.Day.Mon, (float) 8 , 4, 1));
+
+        double result = eval.evalMinfilled(sol);
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void evalMinFilled_OnlyCoursesMet_shouldReturnZero() throws FileNotFoundException {
+        setUp("EvalTestFiles/onlyCourseMetMinNotLab.txt");
+        Eval eval = new Eval(parseData, 1,
+                1,
+                1,
+                1,
+                1,
+                2,
+                1,
+                1);
+        double expected = 8.0;
+
+        Map<Slot_Occupant, Slot> sol = new LinkedHashMap<>();
+        sol.put(parseData.Courses.get(0), new Slot(Slot.Day.Tues, (float) 9.5 , 2, 1));
+        sol.put(parseData.Courses.get(1), new Slot(Slot.Day.Tues, (float) 9.5 , 2, 1));
+        sol.put(parseData.Labs.get(0), new Slot(Slot.Day.Tues, (float) 10 , 2, 2));
+        sol.put(parseData.Labs.get(1), new Slot(Slot.Day.Mon, (float) 8 , 4, 2));
+
+        double result = eval.evalMinfilled(sol);
+        assertEquals(expected, result);
+    }
+
+
 
 
 
