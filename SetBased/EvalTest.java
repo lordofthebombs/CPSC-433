@@ -1,3 +1,4 @@
+package SetBased;
 
 import ParseData.*;
 import Slot_Occupant.*;
@@ -26,7 +27,7 @@ public class EvalTest {
 
     @Test
     public void eval_withAllSoftConstraintAndEqualWeights_shouldReturnExpected() throws FileNotFoundException {
-        setUp("TestFiles/allSoftConstraints.txt");
+        setUp("EvalTestFiles/allSoftConstraints.txt");
 
         // evalPref = 24.0
         // evalPair = 2
@@ -49,7 +50,7 @@ public class EvalTest {
 
     @Test
     public void eval_withAllSoftConstraintAndVaryingWeights_shouldReturnExpected() throws FileNotFoundException {
-        setUp("TestFiles/allSoftConstraints.txt");
+        setUp("EvalTestFiles/allSoftConstraints.txt");
 
         // evalPref = 24.0
         // evalPair = 2
@@ -82,7 +83,7 @@ public class EvalTest {
 
     @Test
     public void eval_withAllSoftConstraintAndZeroWeights_shouldReturnExpected() throws FileNotFoundException {
-        setUp("TestFiles/allSoftConstraints.txt");
+        setUp("EvalTestFiles/allSoftConstraints.txt");
 
         // evalPref = 24.0
         // evalPair = 2
@@ -115,7 +116,7 @@ public class EvalTest {
 
     @Test
     public void evalPref_onlyMeetsTwoOutOf4Prefs_shouldReturnScoreOfTwoUnmet() throws FileNotFoundException {
-        setUp("TestFiles/2_4PrefMet.txt");
+        setUp("EvalTestFiles/2_4PrefMet.txt");
         Eval eval = new Eval(parseData, 1, 1, 1, 1);
 
         double expected = 20.0;
@@ -129,7 +130,7 @@ public class EvalTest {
 
     @Test
     public void evalPref_noPrefsGiven_shouldReturnScoreOfZero() throws FileNotFoundException {
-        setUp("TestFiles/noPrefsGiven.txt");
+        setUp("EvalTestFiles/noPrefsGiven.txt");
         Eval eval = new Eval(parseData, 1, 1, 1, 1);
 
         double expected = 0.0;
@@ -143,7 +144,7 @@ public class EvalTest {
 
     @Test
     public void evalPref_allPrefsMet_shouldReturnScoreOfZero() throws FileNotFoundException {
-        setUp("TestFiles/allPrefsMet.txt");
+        setUp("EvalTestFiles/allPrefsMet.txt");
         Eval eval = new Eval(parseData, 1, 1, 1, 1);
 
         double expected = 0.0;
@@ -159,7 +160,7 @@ public class EvalTest {
 
     @Test
     public void evalPref_PrefNotMetForASingleCourse_shouldReturnScoreOfAllPrefEntriesForThatCourse() throws FileNotFoundException {
-        setUp("TestFiles/multiplePrefEntriesForOne.txt");
+        setUp("EvalTestFiles/multiplePrefEntriesForOne.txt");
         Eval eval = new Eval(parseData, 1, 1, 1, 1);
 
         double expected = 25.0;
@@ -175,7 +176,7 @@ public class EvalTest {
 
     @Test
     public void evalPref_AllInvalidPref_shouldReturnScoreOfZero() throws FileNotFoundException {
-        setUp("TestFiles/allInvalidPref.txt");
+        setUp("EvalTestFiles/allInvalidPref.txt");
         Eval eval = new Eval(parseData, 1, 1, 1, 1);
 
         double expected = 0.0;
@@ -192,7 +193,7 @@ public class EvalTest {
 
     @Test
     public void evalPair_allPairViolated_shouldReturnTotalSizeOfPairs() throws FileNotFoundException {
-        setUp("TestFiles/allPairsViolated.txt");
+        setUp("EvalTestFiles/allPairsViolated.txt");
         Eval eval = new Eval(parseData, 1, 1, 1, 1);
 
         int expected = 2;
@@ -208,7 +209,7 @@ public class EvalTest {
 
     @Test
     public void evalPair_noPairsGiven_shouldReturnZero() throws FileNotFoundException {
-        setUp("TestFiles/noPairs.txt");
+        setUp("EvalTestFiles/noPairs.txt");
         Eval eval = new Eval(parseData, 1, 1, 1, 1);
 
         int expected = 0;
@@ -224,7 +225,7 @@ public class EvalTest {
 
     @Test
     public void evalPair_mutiplePairsForOneCourse_shouldReturnTotalViolationForThatCourse() throws FileNotFoundException {
-        setUp("TestFiles/multiplePairsForOne.txt");
+        setUp("EvalTestFiles/multiplePairsForOne.txt");
         Eval eval = new Eval(parseData, 1, 1, 1, 1);
 
         int expected = 3;
@@ -240,7 +241,7 @@ public class EvalTest {
 
     @Test
     public void evalPair_allPairsMet_shouldReturnZero() throws FileNotFoundException {
-        setUp("TestFiles/allPairsMet.txt");
+        setUp("EvalTestFiles/allPairsMet.txt");
         Eval eval = new Eval(parseData, 1, 1, 1, 1);
 
         int expected = 0;
@@ -257,7 +258,7 @@ public class EvalTest {
 
     @Test
     public void evalSecDiff_allSameSlotAssigned_returnTotalPenForEachPairOfSec() throws FileNotFoundException {
-        setUp("TestFiles/withOneCourseDiffSec.txt");
+        setUp("EvalTestFiles/withOneCourseDiffSec.txt");
         Eval eval = new Eval(parseData, 1, 1, 1, 1);
 
         int expected = 10;
@@ -276,7 +277,7 @@ public class EvalTest {
 
     @Test
     public void evalSecDiff_4outOf5SecSameSlotAssigned_returnTotalPenForEachPairNotMet() throws FileNotFoundException {
-        setUp("TestFiles/withOneCourseDiffSec.txt");
+        setUp("EvalTestFiles/withOneCourseDiffSec.txt");
         Eval eval = new Eval(parseData, 1, 1, 1, 1);
 
         int expected = 6;
@@ -295,7 +296,7 @@ public class EvalTest {
 
     @Test
     public void evalSecDiff_3Same2sameSlotsAssigned_returnTotalPenForEachPairNotMet() throws FileNotFoundException {
-        setUp("TestFiles/withOneCourseDiffSec.txt");
+        setUp("EvalTestFiles/withOneCourseDiffSec.txt");
         Eval eval = new Eval(parseData, 1, 1, 1, 1);
 
         int expected = 4;
@@ -314,7 +315,7 @@ public class EvalTest {
 
     @Test
     public void evalSecDiff_3Same2DiffSlotsAssigned_returnTotalPenForEachPairNotMet() throws FileNotFoundException {
-        setUp("TestFiles/withOneCourseDiffSec.txt");
+        setUp("EvalTestFiles/withOneCourseDiffSec.txt");
         Eval eval = new Eval(parseData, 1, 1, 1, 1);
 
         int expected = 3;
@@ -333,7 +334,7 @@ public class EvalTest {
 
     @Test
     public void evalSecDiff_3Diff2SameSlotsAssigned_returnTotalPenForEachPairNotMet() throws FileNotFoundException {
-        setUp("TestFiles/withOneCourseDiffSec.txt");
+        setUp("EvalTestFiles/withOneCourseDiffSec.txt");
         Eval eval = new Eval(parseData, 1, 1, 1, 1);
 
         int expected = 1;
@@ -352,7 +353,7 @@ public class EvalTest {
 
     @Test
     public void evalSecDiff_withAllDiifSlotsAssigned_returnZero() throws FileNotFoundException {
-        setUp("TestFiles/withOneCourseDiffSec.txt");
+        setUp("EvalTestFiles/withOneCourseDiffSec.txt");
         Eval eval = new Eval(parseData, 1, 1, 1, 1);
 
         int expected = 0;
@@ -372,7 +373,7 @@ public class EvalTest {
 
     @Test
     public void evalSecDiff_withAllSameSlotsForMultipleCourses_returnsTotalCombinations() throws FileNotFoundException {
-        setUp("TestFiles/withDiffCourseSec.txt");
+        setUp("EvalTestFiles/withDiffCourseSec.txt");
         Eval eval = new Eval(parseData, 1, 1, 1, 1);
 
         int expected = 10;
@@ -396,7 +397,7 @@ public class EvalTest {
 
     @Test
     public void evalSecDiff_withAllDiffSlotsForMultipleCourses_returnsTotalCombinations() throws FileNotFoundException {
-        setUp("TestFiles/withDiffCourseSec.txt");
+        setUp("EvalTestFiles/withDiffCourseSec.txt");
         Eval eval = new Eval(parseData, 1, 1, 1, 1);
 
         int expected = 0;

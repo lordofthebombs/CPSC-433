@@ -1,3 +1,5 @@
+package SetBased;
+
 import java.io.File;
 import java.util.*;
 
@@ -10,14 +12,14 @@ import static java.lang.System.exit;
 
 public class SetSearch{
 
-  private static final int INIT_POPULATION = 100;
+  private static final int INIT_POPULATION = 10;
   private static final int MAX_FACTS = 1000;
   private static final int TRIM_NUM = 800; //number of facts after trim, maxfacts-trimnum=num of facts removed
   private static final int MAX_REPEATS = 3;
   private static final int MAX_CHILDREN_PER_PARENT = 10;
 
   //possibly use a heap?
-  private ArrayList<Pair<Map<Slot_Occupant, Slot>, Integer>> workingSet;
+  private ArrayList<Pair<Map<Slot_Occupant, Slot>, Double>> workingSet;
   // Map<Slot_Occupant, Slot> is waht the or tree outputs
   // Integer is what the eval function gives
 
@@ -26,11 +28,11 @@ public class SetSearch{
   private int generation;
   private Eval eval;
 
-/*
+
   public SetSearch(ParseData data, String file){
     makeEval(data, file);
     solGen = new OrTreeSearch(data);
-    workingSet = new ArrayList<Pair<Map<Slot_Occupant, Slot>, Integer>>(MAX_FACTS);
+    workingSet = new ArrayList<Pair<Map<Slot_Occupant, Slot>, Double>>(MAX_FACTS);
     randGen = new Random(System.currentTimeMillis());
     generation = 1;
     int repeats = 0;
@@ -81,7 +83,7 @@ public class SetSearch{
   }
 
   //returns... the best solution...
-  public Pair<Map<Slot_Occupant, Slot>, Integer> getBestSolution(){
+  public Pair<Map<Slot_Occupant, Slot>, Double> getBestSolution(){
     return workingSet.get(0);
   }
 
@@ -92,7 +94,7 @@ public class SetSearch{
   //so that shortens the loop
   private boolean addToSet(Map<Slot_Occupant, Slot> solution){
     double score = eval.eval(solution);
-    Pair<Map<Slot_Occupant, Slot>, Integer> fin = new Pair(solution, score);
+    Pair<Map<Slot_Occupant, Slot>, Double> fin = new Pair(solution, score);
     if(workingSet.contains(fin)){
       return false;
     }
@@ -129,6 +131,6 @@ public class SetSearch{
     workingSet.subList(TRIM_NUM, workingSet.size()).clear();
   }
 
-*/
+
 
 }

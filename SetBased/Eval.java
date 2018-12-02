@@ -1,3 +1,5 @@
+package SetBased;
+
 import ParseData.*;
 
 import java.math.BigInteger;
@@ -102,7 +104,7 @@ public class Eval {
     /**
      * This method calculates the number of violations for Pair list given
      * For every pair(a,b) statement, for which assign(a) is not equal to assign(b),
-     * we add pen_notpaired to the Eval-value of assign.
+     * we add pen_notpaired to the SetBased.Eval-value of assign.
      * @param solution
      * @return int total number of violation
      */
@@ -124,7 +126,7 @@ public class Eval {
     /**
      * This is the method to calculate penalty score for
      * For each pair of sections that is scheduled into the same slot,
-     * we add a penalty pen_section to the Eval-value of an assignment assign.
+     * we add a penalty pen_section to the SetBased.Eval-value of an assignment assign.
      * @param solution
      * @return  total penalty score for all courses with different sections assigned to same slot
      */
@@ -152,7 +154,7 @@ public class Eval {
                  }
 
                  //Since the doc says  For each pair of sections that is scheduled into the same slot,
-                 //* we add a penalty pen_section to the Eval-value of an assignment assign.
+                 //* we add a penalty pen_section to the SetBased.Eval-value of an assignment assign.
                  //* i.e for a course with sec [1,2,3,4] and slots [s1, s2], the penalty for [(1-> S1),(2-> S1),(3-> S1),(4-> S1)]
                  //* should be 6 since the following pairs are violated [(1,2),(1,3),(1,4),(2,3),(2,4),(3,4)]
                  violationCounter+= calculateSecDiffCombinatorialPen(slotsForEachSec);
