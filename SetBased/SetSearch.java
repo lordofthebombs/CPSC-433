@@ -1,6 +1,6 @@
 package SetBased;
 
-import java.io.File;
+import java.io.*;
 import java.util.*;
 
 import javafx.util.Pair;
@@ -59,19 +59,55 @@ public class SetSearch{
   }
 
   private void makeEval(ParseData data, String file){
-    double coursemin =0, preference =0, notpaired =0, section =0;
-    try{
-      Scanner in = new Scanner(new File(file));
-      coursemin = in.nextInt();
-      preference = in.nextInt();
-      notpaired = in.nextInt();
-      section = in.nextInt();
+    double minFilledWeight = 0, prefWeight = 0, notPairedWeight = 0, secDiffWeight = 0;
+    double pen_coursemin = 0 , pen_labmin = 0, pen_notPaired = 0 , pen_section = 0;
+
+    BufferedReader bufferedReader = null;
+    try {
+      bufferedReader = new BufferedReader(new FileReader(new File(file)));
+      String line;
+      while ((line = bufferedReader.readLine()) != null) {
+        line = line.replaceAll("\\s", "");
+        String[] setting = line.split("=");
+        if (setting[0].equals("minFilledWeight")) {
+          minFilledWeight = Integer.parseInt(setting[1]);
+        } else if (setting[0].equals("prefWeight")) {
+          prefWeight = Integer.parseInt(setting[1]);
+        } else if (setting[0].equals("notPairedWeight")) {
+          notPairedWeight = Integer.parseInt(setting[1]);
+        } else if (setting[0].equals("secDiffWeight")) {
+          secDiffWeight = Integer.parseInt(setting[1]);
+        } else if (setting[0].equals("pen_courseMin")) {
+          pen_coursemin = Integer.parseInt(setting[1]);
+        } else if (setting[0].equals("pen_labMin")) {
+          pen_labmin = Integer.parseInt(setting[1]);
+        } else if (setting[0].equals("pen_notPaired")) {
+          pen_notPaired = Integer.parseInt(setting[1]);
+        } else if (setting[0].equals("pen_section")) {
+          pen_section = Integer.parseInt(setting[1]);
+        }
+      }
+
+    } catch ( IOException e){
+      System.out.println("Unable to load config file " + e);
+      System.exit(0);
     }
-    catch(Exception e){
-      System.out.println("Penelties file is bad: " + e);
-      exit(-1);
+    // Always close files.
+    try {
+      bufferedReader.close();
+    } catch (IOException e) {
+      System.out.println("Unable to close config file resource " +  e);
     }
-    eval = new Eval(data,coursemin, preference ,notpaired, section);
+
+    eval = new Eval(data,
+                minFilledWeight,
+                prefWeight,
+                notPairedWeight,
+                secDiffWeight,
+                pen_coursemin,
+                pen_labmin,
+                pen_notPaired,
+                pen_section);
   }
 
   //keeps running untill a genaration has passed or search can't continue

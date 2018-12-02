@@ -33,7 +33,14 @@ public class EvalTest {
         // evalPair = 2
         //evalSecDiff = 1
 
-        Eval eval = new Eval(parseData, 1, 1, 1, 1);
+        Eval eval = new Eval(parseData, 1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1);
 
         double expected = 27.0;
         Map<Slot_Occupant, Slot> sol = new LinkedHashMap<>();
@@ -65,7 +72,11 @@ public class EvalTest {
                 courseMin,
                 prefWeight,
                 notPairedWeight,
-                diffSecWeight);
+                diffSecWeight,
+                1,
+                1,
+                1,
+                1);
 
         double expected = 58.0;
         Map<Slot_Occupant, Slot> sol = new LinkedHashMap<>();
@@ -98,7 +109,11 @@ public class EvalTest {
                 0,
                 0,
                 0,
-                0);
+                0,
+                1,
+                1,
+                1,
+                1);
 
         double expected = 0;
         Map<Slot_Occupant, Slot> sol = new LinkedHashMap<>();
@@ -117,7 +132,14 @@ public class EvalTest {
     @Test
     public void evalPref_onlyMeetsTwoOutOf4Prefs_shouldReturnScoreOfTwoUnmet() throws FileNotFoundException {
         setUp("EvalTestFiles/2_4PrefMet.txt");
-        Eval eval = new Eval(parseData, 1, 1, 1, 1);
+        Eval eval = new Eval(parseData, 1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1);
 
         double expected = 20.0;
         Map<Slot_Occupant, Slot> sol = new LinkedHashMap<>();
@@ -131,8 +153,14 @@ public class EvalTest {
     @Test
     public void evalPref_noPrefsGiven_shouldReturnScoreOfZero() throws FileNotFoundException {
         setUp("EvalTestFiles/noPrefsGiven.txt");
-        Eval eval = new Eval(parseData, 1, 1, 1, 1);
-
+        Eval eval = new Eval(parseData, 1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1);
         double expected = 0.0;
         Map<Slot_Occupant, Slot> sol = new LinkedHashMap<>();
         for ( Slot_Occupant c : parseData.getOccupants()){
@@ -145,8 +173,14 @@ public class EvalTest {
     @Test
     public void evalPref_allPrefsMet_shouldReturnScoreOfZero() throws FileNotFoundException {
         setUp("EvalTestFiles/allPrefsMet.txt");
-        Eval eval = new Eval(parseData, 1, 1, 1, 1);
-
+        Eval eval = new Eval(parseData, 1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1);
         double expected = 0.0;
         Map<Slot_Occupant, Slot> sol = new LinkedHashMap<>();
         sol.put(parseData.Courses.get(0), new Slot(Slot.Day.Tues, (float) 9.5 , 2, 1));
@@ -161,8 +195,14 @@ public class EvalTest {
     @Test
     public void evalPref_PrefNotMetForASingleCourse_shouldReturnScoreOfAllPrefEntriesForThatCourse() throws FileNotFoundException {
         setUp("EvalTestFiles/multiplePrefEntriesForOne.txt");
-        Eval eval = new Eval(parseData, 1, 1, 1, 1);
-
+        Eval eval = new Eval(parseData, 1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1);
         double expected = 25.0;
         Map<Slot_Occupant, Slot> sol = new LinkedHashMap<>();
         sol.put(parseData.Courses.get(0), new Slot(Slot.Day.Mon, (float) 10 , 3, 2));
@@ -177,8 +217,14 @@ public class EvalTest {
     @Test
     public void evalPref_AllInvalidPref_shouldReturnScoreOfZero() throws FileNotFoundException {
         setUp("EvalTestFiles/allInvalidPref.txt");
-        Eval eval = new Eval(parseData, 1, 1, 1, 1);
-
+        Eval eval = new Eval(parseData, 1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1);
         double expected = 0.0;
         Map<Slot_Occupant, Slot> sol = new LinkedHashMap<>();
         sol.put(parseData.Courses.get(0), new Slot(Slot.Day.Tues, (float) 9.5 , 2, 1));
@@ -194,64 +240,88 @@ public class EvalTest {
     @Test
     public void evalPair_allPairViolated_shouldReturnTotalSizeOfPairs() throws FileNotFoundException {
         setUp("EvalTestFiles/allPairsViolated.txt");
-        Eval eval = new Eval(parseData, 1, 1, 1, 1);
-
-        int expected = 2;
+        Eval eval = new Eval(parseData, 1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1);
+        double expected = 2.0;
         Map<Slot_Occupant, Slot> sol = new LinkedHashMap<>();
         sol.put(parseData.Courses.get(0), new Slot(Slot.Day.Mon, (float) 9 , 3, 2));
         sol.put(parseData.Courses.get(1), new Slot(Slot.Day.Tues, (float) 9.5 , 2, 1));
         sol.put(parseData.Labs.get(0), new Slot(Slot.Day.Tues, (float) 10 , 2, 1));
         sol.put(parseData.Labs.get(1), new Slot(Slot.Day.Mon, (float) 8 , 4, 2));
 
-        int result = eval.evalPair(sol);
+        double result = eval.evalPair(sol);
         assertEquals(expected, result);
     }
 
     @Test
     public void evalPair_noPairsGiven_shouldReturnZero() throws FileNotFoundException {
         setUp("EvalTestFiles/noPairs.txt");
-        Eval eval = new Eval(parseData, 1, 1, 1, 1);
-
-        int expected = 0;
+        Eval eval = new Eval(parseData, 1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1);
+        double expected = 0.0;
         Map<Slot_Occupant, Slot> sol = new LinkedHashMap<>();
         sol.put(parseData.Courses.get(0), new Slot(Slot.Day.Mon, (float) 9 , 3, 2));
         sol.put(parseData.Courses.get(1), new Slot(Slot.Day.Tues, (float) 9.5 , 2, 1));
         sol.put(parseData.Labs.get(0), new Slot(Slot.Day.Tues, (float) 10 , 2, 1));
         sol.put(parseData.Labs.get(1), new Slot(Slot.Day.Mon, (float) 8 , 4, 2));
 
-        int result = eval.evalPair(sol);
+        double result = eval.evalPair(sol);
         assertEquals(expected, result);
     }
 
     @Test
     public void evalPair_mutiplePairsForOneCourse_shouldReturnTotalViolationForThatCourse() throws FileNotFoundException {
         setUp("EvalTestFiles/multiplePairsForOne.txt");
-        Eval eval = new Eval(parseData, 1, 1, 1, 1);
-
-        int expected = 3;
+        Eval eval = new Eval(parseData, 1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1);
+        double expected = 3.0;
         Map<Slot_Occupant, Slot> sol = new LinkedHashMap<>();
         sol.put(parseData.Courses.get(0), new Slot(Slot.Day.Mon, (float) 9 , 3, 2));
         sol.put(parseData.Courses.get(1), new Slot(Slot.Day.Tues, (float) 9.5 , 2, 1));
         sol.put(parseData.Labs.get(0), new Slot(Slot.Day.Mon, (float) 8 , 4, 2));
         sol.put(parseData.Labs.get(1), new Slot(Slot.Day.Mon, (float) 8 , 4, 2));
 
-        int result = eval.evalPair(sol);
+        double result = eval.evalPair(sol);
         assertEquals(expected, result);
     }
 
     @Test
     public void evalPair_allPairsMet_shouldReturnZero() throws FileNotFoundException {
         setUp("EvalTestFiles/allPairsMet.txt");
-        Eval eval = new Eval(parseData, 1, 1, 1, 1);
-
-        int expected = 0;
+        Eval eval = new Eval(parseData, 1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1);
+        double expected = 0.0;
         Map<Slot_Occupant, Slot> sol = new LinkedHashMap<>();
         sol.put(parseData.Courses.get(0), new Slot(Slot.Day.Mon, (float) 8 , 3, 2));
         sol.put(parseData.Courses.get(1), new Slot(Slot.Day.Tues, (float) 9.5 , 2, 1));
         sol.put(parseData.Labs.get(0), new Slot(Slot.Day.Mon, (float) 8 , 4, 2));
         sol.put(parseData.Labs.get(1), new Slot(Slot.Day.Mon, (float) 8 , 4, 2));
 
-        int result = eval.evalPair(sol);
+        double result = eval.evalPair(sol);
         assertEquals(expected, result);
     }
 
@@ -259,9 +329,15 @@ public class EvalTest {
     @Test
     public void evalSecDiff_allSameSlotAssigned_returnTotalPenForEachPairOfSec() throws FileNotFoundException {
         setUp("EvalTestFiles/withOneCourseDiffSec.txt");
-        Eval eval = new Eval(parseData, 1, 1, 1, 1);
-
-        int expected = 10;
+        Eval eval = new Eval(parseData, 1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1);
+        double expected = 10.0;
         Map<Slot_Occupant, Slot> sol = new LinkedHashMap<>();
         sol.put(parseData.Courses.get(0), new Slot(Slot.Day.Tues, (float) 14 , 5, 1));
         sol.put(parseData.Courses.get(1), new Slot(Slot.Day.Tues, (float) 14 , 5, 1));
@@ -271,16 +347,22 @@ public class EvalTest {
         sol.put(parseData.Labs.get(0), new Slot(Slot.Day.Mon, (float) 8 , 4, 2));
         sol.put(parseData.Labs.get(1), new Slot(Slot.Day.Mon, (float) 8 , 4, 2));
 
-        int result = eval.evalSecDiff(sol);
+        double result = eval.evalSecDiff(sol);
         assertEquals(expected, result);
     }
 
     @Test
     public void evalSecDiff_4outOf5SecSameSlotAssigned_returnTotalPenForEachPairNotMet() throws FileNotFoundException {
         setUp("EvalTestFiles/withOneCourseDiffSec.txt");
-        Eval eval = new Eval(parseData, 1, 1, 1, 1);
-
-        int expected = 6;
+        Eval eval = new Eval(parseData, 1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1);
+        double expected = 6.0;
         Map<Slot_Occupant, Slot> sol = new LinkedHashMap<>();
         sol.put(parseData.Courses.get(0), new Slot(Slot.Day.Tues, (float) 14 , 5, 1));
         sol.put(parseData.Courses.get(1), new Slot(Slot.Day.Tues, (float) 14 , 5, 1));
@@ -290,16 +372,22 @@ public class EvalTest {
         sol.put(parseData.Labs.get(0), new Slot(Slot.Day.Mon, (float) 8 , 4, 2));
         sol.put(parseData.Labs.get(1), new Slot(Slot.Day.Mon, (float) 8 , 4, 2));
 
-        int result = eval.evalSecDiff(sol);
+        double result = eval.evalSecDiff(sol);
         assertEquals(expected, result);
     }
 
     @Test
     public void evalSecDiff_3Same2sameSlotsAssigned_returnTotalPenForEachPairNotMet() throws FileNotFoundException {
         setUp("EvalTestFiles/withOneCourseDiffSec.txt");
-        Eval eval = new Eval(parseData, 1, 1, 1, 1);
-
-        int expected = 4;
+        Eval eval = new Eval(parseData, 1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1);
+        double expected = 4.0;
         Map<Slot_Occupant, Slot> sol = new LinkedHashMap<>();
         sol.put(parseData.Courses.get(0), new Slot(Slot.Day.Tues, (float) 14 , 5, 1));
         sol.put(parseData.Courses.get(1), new Slot(Slot.Day.Tues, (float) 14 , 5, 1));
@@ -309,16 +397,22 @@ public class EvalTest {
         sol.put(parseData.Labs.get(0), new Slot(Slot.Day.Mon, (float) 8 , 4, 2));
         sol.put(parseData.Labs.get(1), new Slot(Slot.Day.Mon, (float) 8 , 4, 2));
 
-        int result = eval.evalSecDiff(sol);
+        double result = eval.evalSecDiff(sol);
         assertEquals(expected, result);
     }
 
     @Test
     public void evalSecDiff_3Same2DiffSlotsAssigned_returnTotalPenForEachPairNotMet() throws FileNotFoundException {
         setUp("EvalTestFiles/withOneCourseDiffSec.txt");
-        Eval eval = new Eval(parseData, 1, 1, 1, 1);
-
-        int expected = 3;
+        Eval eval = new Eval(parseData, 1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1);
+        double expected = 3.0;
         Map<Slot_Occupant, Slot> sol = new LinkedHashMap<>();
         sol.put(parseData.Courses.get(0), new Slot(Slot.Day.Tues, (float) 14 , 5, 1));
         sol.put(parseData.Courses.get(1), new Slot(Slot.Day.Tues, (float) 14 , 5, 1));
@@ -328,16 +422,22 @@ public class EvalTest {
         sol.put(parseData.Labs.get(0), new Slot(Slot.Day.Mon, (float) 8 , 4, 2));
         sol.put(parseData.Labs.get(1), new Slot(Slot.Day.Mon, (float) 8 , 4, 2));
 
-        int result = eval.evalSecDiff(sol);
+        double result = eval.evalSecDiff(sol);
         assertEquals(expected, result);
     }
 
     @Test
     public void evalSecDiff_3Diff2SameSlotsAssigned_returnTotalPenForEachPairNotMet() throws FileNotFoundException {
         setUp("EvalTestFiles/withOneCourseDiffSec.txt");
-        Eval eval = new Eval(parseData, 1, 1, 1, 1);
-
-        int expected = 1;
+        Eval eval = new Eval(parseData, 1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1);
+        double expected = 1.0;
         Map<Slot_Occupant, Slot> sol = new LinkedHashMap<>();
         sol.put(parseData.Courses.get(0), new Slot(Slot.Day.Tues, (float) 14 , 5, 1));
         sol.put(parseData.Courses.get(1), new Slot(Slot.Day.Tues, (float) 14 , 5, 1));
@@ -347,16 +447,22 @@ public class EvalTest {
         sol.put(parseData.Labs.get(0), new Slot(Slot.Day.Mon, (float) 8 , 4, 2));
         sol.put(parseData.Labs.get(1), new Slot(Slot.Day.Mon, (float) 8 , 4, 2));
 
-        int result = eval.evalSecDiff(sol);
+        double result = eval.evalSecDiff(sol);
         assertEquals(expected, result);
     }
 
     @Test
     public void evalSecDiff_withAllDiifSlotsAssigned_returnZero() throws FileNotFoundException {
         setUp("EvalTestFiles/withOneCourseDiffSec.txt");
-        Eval eval = new Eval(parseData, 1, 1, 1, 1);
-
-        int expected = 0;
+        Eval eval = new Eval(parseData, 1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1);
+        double expected = 0.0;
         Map<Slot_Occupant, Slot> sol = new LinkedHashMap<>();
         sol.put(parseData.Courses.get(0), new Slot(Slot.Day.Tues, (float) 14 , 5, 1));
         sol.put(parseData.Courses.get(1), new Slot(Slot.Day.Tues, (float) 15.5 , 5, 1));
@@ -366,7 +472,7 @@ public class EvalTest {
         sol.put(parseData.Labs.get(0), new Slot(Slot.Day.Mon, (float) 8 , 4, 2));
         sol.put(parseData.Labs.get(1), new Slot(Slot.Day.Mon, (float) 8 , 4, 2));
 
-        int result = eval.evalSecDiff(sol);
+        double result = eval.evalSecDiff(sol);
         assertEquals(expected, result);
     }
 
@@ -374,9 +480,15 @@ public class EvalTest {
     @Test
     public void evalSecDiff_withAllSameSlotsForMultipleCourses_returnsTotalCombinations() throws FileNotFoundException {
         setUp("EvalTestFiles/withDiffCourseSec.txt");
-        Eval eval = new Eval(parseData, 1, 1, 1, 1);
-
-        int expected = 10;
+        Eval eval = new Eval(parseData, 1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1);
+        double expected = 10.0;
         Map<Slot_Occupant, Slot> sol = new LinkedHashMap<>();
         sol.put(parseData.Courses.get(0), new Slot(Slot.Day.Mon, (float) 8 , 3, 2));
         sol.put(parseData.Courses.get(1), new Slot(Slot.Day.Mon, (float) 8 , 3, 2));
@@ -391,16 +503,22 @@ public class EvalTest {
         sol.put(parseData.Labs.get(0), new Slot(Slot.Day.Mon, (float) 8 , 4, 2));
         sol.put(parseData.Labs.get(1), new Slot(Slot.Day.Mon, (float) 8 , 4, 2));
 
-        int result = eval.evalSecDiff(sol);
+        double result = eval.evalSecDiff(sol);
         assertEquals(expected, result);
     }
 
     @Test
     public void evalSecDiff_withAllDiffSlotsForMultipleCourses_returnsTotalCombinations() throws FileNotFoundException {
         setUp("EvalTestFiles/withDiffCourseSec.txt");
-        Eval eval = new Eval(parseData, 1, 1, 1, 1);
-
-        int expected = 0;
+        Eval eval = new Eval(parseData, 1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1);
+        double expected = 0.0;
         Map<Slot_Occupant, Slot> sol = new LinkedHashMap<>();
         sol.put(parseData.Courses.get(0), new Slot(Slot.Day.Mon, (float) 8 , 3, 2));
         sol.put(parseData.Courses.get(1), new Slot(Slot.Day.Mon, (float) 9 , 3, 2));
@@ -415,7 +533,7 @@ public class EvalTest {
         sol.put(parseData.Labs.get(0), new Slot(Slot.Day.Mon, (float) 8 , 4, 2));
         sol.put(parseData.Labs.get(1), new Slot(Slot.Day.Mon, (float) 8 , 4, 2));
 
-        int result = eval.evalSecDiff(sol);
+        double result = eval.evalSecDiff(sol);
         assertEquals(expected, result);
     }
 

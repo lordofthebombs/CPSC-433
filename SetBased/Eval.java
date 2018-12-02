@@ -5,23 +5,35 @@ import ParseData.*;
 import java.math.BigInteger;
 import java.util.*;
 
-import OrTree.*;
 import Slot_Occupant.*;
 import javafx.util.Pair;
 
 public class Eval {
-    private double pen_coursemin, pen_preference, pen_notpaired, pen_section;
+    private double pen_coursemin, pen_labmin, pen_notpaired, pen_section;
+    private double w_minFilled, w_pref, w_notPaired, w_secDiff;
     private Pairs pairs;
     private Preferences pref;
     private Map<String, List<Slot_Occupant>> courseSections;
 
 
 
-    public Eval(ParseData data, double coursemin, double preference, double notpaired, double section) {
-        pen_coursemin = coursemin;
-        pen_preference = preference;
-        pen_notpaired = notpaired;
-        pen_section = section;
+    public Eval(ParseData data,
+                double minFilledWeight,
+                double prefWeight,
+                double notPairedWeight,
+                double secDiffWeight,
+                double penCourseMin,
+                double penLabMin,
+                double penNotPaired,
+                double penSection) {
+        w_minFilled = minFilledWeight;
+        w_pref = prefWeight;
+        w_notPaired = notPairedWeight;
+        w_secDiff = secDiffWeight;
+        pen_coursemin = penCourseMin;
+        pen_labmin= penLabMin;
+        pen_notpaired = penNotPaired;
+        pen_section = penSection;
         pairs = data.Pairs;
         pref = data.Preferences;
         setCoursesSections(data);
@@ -60,20 +72,22 @@ public class Eval {
      */
     public double eval(Map<Slot_Occupant, Slot> solution) {
 
-        return evalMinfilled(solution) * pen_coursemin +
-                evalPref(solution) * pen_preference +
-                evalPair(solution) * pen_notpaired +
-                evalSecDiff(solution) * pen_section;
+        return evalMinfilled(solution) * w_minFilled +
+                evalPref(solution) * w_pref +
+                evalPair(solution) * w_notPaired +
+                evalSecDiff(solution) * w_secDiff;
 
 
     }
 
 
 
-    private int evalMinfilled(Map<Slot_Occupant, Slot> solution) {
+    public int evalMinfilled(Map<Slot_Occupant, Slot> solution) {
+        // The penalty value that will be returned
 
         return 0;
     }
+
 
 
     /**
@@ -102,13 +116,13 @@ public class Eval {
 
 
     /**
-     * This method calculates the number of violations for Pair list given
+     * This method calculates pen_notPaired * number of violations for Pair list given
      * For every pair(a,b) statement, for which assign(a) is not equal to assign(b),
      * we add pen_notpaired to the SetBased.Eval-value of assign.
      * @param solution
      * @return int total number of violation
      */
-    int evalPair(Map<Slot_Occupant, Slot> solution) {
+    double evalPair(Map<Slot_Occupant, Slot> solution) {
         int violationCounter = 0;
         HashSet<Pair<Slot_Occupant, Slot_Occupant>> pair_entries = pairs.getPair_Entries();
         for(Pair<Slot_Occupant, Slot_Occupant> pair : pair_entries){
@@ -119,7 +133,7 @@ public class Eval {
             }
         }
 
-        return violationCounter;
+        return violationCounter * pen_notpaired;
     }
 
 
@@ -130,7 +144,7 @@ public class Eval {
      * @param solution
      * @return  total penalty score for all courses with different sections assigned to same slot
      */
-     int evalSecDiff(Map<Slot_Occupant, Slot> solution) {
+     double evalSecDiff(Map<Slot_Occupant, Slot> solution) {
 
          int violationCounter = 0;
 
@@ -161,7 +175,7 @@ public class Eval {
              }
          }
 
-         return  violationCounter;
+         return  violationCounter * pen_section;
      }
 
     /**
