@@ -228,7 +228,7 @@ public class OrTreeSearch {
          //if the path hasn't been travelled down before generate all alterns. 
          if(root.possibleSlots == null) {
         	 root.myWorkingOccupant = mutatedOccupant;
-             root.possibleSlots = getPossibleSlots(solution, mutatedOccupant); //Altern Function 
+             root.possibleSlots = getPossibleSlots(solution, root.myWorkingOccupant); //Altern Function 
          }
          
          Slot parentSlot = parentSolution.get(root.myWorkingOccupant);
@@ -248,10 +248,10 @@ public class OrTreeSearch {
         	else{
         		// ensures that mutatedOccupant does not take the same slot
         		// assuming theres more than 1 option for slots
-        		if (root.possibleSlots.contains(parentSlot) && root.possibleSlots.size() > 1) {
+        		if (root.possibleSlots.contains(parentSlot) && root.possibleSlots.size() >= 2) {
         			do {
          				attemptedSlot = root.possibleSlots.get(randGen.nextInt(root.possibleSlots.size()));
-         			} while (parentSlot.equals(attemptedSlot));
+         			} while (parentSlot == attemptedSlot);
         		} else {
         			attemptedSlot = root.possibleSlots.get(randGen.nextInt(root.possibleSlots.size()));
         		}
@@ -352,10 +352,11 @@ public class OrTreeSearch {
         	else{
         		// ensures that mutatedOccupant does not take the same slot
         		// assuming theres more than 1 option for slots
-        		if (currentNode.possibleSlots.contains(parentSlot) && currentNode.possibleSlots.size() > 1) {
+        		if (currentNode.possibleSlots.contains(parentSlot) && currentNode.possibleSlots.size() >= 2) {
         			do {
-         				attemptedSlot = root.possibleSlots.get(randGen.nextInt(root.possibleSlots.size()));
-         			} while (parentSlot.equals(attemptedSlot));
+         				attemptedSlot = currentNode.possibleSlots.get(randGen.nextInt(currentNode.possibleSlots.size()));
+         				System.out.println(attemptedSlot);
+         			} while (parentSlot == attemptedSlot);
         		} else {
         			attemptedSlot = currentNode.possibleSlots.get(randGen.nextInt(currentNode.possibleSlots.size()));
         		}

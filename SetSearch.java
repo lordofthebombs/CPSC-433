@@ -26,7 +26,7 @@ public class SetSearch{
   private int generation;
   private Eval eval;
 
-
+/*
   public SetSearch(ParseData data, String file){
     makeEval(data, file);
     solGen = new OrTreeSearch(data);
@@ -129,6 +129,6 @@ public class SetSearch{
     workingSet.subList(TRIM_NUM, workingSet.size()).clear();
   }
 
-
+*/
 
 }
