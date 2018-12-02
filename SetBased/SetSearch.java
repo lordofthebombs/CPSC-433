@@ -37,7 +37,7 @@ public class SetSearch{
     makeEval(data, file);
     solGen = new OrTreeSearch(data);
     workingSet = new ArrayList<Pair<Map<Slot_Occupant, Slot>, Double>>(MAX_FACTS);
-    badParents = new ArrayList<Integer>
+    badParents = new ArrayList<Integer>();
     randGen = new Random(System.currentTimeMillis());
     done = false;
     generation = 1;
