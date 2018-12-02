@@ -169,7 +169,7 @@ public class Parser {
 
 	        	Slot slot = new Slot(day, time, max, min);				        //Creates a slot using information
 
-                if(!data.Courses.contains(slot)){
+                if(!vectCourseSlots.contains(slot)){
                     vectCourseSlots.addElement(slot);						    //Places the current slot into a Vector
                 }
 	        	else
@@ -218,7 +218,7 @@ public class Parser {
 
                 Slot slot = new Slot(day, time, max, min);				        //Creates a slot using information
 
-                if(!data.Labs.contains(slot)){
+                if(!vectLabSlots.contains(slot)){
                     vectLabSlots.addElement(slot);						//Places the current slot into a Vector
                 }
                 else
@@ -252,7 +252,7 @@ public class Parser {
             if(temp.lectSection > 4){
                 System.out.println("meme");
             }
-            if(!alreadyContains(data,temp)){
+            if(!coursesVect.contains(temp)){
                 coursesVect.add(temp);
             }
             else
@@ -280,7 +280,7 @@ public class Parser {
 
     	    Lab temp = makeLabFromIdentifier(entry);
 
-    	    if(!alreadyContains(data,temp)){
+    	    if(!Labs.contains(temp)){
 
     	        if(temp.hasLectSect()){
     	           Course matchingCourse = new Course(temp.id,temp.courseNum,temp.lectSection);
