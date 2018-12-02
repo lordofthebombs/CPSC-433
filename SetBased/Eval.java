@@ -82,19 +82,26 @@ public class Eval {
 
 
 
-     // Counts the amount of times that the given solution does not meet the
-  // coursemin soft constraint
-  public int evalMinfilled(Map<Slot_Occupant, Slot> solution)) {
-      // The penalty value that will be returned
-      int pen = 0;
+    /**
+     * This will calculate the evalMinFilled by counting the amount of times a slot does not have a
+     * minimum number of courses in it by checking each slot and counting how many courses are in the slot
+     * @param solution
+     * @return violationCounter * pen_coursemin
+     */
+     public double evalMinfilled(Map<Slot_Occupant, Slot> solution) {
+         // The penalty value that will be returned
+
+         int violationCourses = 0;
+         int violationLabs = 0;
+      /*
       // Counts the amount of courses that are in a particular slot
       int courseCounter;
 
       Set<Slot_Occupant> keys = solution.keySet();
-      Slot_Occupant[] allOccupants = keys.toArray();
+      Slot_Occupant[] allOccupants = keys.toArray(new Slot_Occupant[0]);
 
       Collection<Slot> values = solution.values();
-      Slot[] allSlots = values.toArray();
+      Slot[] allSlots = values.toArray(new Slot[0]);
 
     // Checks each slot and see how mnay courses occupy that slot
       for (int slot = 0; slot < allSlots.length; slot++) {
@@ -105,12 +112,56 @@ public class Eval {
               }
           }
           if (courseCounter < allSlots[slot].min) {
-              pen++;
+              violationCounter++;
           }
       }
 
-      return pen;
-  }
+      return violationCounter * pen_coursemin;
+      */
+
+         Map<Slot, Integer> courseSlots = new HashMap();
+         for (Slot slot : parseData.Course_Slots) {
+             courseSlots.put(slot, 0);
+         }
+
+
+         Map<Slot, Integer> labSlots = new HashMap();
+         for (Slot slot : parseData.Lab_Slots) {
+             labSlots.put(slot, 0);
+         }
+
+         for (Map.Entry<Slot_Occupant, Slot> sol : solution.entrySet()) {
+             Slot_Occupant occupant = sol.getKey();
+             Slot slot = sol.getValue();
+             if (sol.getKey() instanceof Course) {
+                 if (courseSlots.containsKey(sol.getValue())) {
+                     int temp = courseSlots.get(sol.getValue());
+                     courseSlots.put(slot, temp + 1);
+                 }
+             }
+             else {
+                 if (labSlots.containsKey(sol.getValue())) {
+                     int temp = labSlots.get(sol.getValue());
+                     labSlots.put(slot, temp + 1);
+                 }
+             }
+         }
+
+         for (Map.Entry<Slot, Integer> slotMinPair : courseSlots.entrySet()) {
+             if (slotMinPair.getKey().min < slotMinPair.getValue()) {
+                 violationCourses++;
+             }
+         }
+
+         for (Map.Entry<Slot, Integer> slotMinPair : labSlots.entrySet()) {
+             if (slotMinPair.getKey().min < slotMinPair.getValue()) {
+                 violationLabs++;
+             }
+         }
+
+         return violationCourses * pen_coursemin + violationLabs * pen_labmin;
+
+     }
 
 
 
