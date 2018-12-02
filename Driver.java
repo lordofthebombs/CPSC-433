@@ -24,16 +24,16 @@ public class Driver {
         // Deal with command line args:
         System.out.println("Running ...");
 
-        /*if(args.length != 2){
+        if(args.length != 2){
             System.out.println("Please provide the config file followed by the input file");
             System.out.println("Usage: java Driver [configFilePath] [inputFilePath]");
             System.exit(0);
-        }*/
-        //configFile = args[0];
-        //fileName = args[1];
-        fileName = "testFile.txt";
+        }
+        configFile = args[0];
+        fileName = args[1];
+        //fileName = "testFile.txt";
         try {
-            parseData = Parser.parse("SetTestFiles/setTestFile.txt");
+            parseData = Parser.parse(fileName);
             
 
             //parseData.Non_Compat.print();
@@ -46,6 +46,8 @@ public class Driver {
             //Set Based Search here
             //-------------------------------
             SetSearch setSearch = new SetSearch(parseData, configFile);
+            setSearch.runGeneration();
+            setSearch.runGeneration();
             Pair<Map<Slot_Occupant, Slot>, Double> bestSolution = setSearch.getBestSolution();
             printSolution(bestSolution.getKey(), bestSolution.getValue() );
 

@@ -83,6 +83,10 @@ public class SetSearch{
     }
     return !done;
   }
+  
+  public int getGen(){
+      return generation;
+  }
 
   //decides whether to mutate or trim
   private void searchControl(){
