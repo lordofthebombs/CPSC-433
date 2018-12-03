@@ -482,17 +482,19 @@ public class ConstraintChecker {
 
    // checks if any unwanted(a, s) is in the data
    public boolean isUnwantedValid(Map<Slot_Occupant, Slot> data) {
+
 	   Iterator<Slot_Occupant> soIter = data.keySet().iterator();
 
 	   while (soIter.hasNext()) {
 		   Slot_Occupant currentSO = soIter.next();
+
 		   Slot currentSO_Slot = data.get(currentSO);
 
 		   if (currentSO_Slot != null) {
 			   HashSet<Slot_Occupant> unwanteds = this.allUnwanteds.get(currentSO_Slot);
 
 			   // unsure if this works
-			   if(unwanteds != null && unwanteds.contains(currentSO));
+			   if(unwanteds != null && unwanteds.contains(currentSO)){ return false; }
 		   }
 	   }
 
