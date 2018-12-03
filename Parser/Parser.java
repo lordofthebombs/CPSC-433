@@ -1,6 +1,5 @@
 package Parser;
 
-import ParseData.ParseData;
 import ParseData.Slot;
 import ParseData.*;
 import Slot_Occupant.Slot_Occupant;

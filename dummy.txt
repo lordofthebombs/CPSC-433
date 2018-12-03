@@ -1,0 +1,26 @@
+Name:
+ShortExample
+
+Course slots:
+MO, 8:00, 30, 2
+TU, 9:30, 30, 2
+
+Lab slots:
+MO, 8:00, 4, 2
+TU, 10:00,2,1
+
+Courses:
+CPSC 433 LEC 01
+CPSC 200 LEC 01
+
+Labs:
+
+Not compatible:
+
+Unwanted:
+
+Preferences:
+
+Pair:
+
+Partial assignments:
