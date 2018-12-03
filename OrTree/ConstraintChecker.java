@@ -57,11 +57,6 @@ public class ConstraintChecker {
 	// contains all corresponding courses of labs with no lectSection
 	private Map<Slot_Occupant, Vector<Slot_Occupant>> correspondingCourses = new HashMap<>();
 
-	
-	// contains all courses corresponding to a lab without section #
-	//private Map<Slot_Occupant, Vector<Slot_Occupant>> correspondingCourses = new HashMap<>();
-	
-	//private Vector<Slot_Occupant> allSlot_Occupants = new Vector<>();
 	private Vector<Slot_Occupant> courses500 = new Vector<>();
 	private Map<Slot_Occupant, HashSet<Slot_Occupant>> allNonCompatibles = new HashMap<>();
 	private Map<Slot, HashSet<Slot_Occupant>> allUnwanteds = new HashMap<>();
@@ -129,7 +124,10 @@ public class ConstraintChecker {
         while (allSO_Iter.hasNext()) {
         	Slot_Occupant currentSO = allSO_Iter.next();
         	allNonCompatibles.put(currentSO, parseData.Non_Compat.isNonCompatableWith(currentSO));
+        	//System.out.println(currentSO + " size = " + parseData.Non_Compat.isNonCompatableWith(currentSO));
         }
+        //System.out.println(allNonCompatibles.size());
+      //  System.out.println(allNonCompatibles.get(parseData.Labs.get(0)).size());
         
         // all unwanteds for every slots are stored in a map
         // only need course slots or lab slots are they are considered the same
@@ -139,7 +137,10 @@ public class ConstraintChecker {
         while (allS_Iter.hasNext()) {
         	Slot currentS = allS_Iter.next();
         	allUnwanteds.put(currentS, parseData.Unwanted.isUnwantedWith(currentS));
+        	//System.out.println(currentS + " size = " + parseData.Unwanted.isUnwantedWith(currentS));
+
         }
+        
     }
     
     
@@ -224,9 +225,7 @@ public class ConstraintChecker {
     }
     
     public boolean checkHardConstraints(Map<Slot_Occupant, Slot> solution, Slot_Occupant so, Slot s) {
-    	Set<Slot_Occupant> keys = solution.keySet();
- 	   	// no keys therefore no courses/labs are assigned
- 	   	if (keys.size() == 0) return true;
+    	
  	   	
  	   	if (!isSlotMaxValid(solution, so, s)) {
  	   		//System.out.println("Slot max exceeded with slot_Occupant: " + so + " and slot: " + s);
@@ -236,6 +235,11 @@ public class ConstraintChecker {
  	   	if (!isOverlapValid(solution, so, s)) {
     		//System.out.println("Corresponding courses and labs were scheduled in the same slot.");
  	   		return false;
+ 	   	}
+ 	   	
+ 	   	if (!isCompatibleValid(solution, so, s)) {
+ 	  		//System.out.println("Courses were incompatible.");
+	   		return false;
  	   	}
  	   	
  	   	if (!isUnwantedValid(solution, so, s)) {
@@ -468,7 +472,7 @@ public class ConstraintChecker {
    // Unwanted(so, s) = slot occupant cannot be in the slot s
    public boolean isUnwantedValid(Map<Slot_Occupant, Slot> solution, Slot_Occupant so, Slot s) {
 	   HashSet<Slot_Occupant> unwanteds = this.allUnwanteds.get(s);
-	   
+
 	   if (unwanteds.contains(so)) { return false; }
 	   
 	   return true;
@@ -525,138 +529,6 @@ public class ConstraintChecker {
 	   
 	   return output;
    }
-   
-   /*
-   public boolean is813CourseValid(Map<Slot_Occupant, Slot> data) {
-	   return isSpecialCourseValid(data, course813);
-   }
-   
-   public boolean is913CourseValid(Map<Slot_Occupant, Slot> data) {
-	   return isSpecialCourseValid(data, course913);
-   }
-   
-   
-   
-   // cannot overlap with 313/413 courses and labs
-   // **transitivity not implemented**
-   private boolean isSpecialCourseValid(Map<Slot_Occupant, Slot> data, Slot_Occupant specialCourse) {
-	   Slot slotSpecialCourse = data.get(specialCourse);
-	   Iterator<Slot_Occupant> iterSpecialCourseSec = null;
-	   if (specialCourse.equals(course813)) iterSpecialCourseSec = all313Courses.iterator();
-	   else if (specialCourse.equals(course913)) iterSpecialCourseSec = all413Courses.iterator();
-	   
-	   while (iterSpecialCourseSec.hasNext()) {
-		   Slot_Occupant currentSC_C = iterSpecialCourseSec.next();
-		   Slot currentSC_S = data.get(currentSC_C);
-		   if (currentSC_S != null) {
-			   // check that the isn't in the same slot
-			   if (currentSC_S.equals(slotSpecialCourse)) return false;
-			   
-			   // check if the labs of the course isn't in the same slot
-			   Iterator<Slot_Occupant> currentSC_C_Labs_Iter = correspondingLabs.get(currentSC_C).iterator();
-			   while (currentSC_C_Labs_Iter.hasNext()) {
-				   Slot_Occupant currentSC_C_Lab = currentSC_C_Labs_Iter.next();
-				   Slot currentSC_C_Lab_S = data.get(currentSC_C_Lab);
-				   
-				   if (currentSC_C_Lab_S != null) {
-					   if (currentSC_C_Lab_S.equals(slotSpecialCourse)) return false;
-				   }
-				   
-			   }
-		   }
-	   }
-	   
-	   return true;
-   }
-   */
-   
-    /*
-    // assumes that our time slot is the same as the time slot of cpsc 813
-    // checks if the given lab is compatible with the time slot
-    private boolean isCompatibleWith813(Map<Slot, Vector<Slot_Occupant>> data, Slot s, Lab so) {
-    	return (so.id.equals("CPSC") && so.courseNum == 313);
-    }
-    
-    // checks if the given course is compatible with cpsc 313 course
-    private boolean isCompatibleWith813(Map<Slot, Vector<Slot_Occupant>> data, Slot s, Course so) {
-    	if (so.id.equals("CPSC") && so.courseNum == 313) return false;
-    	// assumes cpsc 313 lecture 1 exists
-    	return (parseData.Non_Compat.Compatible(so, new Course("CPSC", 313, 1)));		
-    	
-    }
-    
-    
-    // checks if a time slot is the same time and day as cpsc 813
-    private boolean is813Slot(Slot s) {
-    	return (s.day == Slot.Day.Tues && s.time == 18.0f);
-    }
-    
-    // checks if the given slot_occupant is compatible with all the slot_occupants in the given time slot
-    private boolean isCompatible(Map<Slot, Vector<Slot_Occupant>> data, Slot s, Slot_Occupant so) {
-    	Vector<Slot_Occupant> slotsVector = data.get(s);
-    	if (slotsVector.size() == 0) {
-    		return true;
-    	} else {
-    		Iterator<Slot_Occupant> vecIterator = slotsVector.iterator();
-    		while(vecIterator.hasNext()) {
-    			if (!parseData.Non_Compat.Compatible(so, vecIterator.next())) return false;
-    		}
-    		return true;
-    	}
-    }
-    
-   // checks if courses with lecture section higher than or equal to 9 is scheduled into evening time slots
-    private boolean isScheduledCorrect(Map<Slot, Vector<Slot_Occupant>> data, Slot s, Slot_Occupant so) {
-    	boolean output = false;
-    	if ((so.lectSection < EVENING_SECTION || so.lectSection >= EVENING_SECTION && s.time >= 18.0f)) {
-    		output = true;
-    	}
-    	return output;
-    }
-    
-    // checks if a time slot does not already contain a 500 level course
-    private boolean isSlotOpenFor500LevelCourse(Map<Slot, Vector<Slot_Occupant>> data, Slot s) {
-    	Vector<Slot_Occupant> sVector = data.get(s);
-    	Iterator<Slot_Occupant> vecIterator = sVector.iterator();
-    	while(vecIterator.hasNext()) {
-    		if (vecIterator.next().courseNum == 500) return false;
-    	}
-    	return true;
-    }
-    
-    
-    // checks whether the given time slot is within tuesday from 11:00 to 12:30 pm
-    private boolean isTimeOff(Slot s) {
-    	return (s.day == Slot.Day.Tues && s.time >= 11.0f && s.time <= 12.5f);
-    }
-    
-    */
-   	
-   /*
-    // helper function that finds the corresponding lab_slot given the course_slot
-    // used for checking if labs and courses are in the same slots
-    private Slot findLabSlot(Slot courseSlot) {
-    	Vector<Slot> labSlots = parseData.Lab_Slots;
-    	int labInd = labSlots.indexOf(new Slot(courseSlot.day, courseSlot.time, -1, -1));
-    	if (labInd == -1) {
-    		return null;
-    	} else {
-    		return labSlots.get(labInd);
-    	}
-    	
-    }
-    
-    // helper function that finds the corresponding course_slot given the lab_slot
-    private Slot findCourseSlot(Slot labSlot) {
-    	Vector<Slot> courseSlots = parseData.Course_Slots;
-    	int courseInd = courseSlots.indexOf(new Slot(labSlot.day, labSlot.time, -1, -1));
-    	if (courseInd == -1) {
-    		return null;
-    	} else {
-    		return courseSlots.get(courseInd);
-    	}
-    }
-    */
    
     private boolean isCourseObject(Slot_Occupant so) {
     	return (so instanceof Course);

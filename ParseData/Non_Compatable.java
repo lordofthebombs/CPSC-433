@@ -30,6 +30,8 @@ public class Non_Compatable {
 
             if(a.equals(temp.getLeft())){
                 NonCompatableWith.add(temp.getRight());
+            } else if (a.equals(temp.getRight())) {
+                NonCompatableWith.add(temp.getLeft());
             }
         }
 
