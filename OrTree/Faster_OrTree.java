@@ -65,7 +65,6 @@ public class Faster_OrTree {
 
 
     }
-
     public LinkedHashMap<Slot_Occupant,Slot> fasterSearch(){
 
         //Always start at the
@@ -103,7 +102,20 @@ public class Faster_OrTree {
                 }
 
                 //Randomly select a possible slot from the current nodes possible options.
-                attemptedSlot = getSlot(currentNode);
+                attemptedSlot = getSlot(currentNode,attemptedSolution);
+                if (attemptedSlot == null) { //There were no possible solutions at this point;
+                    if(currentNode.possibleSlots.size() == 0 && currentNode.parent != null) {
+
+                        OrTreeNode temp = currentNode;
+
+                        while (temp.possibleSlots.size() == 0 && temp.parent != null) {
+                            temp.parent.possibleSlots.remove(temp.parent.lastTried);
+                            temp = temp.parent;
+                        }
+                        break;
+                    }
+                }
+
                 //attemptedSlot = currentNode.possibleSlots.get(0);
                 currentNode.lastTried = attemptedSlot;
 
@@ -157,12 +169,21 @@ public class Faster_OrTree {
         //As root.possibleSlots is empty this means that there that the OrTree is exhausted.
         return null;
     }
-    public LinkedHashMap<Slot_Occupant,Slot> fasterSearch(){
+    public LinkedHashMap<Slot_Occupant,Slot> fasterMutate(Map<Slot_Occupant,Slot> parent) {
+
+        //We know this solution has been already found in the tree so, first generate a possible mutant position;
+
+        while(!root.possibleSlots.isEmpty()){
 
 
+
+
+
+        }
+
+        return null;
+    }
     private LinkedHashMap<Slot_Occupant, Slot> initializePr(LinkedHashMap<Slot_Occupant,Slot> givenData){
-
-        //This will have to be re-done.
 
         Vector<Slot_Occupant> all_Occupants = this.parseData.getOccupants();
         all_Occupants.forEach((item) -> givenData.put(item, null));
@@ -176,19 +197,23 @@ public class Faster_OrTree {
         return givenData;
     }
 
-    private Slot getSlot (OrTreeNode currentNode){
+    private Slot getSlot (OrTreeNode currentNode, LinkedHashMap<Slot_Occupant,Slot> currentSolution){
 
         Slot attemptedSlot;
         LinkedHashMap<Slot_Occupant,Slot> attemptedSolution;
 
         while(true){
-            attemptedSlot = currentNode.possibleSlots.get(randGen.nextInt(currentNode.possibleSlots.size()));
+
+            if(currentNode.possibleSlots.size() == 0){
+                return null;
+            }
+            attemptedSlot = currentNode.possibleSlots.get(0);
 
             //If we have already determined this is valid
             if(currentNode.verifiedSlots.contains(attemptedSlot)){ break; }
 
             //Otherwise check if it is valid
-            attemptedSolution = new LinkedHashMap<>(startingSolution);
+            attemptedSolution = new LinkedHashMap<>(currentSolution);
             attemptedSolution.put(currentNode.myWorkingOccupant,attemptedSlot);
 
             if(!constraints.checkHardConstraints(attemptedSolution)){
