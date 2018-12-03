@@ -15,7 +15,7 @@ public class Driver {
 
     public static Random random = new Random();
     static ParseData parseData;
-    static int MAX_GEN = 5;
+    static int MAX_GEN = 15;
 
     public static void main(String args[]){
 

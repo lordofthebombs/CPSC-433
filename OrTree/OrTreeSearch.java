@@ -1,7 +1,6 @@
 package OrTree;
 
-import ParseData.ParseData;
-import ParseData.Slot;
+import ParseData.*;
 import Slot_Occupant.*;
 
 import java.util.*;
@@ -78,7 +77,7 @@ public class OrTreeSearch {
             	System.out.print("test");
             }
             */
-            if(constraints.checkHardConstraints(attemptedSolution, workingOccupant, s)){
+            if(constraints.checkHardConstraints(attemptedSolution)){
                 possibleSlots.add(s);
             }
         }

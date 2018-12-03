@@ -19,14 +19,14 @@ public class Faster_OrTree {
         private Slot lastTried;
         private HashMap<Slot,Boolean> verifiedSlots;
 
-        public OrTreeNode(OrTreeNode parent, Slot_Occupant wo, Vector<Slot> AllSlots)
+        public OrTreeNode(OrTreeNode parent, Slot_Occupant wo)
         {
             this.myWorkingOccupant = wo;
             possibleSlots = parseData.getSlots();
             transitions = new HashMap<>();
             this.parent = parent;
             this.lastTried = null;
-            possibleSlots = new Vector<>(AllSlots);
+            possibleSlots = wo instanceof Course ? new Vector<>(parseData.Course_Slots) : new Vector<>(parseData.Lab_Slots);
             verifiedSlots = new HashMap();
         }
     }
@@ -38,6 +38,8 @@ public class Faster_OrTree {
     private Random randGen;
     private ParseData parseData;
     private LinkedHashMap<Slot_Occupant,Slot> startingSolution;
+    private HashSet<Map<Slot_Occupant,Slot>> uniqueConstraint;
+
 
     public Faster_OrTree(ParseData parseData){
 
@@ -61,9 +63,9 @@ public class Faster_OrTree {
         parseData.setAllOccupants();
 
         //This means we know what the root's occupant will be at this point
-        root = new OrTreeNode(null, occupantOrder.get(0),parseData.AllSlots);
+        root = new OrTreeNode(null, occupantOrder.get(0));
 
-
+        uniqueConstraint = new HashSet<Map<Slot_Occupant,Slot>>();
     }
     public LinkedHashMap<Slot_Occupant,Slot> fasterSearch(){
 
@@ -140,7 +142,12 @@ public class Faster_OrTree {
                         }
                     }
 
-                    return attemptedSolution;
+                    if(!uniqueConstraint.add(attemptedSolution)){
+                        break;
+                    }
+                    else{
+                        return attemptedSolution;
+                    }
                 }
 
                 //See if the current node has a transition already made for the slot
@@ -150,7 +157,7 @@ public class Faster_OrTree {
                 if(nextNode == null ){
 
                     //As the end of tree nodes will have no possible slots this currentOccupant++ will never be out of bounds
-                    nextNode = new OrTreeNode(currentNode,this.occupantOrder.get(currentOccupant+1),parseData.AllSlots);
+                    nextNode = new OrTreeNode(currentNode,this.occupantOrder.get(currentOccupant+1));
 
                     //Add the transition to the current node.
                     currentNode.transitions.put(attemptedSlot,nextNode);
@@ -174,10 +181,6 @@ public class Faster_OrTree {
                 currentNode = nextNode;
                 currentOccupant++;
 
-                if(currentOccupant == 3){
-
-
-                }
             }
         }
 
@@ -285,7 +288,12 @@ public class Faster_OrTree {
                         }
                     }
 
-                    return attemptedSolution;
+                    if(!uniqueConstraint.add(attemptedSolution)){
+                        break;
+                    }
+                    else{
+                        return attemptedSolution;
+                    }
                 }
 
                 //See if the current node has a transition already made for the slot
@@ -295,7 +303,7 @@ public class Faster_OrTree {
                 if(nextNode == null){
 
                     //As the end of tree nodes will have no possible slots this currentOccupant++ will never be out of bounds
-                    nextNode = new OrTreeNode(currentNode,this.occupantOrder.get(currentOccupant + 1),parseData.AllSlots);
+                    nextNode = new OrTreeNode(currentNode,this.occupantOrder.get(currentOccupant + 1));
 
                     //Add the transition to the current node.
                     currentNode.transitions.put(attemptedSlot,nextNode);
@@ -339,8 +347,8 @@ public class Faster_OrTree {
                 return null;
             }
 
-            attemptedSlot = currentNode.possibleSlots.get(0);
-            //attemptedSlot = currentNode.possibleSlots.get(randGen.nextInt(currentNode.possibleSlots.size()));
+            //attemptedSlot = currentNode.possibleSlots.get(0);
+            attemptedSlot = currentNode.possibleSlots.get(randGen.nextInt(currentNode.possibleSlots.size()));
 
             //If we have already determined this is valid
             if(currentNode.verifiedSlots.containsKey(attemptedSlot)){
@@ -377,8 +385,8 @@ public class Faster_OrTree {
             }
 
             if(triedWantedSlot) {
-                attemptedSlot = currentNode.possibleSlots.get(0);
-                //attemptedSlot = currentNode.possibleSlots.get(randGen.nextInt(currentNode.possibleSlots.size()));
+                //attemptedSlot = currentNode.possibleSlots.get(0);
+                attemptedSlot = currentNode.possibleSlots.get(randGen.nextInt(currentNode.possibleSlots.size()));
             }
 
             //If we have already determined this is valid

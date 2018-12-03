@@ -1,6 +1,5 @@
-import OrTree.ConstraintChecker;
-import OrTree.Faster_OrTree;
-import OrTree.OrTreeSearch;
+package OrTree;
+
 import ParseData.*;
 import Parser.*;
 import Slot_Occupant.*;
@@ -40,9 +39,9 @@ public class testDriver {
                     System.out.println("NON UNIQUE");
                     //break;
                 }
-                printSolution(solution);
+               // printSolution(solution);
 
-                System.out.println("--------------------------");
+                System.out.println("Found Solution");
 
                 solution = generator.fasterMutate(solution);
                 if(solution == null){
@@ -54,13 +53,13 @@ public class testDriver {
                     System.out.println("Hard Constraints do not hold");
                     break;
                 }
-                printSolution(solution);
-                System.out.println("--------------------------");
+               // printSolution(solution);
+                System.out.println("Mutated");
 
                 if(!unique.add(solution)){
                    System.out.println("NON UNIQUE");
-                    //break;
-                 }
+                   //break;
+                }
 //                else {
 //                    sol1.add(solution);
 //                }
@@ -108,7 +107,9 @@ public class testDriver {
             //System.out.println("Original Time = " + ((end2 - start2)/1000));
 
         }catch (FileNotFoundException e){
-
+            System.out.println("No such file");
+        }catch (ParseError e){
+            e.print();
         }
 
     }

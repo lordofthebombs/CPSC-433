@@ -1,0 +1,8 @@
+minFilledWeight=1
+prefWeight=1
+notPairedWeight=1
+secDiffWeight=1
+pen_courseMin=1
+pen_labMin=1
+pen_notPaired=1
+pen_section=1
