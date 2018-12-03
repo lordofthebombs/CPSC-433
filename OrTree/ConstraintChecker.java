@@ -54,6 +54,9 @@ public class ConstraintChecker {
 	private ParseData parseData;
 	// contains all the corresponding labs of any course, if it exists
 	private Map<Slot_Occupant, Vector<Slot_Occupant>> correspondingLabs = new HashMap<>();
+	// contains all corresponding courses of labs with no lectSection
+	private Map<Slot_Occupant, Vector<Slot_Occupant>> correspondingCourses = new HashMap<>();
+
 	
 	// contains all courses corresponding to a lab without section #
 	//private Map<Slot_Occupant, Vector<Slot_Occupant>> correspondingCourses = new HashMap<>();
@@ -71,25 +74,8 @@ public class ConstraintChecker {
     public ConstraintChecker(ParseData parseData){
     	this.parseData = parseData;
     	
-    	//this.allSlot_Occupants = parseData.Courses;
-    	//allSlot_Occupants.addAll(parseData.Labs);
-    	
-    	// removes course time slots at tuesdays 11.0f
-    	/*
-        Iterator<Slot> iter = parseData.Course_Slots.iterator();
-        LinkedList<Slot> toBeRemoved = new LinkedList();
-        
-        while (iter.hasNext()) {
-        	Slot currentSlot = iter.next();
-        	if (currentSlot.day == Day.Tues && currentSlot.time == 11.0f) {
-        		toBeRemoved.add(currentSlot); 
-        	}
-        }
-        */
-    	
         // removes course time slots at tuesdays 11.0f
         int indexOfTue = parseData.Course_Slots.indexOf(new Slot(Day.Tues, 11.0f, -1, -1));
-        
         if (indexOfTue != -1) {
         	parseData.Course_Slots.remove(indexOfTue);
         }
@@ -102,23 +88,6 @@ public class ConstraintChecker {
         	// add 500-level courses to a vector
         	if (c.courseNum >= 500 && c.courseNum < 600) courses500.add(c);
         	
-        	// add 313 course sections to a vector
-        	//else if (c.id.equals("CPSC") && c.courseNum == 313) all313Courses.add(c);
-        	// add 413 course sections to a vector
-        	//else if (c.id.equals("CPSC") && c.courseNum == 413) all413Courses.add(c);
-        	
-        	// save 813 pointer
-        	else if (c.id.equals("CPSC") && c.courseNum == 813) {
-        		//course813 = c;
-        		continue;
-        	}
-        	// save 913 pointer
-        	else if (c.id.equals("CPSC") && c.courseNum == 913) {
-        		//course913 = c;
-        		continue;
-        	}
-        	
-        	
         	// 813, 913 have no corresponding labs
         	
         	for (Slot_Occupant l : parseData.Labs) {
@@ -130,12 +99,27 @@ public class ConstraintChecker {
         				correspondingL.add(l);
         			}
         		}
- 
+        	}
+        	this.correspondingLabs.put(c, correspondingL);
+        }
+        
+        
+        // pairs all labs with no lectSection to all its corresponding courses
+        for (Slot_Occupant l : parseData.Labs) {
+        	Vector<Slot_Occupant> correspondingC = new Vector<Slot_Occupant>();
+        	
+        	// pair the lab with all its corresponding courses
+        	for (Slot_Occupant c : parseData.Courses) {
+        		if (l.id.equals(c.id) && l.courseNum == c.courseNum) {
+        			if (!((Lab)l).hasLectSect()) {
+        				correspondingC.add(c);
+        			}
+        		}
         	}
         	
-        	if (correspondingL != null) this.correspondingLabs.put(c, correspondingL);
-        	
+        	this.correspondingCourses.put(l, correspondingC);
         }
+        
        
         
         // all non-compatibles for every slot_occupant are stored in a map
@@ -148,6 +132,7 @@ public class ConstraintChecker {
         }
         
         // all unwanteds for every slots are stored in a map
+        // only need course slots or lab slots are they are considered the same
         Vector<Slot> allS = parseData.getSlots();
         Iterator<Slot> allS_Iter = allS.iterator();
         
@@ -166,28 +151,27 @@ public class ConstraintChecker {
      * @return Map<Slot_Occupant, Slot>
      */
     public Map<Slot_Occupant, Slot> initialize() {
-    	// initializes a node data with the required part assigns
-    
-    	/* unnecessary since only one slot occupant is paired since all keys are the same (null)
-    	Vector<Slot> allSlots = parseData.Course_Slots;
-    	allSlots.addAll(parseData.Lab_Slots);
-    	
-
-        allSlots.forEach((item) -> data.put(null, item));
-		*/
-    	
-        Map<Slot_Occupant, Slot> data = new LinkedHashMap<Slot_Occupant, Slot>();
-
-        HashMap<Slot_Occupant, Slot> allPartialAssignments = this.parseData.Partial_Assignments.getAllPartialAssignments();
+    	// initializes the base solution with all slot occupants and partial assignments
+        Map<Slot_Occupant, Slot> baseSol = new LinkedHashMap<Slot_Occupant, Slot>();
+    	Vector<Slot_Occupant> allSlots = parseData.getOccupants();
+        allSlots.forEach((item) -> baseSol.put(item, null));
+		
         
+        HashMap<Slot_Occupant, Slot> allPartialAssignments = this.parseData.Partial_Assignments.getAllPartialAssignments();
         // partial assignments already contain 813/913 into corresponding lab slots
         for(Map.Entry<Slot_Occupant, Slot> assignment : allPartialAssignments.entrySet()){
-            if(data.containsKey(assignment.getKey())){
-            	data.put(assignment.getKey(), assignment.getValue());
+            // must check if key is a real slot occupant
+            if(baseSol.containsKey(assignment.getKey())){
+            	if (checkHardConstraints(baseSol, assignment.getKey(), assignment.getValue())) {
+                	baseSol.put(assignment.getKey(), assignment.getValue());
+            	} else {
+            		System.out.println("Partial assignment invalid due to Slot Occupant " + assignment.getKey() + " and Slot: " + assignment.getValue());
+            		System.exit(-1);
+            	}
             }
         }
         
-        return data;
+        return baseSol;
     }
     
     /**
@@ -239,6 +223,34 @@ public class ConstraintChecker {
     	return true;
     }
     
+    public boolean checkHardConstraints(Map<Slot_Occupant, Slot> solution, Slot_Occupant so, Slot s) {
+    	Set<Slot_Occupant> keys = solution.keySet();
+ 	   	// no keys therefore no courses/labs are assigned
+ 	   	if (keys.size() == 0) return true;
+ 	   	
+ 	   	if (!isSlotMaxValid(solution, so, s)) {
+ 	   		//System.out.println("Slot max exceeded with slot_Occupant: " + so + " and slot: " + s);
+ 	   		return false;
+ 	   	}
+ 	   	
+ 	   	if (!isOverlapValid(solution, so, s)) {
+    		//System.out.println("Corresponding courses and labs were scheduled in the same slot.");
+ 	   		return false;
+ 	   	}
+ 	   	
+ 	   	if (!isUnwantedValid(solution, so, s)) {
+    		//System.out.println("Slot_occupant were schedule in an unwanted slot");
+ 	   		return false;
+ 	   	}
+ 	   	
+ 	   	if (!is500CoursesValid(solution, so, s)) {
+    		//System.out.println("500 course/s were scheduled in the same slot");
+ 	   		return false;
+ 	   	}
+ 	   	
+ 	   	return true;
+    }
+    
     
     // checks if all the slots can be paired to their corresponding courses
     public boolean isSlotMaxValid(Map<Slot_Occupant, Slot> solution) {
@@ -264,6 +276,36 @@ public class ConstraintChecker {
 
     	return output;
     }
+    
+    // assumes that solution is already valid
+    // only checks the new pair
+    public boolean isSlotMaxValid(Map<Slot_Occupant, Slot> solution, Slot_Occupant so, Slot s) {
+    	// iterate through all keys
+    	Iterator<Slot_Occupant> keysIter = solution.keySet().iterator();
+    	
+    	boolean isSO_Course = isCourseObject(so);		// need to know if Slot_occupant is course or lab so we don't count course slots and labs slots
+    	
+    	int slotCount = 0;
+    	while (keysIter.hasNext()) {
+    		Slot_Occupant currentSO = keysIter.next();
+    		
+    		// slot_occupants must be a course or lab depending on 'so'
+    		// so slots aren't counted for the wrong class
+    		if (isCourseObject(currentSO) == isSO_Course) {
+    			Slot currentSlot = solution.get(currentSO);
+    			if (currentSlot != null && currentSlot.equals(s)) {
+    			slotCount++;
+    			// check if maximum
+    				if (slotCount > s.max) { return false; }
+    			}
+    		
+    		}
+    		
+    	}
+    	
+    	return true;
+    }
+    
     
    
    // checks if a course overlaps with its corresponding labs
@@ -292,6 +334,59 @@ public class ConstraintChecker {
 		   }
 	   }
 	 
+	   return true;
+   }
+   
+   // assumes the solution is already valid
+   // only checks the new assignment
+   public boolean isOverlapValid(Map<Slot_Occupant, Slot> solution, Slot_Occupant so, Slot s) {	   	
+	   
+	   // if course check its labs
+	   if (isCourseObject(so)) {	
+		   Vector<Slot_Occupant> myLabs = correspondingLabs.get(so);
+		   Iterator<Slot_Occupant> myLabs_iter = myLabs.iterator();
+		   
+		   while (myLabs_iter.hasNext()) {
+			   Slot_Occupant currentLab = myLabs_iter.next();
+			   Slot currentLab_Slot = solution.get(currentLab);
+			   
+			   if (currentLab_Slot != null && s.equals(currentLab_Slot)) {
+				   return false;
+			   }
+		   }
+	   }
+	   
+	   // if labs check its courses
+	   else {
+		   if (((Lab)so).hasLectSect()) {
+			   int correspondingCourseIndex = parseData.Courses.indexOf(new Course(so.id, so.courseNum, so.lectSection));
+			   
+			   if (correspondingCourseIndex != -1) {
+				   Slot correspondingSlot = solution.get(parseData.Courses.get(correspondingCourseIndex));
+				   
+				   // course and lab are in the same slot
+				   if (correspondingSlot != null && correspondingSlot.equals(s)) {
+					   return false;
+				   }
+			   }
+		   }
+		   // else iterate through all corresponding courses
+		   else {
+			   Vector<Slot_Occupant> myCourse = correspondingCourses.get(so);
+			   Iterator<Slot_Occupant> myCourse_Iter = myCourse.iterator();
+			   
+			   while (myCourse_Iter.hasNext()) {
+				   Slot_Occupant currentCourse = myCourse_Iter.next();
+				   Slot currentSlot = solution.get(currentCourse);
+				   
+				   // lab and course are in the same slot
+				   if (currentSlot != null && currentSlot.equals(s)) {
+					   return false;
+				   }
+			   }
+		   }
+	   }
+	   
 	   return true;
    }
    
@@ -330,6 +425,25 @@ public class ConstraintChecker {
 	   
    }
    
+   // assumes the current solution is valid
+   // only checks non_comptability of the current assignment
+   // Unwanted(s1, s2) = s1 and s1 cannot be in the same slot
+   public boolean isCompatibleValid(Map<Slot_Occupant, Slot> solution, Slot_Occupant so, Slot s) {
+	   // all non-compatibles with so
+	   HashSet<Slot_Occupant> non_compatibles = allNonCompatibles.get(so);
+	   Iterator<Slot_Occupant> non_compat_iter = non_compatibles.iterator();
+
+	   while (non_compat_iter.hasNext()) {
+		   Slot_Occupant nonCompat_currentSO = non_compat_iter.next();
+		   Slot nonCompat_currentS = solution.get(nonCompat_currentSO);
+		   
+		   if (nonCompat_currentS != null && nonCompat_currentS.equals(s)){ return false; }
+			   
+	   }
+	   
+	   return true;
+   }
+   
    // checks if any unwanted(a, s) is in the data
    public boolean isUnwantedValid(Map<Slot_Occupant, Slot> data) {
 	   Iterator<Slot_Occupant> soIter = data.keySet().iterator();
@@ -339,12 +453,23 @@ public class ConstraintChecker {
 		   Slot currentSO_Slot = data.get(currentSO);
 		   
 		   if (currentSO_Slot != null) {
-			   HashSet<Slot_Occupant> unwanteds = allUnwanteds.get(currentSO_Slot);
+			   HashSet<Slot_Occupant> unwanteds = this.allUnwanteds.get(currentSO_Slot);
 			   
 			   // unsure if this works
 			   if (unwanteds.contains(currentSO)) return false;
 		   }
 	   }
+	   
+	   return true;
+   }
+   
+   // assumes that solution is already valid
+   // only checks unwanted validity with the current assignment
+   // Unwanted(so, s) = slot occupant cannot be in the slot s
+   public boolean isUnwantedValid(Map<Slot_Occupant, Slot> solution, Slot_Occupant so, Slot s) {
+	   HashSet<Slot_Occupant> unwanteds = this.allUnwanteds.get(s);
+	   
+	   if (unwanteds.contains(so)) { return false; }
 	   
 	   return true;
    }
@@ -365,6 +490,7 @@ public class ConstraintChecker {
 	   return true;
    }
    
+   
    // checks that all 500 courses have different time slots
    public boolean is500CoursesValid(Map<Slot_Occupant, Slot> data) {
 	   Iterator<Slot_Occupant> iter500 = courses500.iterator();
@@ -382,6 +508,22 @@ public class ConstraintChecker {
 	   }
 	   
 	   return slSet.size() == assigned500Courses;
+   }
+   
+   // checks that all 500 courses have different time slots
+   // assumes it was valid before
+   public boolean is500CoursesValid(Map<Slot_Occupant, Slot> solution, Slot_Occupant so, Slot s) {
+	   boolean output = true;
+	   if (so.courseNum >= 500 && so.courseNum < 600) {
+		   // if new assignment is a 500 level course
+		   // create a clone solution with assignment
+		   // call the other is500CourseValid()
+		   Map<Slot_Occupant, Slot> solutionClone = new LinkedHashMap<>(solution);
+		   solutionClone.put(so, s);
+		   output = is500CoursesValid(solutionClone);
+	   } 
+	   
+	   return output;
    }
    
    /*

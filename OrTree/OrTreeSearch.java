@@ -18,7 +18,7 @@ public class OrTreeSearch {
         private HashMap<Slot,OrTreeNode> transitions;
         // parent node 
         private OrTreeNode parent;
-
+        
         public OrTreeNode(OrTreeNode parent, Slot_Occupant wo)
         {
             this.myWorkingOccupant = wo;
@@ -40,18 +40,16 @@ public class OrTreeSearch {
     private Slot lastTried;			// last tried isn't needed anymore really
     public Slot_Occupant mutatedOccupant;
     Vector<Slot_Occupant> possible_mutants;
+    private LinkedHashMap<Slot_Occupant,Slot> baseSolution;
 
     public OrTreeSearch(ParseData parseData){
         this.parseData = parseData;
         root = new OrTreeNode(null);
         constraints = new ConstraintChecker(parseData);
         randGen = new Random();
+        
         // simply checks if partial assignments would lead to a solution
-        if (!constraints.checkHardConstraints(initializePr(new LinkedHashMap<Slot_Occupant,Slot>()))) {
-
-            System.out.println("Partial Solution has no solutions");
-            System.exit(0);
-        }
+        baseSolution = (LinkedHashMap) constraints.initialize();
 
     }
 
@@ -73,14 +71,14 @@ public class OrTreeSearch {
         for(Slot s : workingSlots){
 
             LinkedHashMap<Slot_Occupant,Slot> attemptedSolution = new LinkedHashMap<>(currentSolution);
-            attemptedSolution.put(workingOccupant,s);
+            //attemptedSolution.put(workingOccupant,s);
             
             /*
             if(attemptedSolution == null){			// never null ?
             	System.out.print("test");
             }
             */
-            if(constraints.checkHardConstraints(attemptedSolution)){
+            if(constraints.checkHardConstraints(attemptedSolution, workingOccupant, s)){
                 possibleSlots.add(s);
             }
         }
@@ -97,14 +95,12 @@ public class OrTreeSearch {
      */
     public Map<Slot_Occupant,Slot> OrTreeRecursiveSearch(){
 
-        LinkedHashMap<Slot_Occupant,Slot> solution = new LinkedHashMap<>();
-        solution = initializePr(solution);
-
+        //LinkedHashMap<Slot_Occupant,Slot> solution = (LinkedHashMap) constraints.initialize();
 
         Slot_Occupant workingOccupant = null;
         if(root.myWorkingOccupant == null) {
             //Get the first non null position;
-            for(Map.Entry entry : solution.entrySet()){
+            for(Map.Entry entry : baseSolution.entrySet()){
                 if(entry.getValue() == null){
                     workingOccupant = (Slot_Occupant)entry.getKey();
                     break;
@@ -112,14 +108,14 @@ public class OrTreeSearch {
             }
             // assign roots working occupant and corresponding possible slots
             root.myWorkingOccupant = workingOccupant;
-            root.possibleSlots = getPossibleSlots(solution, workingOccupant);
+            root.possibleSlots = getPossibleSlots(baseSolution, workingOccupant);
         }
 
         while(!root.possibleSlots.isEmpty()){
             // find random possible slot
             Slot attemptedSlot = root.possibleSlots.get(randGen.nextInt(root.possibleSlots.size()));
             // create a new node with new slot and workingOccupant
-            LinkedHashMap<Slot_Occupant,Slot> attemptedSolution = new LinkedHashMap<>(solution);
+            LinkedHashMap<Slot_Occupant,Slot> attemptedSolution = new LinkedHashMap<>(baseSolution);
             attemptedSolution.put(root.myWorkingOccupant, attemptedSlot);
             OrTreeNode nextNode;
 
