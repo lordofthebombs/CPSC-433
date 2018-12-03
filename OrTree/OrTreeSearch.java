@@ -201,7 +201,15 @@ public class OrTreeSearch {
                 //If the path has been made and has no possible slots, then and only then remove the attempted slot
                 if(nextNode.possibleSlots != null){
                     if(nextNode.possibleSlots.isEmpty()) {
-                        currentNode.possibleSlots.remove(attemptedSlot);
+                        OrTreeNode temp = currentNode;
+                        OrTreeNode prevNode = currentNode;
+
+                        while (temp.possibleSlots.size() == 0 && temp.parent != null) {
+                            temp.possibleSlots.remove(prevNode.myWorkingOccupant);
+                            prevNode = temp;
+                            temp = temp.parent;
+
+                        }
                     }
                 }
             }
