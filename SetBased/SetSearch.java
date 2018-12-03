@@ -56,7 +56,6 @@ public class SetSearch{
       Map<Slot_Occupant, Slot> out = solGen.OrTreeRecursiveSearch();
       if(out == null){
         done = true;
-        repeats = INIT_POPULATION;
         throw new ExhaustedError(getBestSolution());
       }
       else if(!addToSet(out)){
@@ -79,21 +78,21 @@ public class SetSearch{
         line = line.replaceAll("\\s", "");
         String[] setting = line.split("=");
         if (setting[0].equals("minFilledWeight")) {
-          minFilledWeight = Integer.parseInt(setting[1]);
+          minFilledWeight = Double.parseDouble(setting[1]);
         } else if (setting[0].equals("prefWeight")) {
-          prefWeight = Integer.parseInt(setting[1]);
+          prefWeight = Double.parseDouble(setting[1]);
         } else if (setting[0].equals("notPairedWeight")) {
-          notPairedWeight = Integer.parseInt(setting[1]);
+          notPairedWeight = Double.parseDouble(setting[1]);
         } else if (setting[0].equals("secDiffWeight")) {
-          secDiffWeight = Integer.parseInt(setting[1]);
+          secDiffWeight = Double.parseDouble(setting[1]);
         } else if (setting[0].equals("pen_courseMin")) {
-          pen_coursemin = Integer.parseInt(setting[1]);
+          pen_coursemin = Double.parseDouble(setting[1]);
         } else if (setting[0].equals("pen_labMin")) {
-          pen_labmin = Integer.parseInt(setting[1]);
+          pen_labmin = Double.parseDouble(setting[1]);
         } else if (setting[0].equals("pen_notPaired")) {
-          pen_notPaired = Integer.parseInt(setting[1]);
+          pen_notPaired = Double.parseDouble(setting[1]);
         } else if (setting[0].equals("pen_section")) {
-          pen_section = Integer.parseInt(setting[1]);
+          pen_section = Double.parseDouble(setting[1]);
         }
       }
 
@@ -128,7 +127,7 @@ public class SetSearch{
     }
     return !done;
   }
-  
+
   public int getGen(){
       return generation;
   }
@@ -141,6 +140,7 @@ public class SetSearch{
 
       if(workingSet.size() == badParents.size()){         //can no longer mutate, search has ended
         done = true;
+        throw new ExhaustedError(getBestSolution());
       }
     }
     else{
@@ -166,29 +166,37 @@ public class SetSearch{
   private boolean addToSet(Map<Slot_Occupant, Slot> solution){
     double score = eval.eval(solution);
     Pair<Map<Slot_Occupant, Slot>, Double> fin = new Pair(solution, score);
-    if(workingSet.contains(fin)){
-      return false;
-    }
+    
+  /*  if(workingSet.size() > 0)
+        if(score <= workingSet.get(0).getValue()){
+            System.out.println(score + " " + workingSet.size());
+        }
+*/
 
     int setsize = workingSet.size();
     for(int i = 0; i <= setsize; i++){
       if(i == setsize){
         workingSet.add(fin);      //reached the end, add it to the end
       }
-      else if(score <= workingSet.get(i).getValue()){  //sorted in decending order by eval score
-        workingSet.add(i, fin);
+      else if(score < workingSet.get(i).getValue()){  //sorted in decending order by eval score
+        workingSet.add(i, fin); //add if score is strictly less than
         break;
       }
+      else if(score == workingSet.get(i).getValue())
+          if(workingSet.get(i).equals(fin))
+            return false;
+
     }
      return true;
   }
 
   //mutates upon a random fact
   //returns true if mutation was succesfull
-  private boolean mutate() throws ExhaustedError {
+  private boolean mutate() {
     int repeats = 0;
     int size = workingSet.size();
     int randnum;
+
 
     //select a parent that has not been deemed bad
     do{
@@ -200,7 +208,7 @@ public class SetSearch{
     for(int i = 0; i < MAX_CHILDREN_PER_PARENT && repeats < MAX_REPEATS && workingSet.size() < MAX_FACTS; i++){
       Map<Slot_Occupant, Slot> child = solGen.mutateSearch(parent); //acquire a mutant
       if(child == null) {
-          throw new ExhaustedError(getBestSolution());
+          break;
       }
           //parent is exhausted
 
