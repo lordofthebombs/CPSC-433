@@ -17,7 +17,7 @@ public class Faster_OrTree {
         // parent node
         private OrTreeNode parent;
         private Slot lastTried;
-        private HashSet<Slot> verifiedSlots;
+        private HashMap<Slot,Boolean> verifiedSlots;
 
         public OrTreeNode(OrTreeNode parent, Slot_Occupant wo, Vector<Slot> AllSlots)
         {
@@ -27,7 +27,7 @@ public class Faster_OrTree {
             this.parent = parent;
             this.lastTried = null;
             possibleSlots = new Vector<>(AllSlots);
-            verifiedSlots = new HashSet<>();
+            verifiedSlots = new HashMap();
         }
     }
 
@@ -38,7 +38,6 @@ public class Faster_OrTree {
     private Random randGen;
     private ParseData parseData;
     private LinkedHashMap<Slot_Occupant,Slot> startingSolution;
-    private Vector<Slot> AllSlots;
 
     public Faster_OrTree(ParseData parseData){
 
@@ -59,6 +58,7 @@ public class Faster_OrTree {
         }
 
         parseData.setAllSlots();
+        parseData.setAllOccupants();
 
         //This means we know what the root's occupant will be at this point
         root = new OrTreeNode(null, occupantOrder.get(0),parseData.AllSlots);
@@ -86,30 +86,32 @@ public class Faster_OrTree {
 
             while(true){
 
-                //Test to see if the currentNode has been traveled to before if not initialize the current node;
-                if(currentNode.possibleSlots == null){
+                //Test to see if currentNode has any more locatiions to go to.
+                if(currentNode.possibleSlots.size() == 0){
 
-                    if(currentNode.possibleSlots.size() == 0 && currentNode.parent != null) {
+                    OrTreeNode temp = currentNode;
 
-                        OrTreeNode temp = currentNode;
-
-                        while (temp.possibleSlots.size() == 0 && temp.parent != null) {
-                            temp.parent.possibleSlots.remove(temp.parent.lastTried);
-                            temp = temp.parent;
-                        }
-                        break;
+                    while (temp.possibleSlots.size() == 0 && temp.parent != null) {
+                        temp.parent.possibleSlots.remove(temp.parent.lastTried);
+                        temp.parent.verifiedSlots.replace(temp.parent.lastTried,false);
+                        temp = temp.parent;
                     }
+                    break;
+
                 }
 
                 //Randomly select a possible slot from the current nodes possible options.
                 attemptedSlot = getSlot(currentNode,attemptedSolution);
-                if (attemptedSlot == null) { //There were no possible solutions at this point;
+
+                //There were no possible solutions at this point;
+                if (attemptedSlot == null) {
                     if(currentNode.possibleSlots.size() == 0 && currentNode.parent != null) {
 
                         OrTreeNode temp = currentNode;
 
                         while (temp.possibleSlots.size() == 0 && temp.parent != null) {
                             temp.parent.possibleSlots.remove(temp.parent.lastTried);
+                            temp.parent.verifiedSlots.replace(temp.parent.lastTried,false);
                             temp = temp.parent;
                         }
                         break;
@@ -133,6 +135,7 @@ public class Faster_OrTree {
 
                         while (temp.possibleSlots.size() == 0 && temp.parent != null) {
                             temp.parent.possibleSlots.remove(temp.parent.lastTried);
+                            temp.parent.verifiedSlots.replace(temp.parent.lastTried,false);
                             temp = temp.parent;
                         }
                     }
@@ -155,16 +158,28 @@ public class Faster_OrTree {
                 else {
 
                     if(nextNode.possibleSlots.isEmpty()){
-                        System.out.println("What is going on here?");
+                        currentNode.possibleSlots.remove(attemptedSlot);
+
+                        OrTreeNode temp = currentNode;
+
+                        while (temp.possibleSlots.size() == 0 && temp.parent != null) {
+                            temp.parent.possibleSlots.remove(temp.parent.lastTried);
+                            temp.parent.verifiedSlots.replace(temp.parent.lastTried,false);
+                            temp = temp.parent;
+                        }
                     }
 
                 }
                 //Go down a level in the tree, if the end of the branch has not been met.
                 currentNode = nextNode;
                 currentOccupant++;
+
+                if(currentOccupant == 3){
+
+
+                }
             }
         }
-
 
         //As root.possibleSlots is empty this means that there that the OrTree is exhausted.
         return null;
@@ -172,15 +187,131 @@ public class Faster_OrTree {
     public LinkedHashMap<Slot_Occupant,Slot> fasterMutate(Map<Slot_Occupant,Slot> parent) {
 
         //We know this solution has been already found in the tree so, first generate a possible mutant position;
+        LinkedHashMap<Slot_Occupant,Slot> attemptedSolution;
+        Slot attemptedSlot = null;
+        int currentOccupant = 0;
+
+        OrTreeNode currentNode = root;
+        OrTreeNode nextNode;
+
+        Vector<Slot_Occupant> possibleMutants = new Vector<>(this.occupantOrder);
+        Slot_Occupant mutant;
+        Slot parentSlot;
 
         while(!root.possibleSlots.isEmpty()){
 
+            currentOccupant = 0;
+            attemptedSolution = new LinkedHashMap<>(this.startingSolution);
+            currentNode = root;
 
+            //Generate a random mutant
+            mutant = possibleMutants.elementAt(0);
+            //mutant = possibleMutants.elementAt(randGen.nextInt(possibleMutants.size()));
 
+            //Follow the parent tree until that mutant is solved.
+            currentNode = root;
 
+            while(!currentNode.myWorkingOccupant.equals(mutant)){
+                parentSlot = parent.get(currentNode.myWorkingOccupant);
+                attemptedSolution.put(currentNode.myWorkingOccupant,parentSlot);
 
+                if(!currentNode.equals(root)){
+                    ++currentOccupant;
+                }
+                currentNode = currentNode.transitions.get(parentSlot);
+
+            }
+
+            while(true){
+
+                //Now we are at the mutant, if we are already skrewed here don't try this mutant again.
+                if(currentNode.myWorkingOccupant.equals(mutant) && currentNode.possibleSlots.size() == 0){
+                    possibleMutants.remove(mutant);
+                    currentNode.parent.possibleSlots.remove(currentNode.parent.lastTried);
+                    currentNode.parent.verifiedSlots.replace(currentNode.parent.lastTried,false);
+                    break;
+                }
+
+                parentSlot = parent.get(currentNode.myWorkingOccupant);
+
+                if(currentNode.myWorkingOccupant.equals(mutant)) {
+                    //Randomly select a possible slot from the current nodes possible options.
+                    attemptedSlot = getSlot(currentNode, attemptedSolution);
+                }
+                else{
+                    if(currentNode.possibleSlots.contains(parentSlot)){
+                        attemptedSlot = getSlot(currentNode, attemptedSolution, parentSlot);
+
+                    }
+                    else{
+                        attemptedSlot = getSlot(currentNode, attemptedSolution);
+                    }
+                }
+
+                if(attemptedSlot == null){
+                    if(currentNode.possibleSlots.size() == 0 && currentNode.parent != null) {
+
+                        OrTreeNode temp = currentNode;
+
+                        while (temp.possibleSlots.size() == 0 && temp.parent != null) {
+                            temp.parent.possibleSlots.remove(temp.parent.lastTried);
+                            temp.parent.verifiedSlots.replace(temp.parent.lastTried,false);
+                            temp = temp.parent;
+                        }
+
+                        if(currentNode.equals(mutant)){
+                            possibleMutants.remove(mutant);
+                        }
+
+                        break;
+                    }
+                }
+                //attempt the solution
+                currentNode.lastTried = attemptedSlot;
+                attemptedSolution.put(currentNode.myWorkingOccupant,attemptedSlot);
+
+                if(!attemptedSolution.containsValue(null)){
+
+                    currentNode.possibleSlots.remove(attemptedSlot);
+
+                    if(currentNode.possibleSlots.size() == 0 && currentNode.parent != null) {
+
+                        OrTreeNode temp = currentNode;
+
+                        while (temp.possibleSlots.size() == 0 && temp.parent != null) {
+                            temp.parent.possibleSlots.remove(temp.parent.lastTried);
+                            temp.parent.verifiedSlots.replace(temp.parent.lastTried,false);
+                            temp = temp.parent;
+                        }
+                    }
+
+                    return attemptedSolution;
+                }
+
+                //See if the current node has a transition already made for the slot
+                nextNode = currentNode.transitions.get(attemptedSlot);
+
+                //If we've never traveled down this branch before, and it's not the end of a branch
+                if(nextNode == null){
+
+                    //As the end of tree nodes will have no possible slots this currentOccupant++ will never be out of bounds
+                    nextNode = new OrTreeNode(currentNode,this.occupantOrder.get(currentOccupant + 1),parseData.AllSlots);
+
+                    //Add the transition to the current node.
+                    currentNode.transitions.put(attemptedSlot,nextNode);
+                }
+                else {
+
+                    if (nextNode.possibleSlots.isEmpty()) {
+                        currentNode.possibleSlots.remove(attemptedSlot);
+                        break;
+                    }
+                }
+
+                currentNode = nextNode;
+                ++currentOccupant;
+            }
         }
-
         return null;
     }
     private LinkedHashMap<Slot_Occupant, Slot> initializePr(LinkedHashMap<Slot_Occupant,Slot> givenData){
@@ -207,10 +338,14 @@ public class Faster_OrTree {
             if(currentNode.possibleSlots.size() == 0){
                 return null;
             }
+
             attemptedSlot = currentNode.possibleSlots.get(0);
+            //attemptedSlot = currentNode.possibleSlots.get(randGen.nextInt(currentNode.possibleSlots.size()));
 
             //If we have already determined this is valid
-            if(currentNode.verifiedSlots.contains(attemptedSlot)){ break; }
+            if(currentNode.verifiedSlots.containsKey(attemptedSlot)){
+                if(currentNode.verifiedSlots.get(attemptedSlot)){break;}
+            }
 
             //Otherwise check if it is valid
             attemptedSolution = new LinkedHashMap<>(currentSolution);
@@ -218,11 +353,53 @@ public class Faster_OrTree {
 
             if(!constraints.checkHardConstraints(attemptedSolution)){
                 currentNode.possibleSlots.remove(attemptedSlot);
+                currentNode.verifiedSlots.put(attemptedSlot,false);
             }
             else{
-                currentNode.verifiedSlots.add(attemptedSlot);
+                currentNode.verifiedSlots.put(attemptedSlot,true);
                 break;
             }
+        }
+        return attemptedSlot;
+    }
+    private Slot getSlot (OrTreeNode currentNode, LinkedHashMap<Slot_Occupant,Slot> currentSolution, Slot wantedSlot){
+
+        Slot attemptedSlot;
+        LinkedHashMap<Slot_Occupant,Slot> attemptedSolution;
+
+        boolean triedWantedSlot = false;
+        attemptedSlot = wantedSlot;
+
+        while(true){
+
+            if(currentNode.possibleSlots.size() == 0){
+                return null;
+            }
+
+            if(triedWantedSlot) {
+                attemptedSlot = currentNode.possibleSlots.get(0);
+                //attemptedSlot = currentNode.possibleSlots.get(randGen.nextInt(currentNode.possibleSlots.size()));
+            }
+
+            //If we have already determined this is valid
+            if(currentNode.verifiedSlots.containsKey(attemptedSlot)){
+                if(currentNode.verifiedSlots.get(attemptedSlot)){break;}
+            }
+
+            //Otherwise check if it is valid
+            attemptedSolution = new LinkedHashMap<>(currentSolution);
+            attemptedSolution.put(currentNode.myWorkingOccupant,attemptedSlot);
+
+            if(!constraints.checkHardConstraints(attemptedSolution)){
+                currentNode.possibleSlots.remove(attemptedSlot);
+                currentNode.verifiedSlots.put(attemptedSlot,false);
+            }
+            else{
+                currentNode.verifiedSlots.put(attemptedSlot,true);
+                break;
+            }
+
+            triedWantedSlot = true;
         }
         return attemptedSlot;
     }

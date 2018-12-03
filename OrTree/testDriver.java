@@ -1,3 +1,4 @@
+import OrTree.ConstraintChecker;
 import OrTree.Faster_OrTree;
 import OrTree.OrTreeSearch;
 import ParseData.*;
@@ -10,11 +11,10 @@ import java.util.*;
 public class testDriver {
 
 
-
     public static void main(String args[]){
 
         try {
-            ParseData p = Parser.parse("testFile.txt");
+            ParseData p = Parser.parse("medFile.txt");
 
             Faster_OrTree generator = new Faster_OrTree(p);
             OrTreeSearch test = new OrTreeSearch(p);
@@ -36,30 +36,46 @@ public class testDriver {
                     System.out.println("Tree Exhausted " + x);
                     break;
                 }
+                if(!unique.add(solution)){
+                    System.out.println("NON UNIQUE");
+                    //break;
+                }
+                printSolution(solution);
+
+                System.out.println("--------------------------");
+
+                solution = generator.fasterMutate(solution);
+                if(solution == null){
+                    System.out.println("Tree Exhausted " + x);
+                    break;
+                }
 
                 if(!c.checkHardConstraints(solution)){
                     System.out.println("Hard Constraints do not hold");
                     break;
                 }
-
+                printSolution(solution);
+                System.out.println("--------------------------");
 
                 if(!unique.add(solution)){
-                    System.out.println("NON UNIQUE");
+                   System.out.println("NON UNIQUE");
                     //break;
-                }
-                else {
-                    sol1.add(solution);
-                }
+                 }
+//                else {
+//                    sol1.add(solution);
+//                }
 
+                //System.out.println("Mutation ----------------------------------");
                 //printSolution(solution);
-                System.out.println("Found Solution " + x);
+                //System.out.println("-------------------------------------------");
+               // System.out.println("Found Solution " + x);
             }
 
             long end1,start2 = System.currentTimeMillis();
             end1 = start2;
-            unique.clear();
+           //unique.clear();
 
-            for(int x = 0; x < 150; x++){
+            for(int x = 0; x < 0; x++){
 
                 solution = test.OrTreeRecursiveSearch();
 
@@ -87,16 +103,8 @@ public class testDriver {
                 System.out.println("Found Solution " + x);
             }
 
-            for(Map<Slot_Occupant,Slot> m : sol1){
-
-                if(sol2.contains(m) == false){
-                    printSolution(m);
-                    break;
-                }
-            }
-
             //long end2 = System.currentTimeMillis();
-            System.out.println("Fast Time = " + ((end1 - start1)/1000));
+            System.out.println("Fast Time = " + ((end1 - start1)/1000) + " U: " + unique.size());
             //System.out.println("Original Time = " + ((end2 - start2)/1000));
 
         }catch (FileNotFoundException e){
