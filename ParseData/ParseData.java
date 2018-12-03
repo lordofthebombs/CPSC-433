@@ -12,10 +12,10 @@ public class ParseData {
     public Vector<Slot_Occupant> Courses;
     public Vector<Slot_Occupant> Labs;
 
-    private Vector<Slot> Course_Slots_Orig;
+    public Vector<Slot> Course_Slots_Orig;
     public Vector<Slot> Course_Slots;
     
-    private Vector<Slot> Lab_Slots_Orig;
+    public Vector<Slot> Lab_Slots_Orig;
     public Vector<Slot> Lab_Slots;
 
     public Non_Compatable Non_Compat;
@@ -80,18 +80,16 @@ public class ParseData {
     	// since some slots will be removed due to the hard constraint
     	int j = 0;
     	for(int i = 0; i < Course_Slots_Orig.size(); i++) {
-    		if (Course_Slots.get(i).equals(Course_Slots_Orig.get(j))) {
+    		if (j < Course_Slots.size() && Course_Slots_Orig.get(i).equals(Course_Slots.get(j))) {
     			Slot currentSlot = Course_Slots.get(j);
     			currentSlot.max = Course_Slots_Orig.get(i).max;
     			j++;
-    		}    		
-
-
+    		}
     	}
     	
     	j = 0;
     	for(int i = 0; i < Lab_Slots_Orig.size(); i++) {
-    		if (Lab_Slots.get(i).equals(Lab_Slots_Orig.get(j))) {
+    		if (Lab_Slots_Orig.get(i).equals(Lab_Slots.get(j))) {
     			Slot currentSlot = Lab_Slots.get(j);
     			currentSlot.max = Lab_Slots_Orig.get(i).max;
     			j++;
