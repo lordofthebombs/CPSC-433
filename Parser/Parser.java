@@ -813,7 +813,7 @@ public class Parser {
             }
 
             //Make all evening courses unwanted with all nonevening slots;
-            if(c.lectSection == 9){
+            if(startsWithNine(c.lectSection)){
                 for(Slot s : p.Course_Slots){
                     if(s.time < 18){
                         p.Unwanted.addEntry(c,s);
@@ -905,5 +905,16 @@ public class Parser {
                 }
             }
         }*/
+    }
+    private static boolean  startsWithNine(int x){
+
+        while(x > 0) {
+            if (x == 9){
+                return true;
+            }
+            x = x/10;
+        }
+
+        return false;
     }
 }
