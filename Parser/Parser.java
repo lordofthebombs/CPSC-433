@@ -249,9 +249,6 @@ public class Parser {
 
             Course temp = makeCourseFromIdentifier(entry);
 
-            if(temp.lectSection > 4){
-                System.out.println("meme");
-            }
             if(!coursesVect.contains(temp)){
                 coursesVect.add(temp);
             }
