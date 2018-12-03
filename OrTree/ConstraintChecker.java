@@ -285,7 +285,7 @@ public class ConstraintChecker {
     	
     	boolean isSO_Course = isCourseObject(so);		// need to know if Slot_occupant is course or lab so we don't count course slots and labs slots
     	
-    	int slotCount = 0;
+    	int slotCount = 1;
     	while (keysIter.hasNext()) {
     		Slot_Occupant currentSO = keysIter.next();
     		
@@ -294,8 +294,8 @@ public class ConstraintChecker {
     		if (isCourseObject(currentSO) == isSO_Course) {
     			Slot currentSlot = solution.get(currentSO);
     			if (currentSlot != null && currentSlot.equals(s)) {
-    			slotCount++;
-    			// check if maximum
+    				slotCount++;
+    				// check if maximum
     				if (slotCount > s.max) { return false; }
     			}
     		
