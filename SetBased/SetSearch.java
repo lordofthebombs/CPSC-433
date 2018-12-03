@@ -8,12 +8,11 @@ import Slot_Occupant.*;
 import ParseData.*;
 import OrTree.*;
 
-import static java.lang.System.exit;
 
 public class SetSearch{
 
   //CONFIG////////////////////////////////////////
-  private static final int INIT_POPULATION = 10;
+  private static final int INIT_POPULATION = 200;
   private static final int MAX_FACTS = 1000;
   private static final int TRIM_NUM = 800; //number of facts after trim, maxfacts-trimnum=num of facts removed
   private static final int MAX_REPEATS = 3;
@@ -32,8 +31,17 @@ public class SetSearch{
   private Eval eval;
   private boolean done;
 
+ public class ExhaustedError extends Exception{
 
-  public SetSearch(ParseData data, String file){
+     public Pair<Map<Slot_Occupant, Slot>, Double> solution ;
+
+     ExhaustedError(Pair<Map<Slot_Occupant, Slot>, Double> solution ){
+         this.solution = solution;
+     }
+
+ }
+
+  public SetSearch(ParseData data, String file) throws ExhaustedError {
     makeEval(data, file);
     solGen = new OrTreeSearch(data);
     workingSet = new ArrayList<Pair<Map<Slot_Occupant, Slot>, Double>>(MAX_FACTS);
@@ -49,6 +57,7 @@ public class SetSearch{
       if(out == null){
         done = true;
         repeats = INIT_POPULATION;
+        throw new ExhaustedError(getBestSolution());
       }
       else if(!addToSet(out)){
         i--;
@@ -112,7 +121,7 @@ public class SetSearch{
 
   //keeps running untill a genaration has passed or search can't continue
   //returns true if generation ran succesfully
-  public boolean runGeneration(){
+  public boolean runGeneration() throws ExhaustedError {
     int curgen = generation;
     while(curgen == generation && !done){
       searchControl();
@@ -125,7 +134,7 @@ public class SetSearch{
   }
 
   //decides whether to mutate or trim
-  private void searchControl(){
+  private void searchControl() throws ExhaustedError {
     if(workingSet.size() < MAX_FACTS){
       while(workingSet.size() != badParents.size() && !mutate()){ //mutate untill all parents are deemed bad or mutation is sucessfull
       }
@@ -142,7 +151,11 @@ public class SetSearch{
 
   //returns... the best solution...
   public Pair<Map<Slot_Occupant, Slot>, Double> getBestSolution(){
-    return workingSet.get(0);
+      if(workingSet.size() > 0) {
+          return workingSet.get(0);
+      }
+
+      return  null;
   }
 
   //adds solution to set if it is not contained already
@@ -172,7 +185,7 @@ public class SetSearch{
 
   //mutates upon a random fact
   //returns true if mutation was succesfull
-  private boolean mutate(){
+  private boolean mutate() throws ExhaustedError {
     int repeats = 0;
     int size = workingSet.size();
     int randnum;
@@ -186,7 +199,10 @@ public class SetSearch{
 
     for(int i = 0; i < MAX_CHILDREN_PER_PARENT && repeats < MAX_REPEATS && workingSet.size() < MAX_FACTS; i++){
       Map<Slot_Occupant, Slot> child = solGen.mutateSearch(parent); //acquire a mutant
-      if(child == null) break;          //parent is exhausted
+      if(child == null) {
+          throw new ExhaustedError(getBestSolution());
+      }
+          //parent is exhausted
 
       if(!addToSet(child)){
         i--;

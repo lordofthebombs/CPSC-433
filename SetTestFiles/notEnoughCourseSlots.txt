@@ -2,9 +2,8 @@ Name:
 Multiple Entries in Pref for same course
 
 Course slots:
-MO, 8:00, 3, 2
-MO, 10:00, 3, 2
-MO,9:00,3,2
+MO, 8:00, 1, 2
+MO,9:00,1,2
 TU, 9:30, 2,  1
 
 Lab slots:

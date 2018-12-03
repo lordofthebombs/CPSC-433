@@ -15,6 +15,7 @@ public class Driver {
 
     public static Random random = new Random();
     static ParseData parseData;
+    static int MAX_GEN = 20;
 
     public static void main(String args[]){
 
@@ -33,82 +34,59 @@ public class Driver {
         fileName = args[1];
         //fileName = "testFile.txt";
         try {
+
+            // parsing the input file and initializing all data types
             parseData = Parser.parse(fileName);
             
 
-            //parseData.Non_Compat.print();
             //Gen the starting states with the Partial Assignments
             //---- Check to make sure the partial assignment is valid if not post error.
             //Then start.
 
-            //The Solutions for the OR tree here
+
+
             //-------------------------------
             //Set Based Search here
             //-------------------------------
             SetSearch setSearch = new SetSearch(parseData, configFile);
-            setSearch.runGeneration();
-            setSearch.runGeneration();
+
+            for(int i = 0 ; i < MAX_GEN ; i++ ) {
+                setSearch.runGeneration();
+                System.out.printf("Best solution for generation %s:\n", i);
+                Pair<Map<Slot_Occupant, Slot>, Double> bestSolution = setSearch.getBestSolution();
+                if(bestSolution != null) {
+                    printSolution(bestSolution.getKey(), bestSolution.getValue());
+                }else{
+                    System.out.println("No solution was possible for this generation");
+                }
+
+            }
+
+            //final solution after all generation ran
             Pair<Map<Slot_Occupant, Slot>, Double> bestSolution = setSearch.getBestSolution();
-            printSolution(bestSolution.getKey(), bestSolution.getValue() );
-
-
-            //Output the answers
-            //-------------------------------
-//            OrTreeSearch orTreeSearch = new OrTreeSearch(parseData);
-//            HashSet<Map<Slot_Occupant,Slot>> unique = new HashSet<>();
-//            int y = 0;
-//            int x = 0;
-//
-//            Map<Slot_Occupant, Slot> slot_occupantSlotMap = orTreeSearch.OrTreeRecursiveSearch();		// parent
-//            if(slot_occupantSlotMap != null) {
-//            	System.out.println("PARENT");
-//            	printSolution(slot_occupantSlotMap);
-//
-//
-//                if(!unique.add(slot_occupantSlotMap)){
-//                	System.out.println("NOT UNIQUE");
-//                }
-//                Map<Slot_Occupant,Slot> mutant = slot_occupantSlotMap;
-//            for(x = 0 ; x < 27 ; x++) {
-//
-//
-//                    System.out.println("MUTANT ---------------------------------------------------");
-//                    mutant = orTreeSearch.mutateSearch(mutant);
-//                    if (mutant == null) break;		// mutation could be null when all solutions have been exhausted
-//                    System.out.println("Mutation on " + orTreeSearch.mutatedOccupant);
-//
-//                    printSolution(mutant);
-//                    if(!unique.add(mutant)){
-//                    	System.out.println("NOT UNIQUE");
-//                    	break;
-//                    }
-//
-//
-//                }
-//            }
-//            System.out.println("Possible solutions tried = " + unique.size());
-
-            
-
-
-
-//            Map<Slot_Occupant, Slot> mutant = orTreeSearch.mutateParentSolution(slot_occupantSlotMap);
-//            System.out.println("Parent passed for mutation ----------->");
-//            printSolution(slot_occupantSlotMap);
-//            System.out.println("MUTATION CREATED ---------------->");
-//            if(mutant != null) {
-//                printSolution(mutant, 0);
-//            }else{
-//                System.out.println("Mutant Result was null");
-//            }
-
-
+            System.out.println("Final solution:\n");
+            if(bestSolution != null) {
+                printSolution(bestSolution.getKey(), bestSolution.getValue());
+            }else{
+                System.out.println("There was no possible solution for this problem instance");
+            }
 
         }
         catch (FileNotFoundException e){
             System.out.println("File not found");
             System.out.println("Invalid argument: try \t java Driver [configFile] [inputFile]");
             System.exit(0);
+        } catch (SetSearch.ExhaustedError exhaustedError) {
+            System.out.println("All solution exhausted");
+            //final solution after all generation ran
+            Pair<Map<Slot_Occupant, Slot>, Double> bestSolution = exhaustedError.solution;
+            System.out.println("Final solution:\n");
+            if(bestSolution != null) {
+                printSolution(bestSolution.getKey(), bestSolution.getValue());
+            }else{
+                System.out.println("There was no possible solution for this problem instance");
+            }
+
         }
 
     }
