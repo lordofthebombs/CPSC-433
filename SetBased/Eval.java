@@ -14,6 +14,7 @@ public class Eval {
     private Pairs pairs;
     private Preferences pref;
     private Map<String, List<Slot_Occupant>> courseSections;
+    private ParseData parseData;
 
 
 
@@ -36,6 +37,7 @@ public class Eval {
         pen_section = penSection;
         pairs = data.Pairs;
         pref = data.Preferences;
+        parseData = data;
         setCoursesSections(data);
     }
 
@@ -93,31 +95,6 @@ public class Eval {
 
          int violationCourses = 0;
          int violationLabs = 0;
-      /*
-      // Counts the amount of courses that are in a particular slot
-      int courseCounter;
-
-      Set<Slot_Occupant> keys = solution.keySet();
-      Slot_Occupant[] allOccupants = keys.toArray(new Slot_Occupant[0]);
-
-      Collection<Slot> values = solution.values();
-      Slot[] allSlots = values.toArray(new Slot[0]);
-
-    // Checks each slot and see how mnay courses occupy that slot
-      for (int slot = 0; slot < allSlots.length; slot++) {
-          courseCounter = 0;
-          for (int occupant = 0; occupant < allOccupants.length; occupant++) {
-              if (allSlots[slot].equals(solution.get(allOccupants[occupant]))) {
-                  courseCounter++;
-              }
-          }
-          if (courseCounter < allSlots[slot].min) {
-              violationCounter++;
-          }
-      }
-
-      return violationCounter * pen_coursemin;
-      */
 
          Map<Slot, Integer> courseSlots = new HashMap();
          for (Slot slot : parseData.Course_Slots) {
@@ -133,14 +110,14 @@ public class Eval {
          for (Map.Entry<Slot_Occupant, Slot> sol : solution.entrySet()) {
              Slot_Occupant occupant = sol.getKey();
              Slot slot = sol.getValue();
-             if (sol.getKey() instanceof Course) {
-                 if (courseSlots.containsKey(sol.getValue())) {
-                     int temp = courseSlots.get(sol.getValue());
+             if (occupant instanceof Course) {
+                 if (courseSlots.containsKey(slot)) {
+                     int temp = courseSlots.get(slot);
                      courseSlots.put(slot, temp + 1);
                  }
              }
              else {
-                 if (labSlots.containsKey(sol.getValue())) {
+                 if (labSlots.containsKey(slot)) {
                      int temp = labSlots.get(sol.getValue());
                      labSlots.put(slot, temp + 1);
                  }
@@ -148,13 +125,13 @@ public class Eval {
          }
 
          for (Map.Entry<Slot, Integer> slotMinPair : courseSlots.entrySet()) {
-             if (slotMinPair.getKey().min < slotMinPair.getValue()) {
+             if (slotMinPair.getValue() < slotMinPair.getKey().min) {
                  violationCourses++;
              }
          }
 
          for (Map.Entry<Slot, Integer> slotMinPair : labSlots.entrySet()) {
-             if (slotMinPair.getKey().min < slotMinPair.getValue()) {
+             if (slotMinPair.getValue() < slotMinPair.getKey().min) {
                  violationLabs++;
              }
          }

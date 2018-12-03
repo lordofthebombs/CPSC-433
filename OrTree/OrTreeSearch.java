@@ -38,13 +38,21 @@ public class OrTreeSearch {
     private ConstraintChecker constraints;
     private Random randGen;
     private Slot lastTried;			// last tried isn't needed anymore really
-    public Slot_Occupant mutatedOccupant; 
-    
+    public Slot_Occupant mutatedOccupant;
+    Vector<Slot_Occupant> possible_mutants;
+
     public OrTreeSearch(ParseData parseData){
         this.parseData = parseData;
         root = new OrTreeNode(null);
         constraints = new ConstraintChecker(parseData);
-        randGen = new Random(); 
+        randGen = new Random();
+        // simply checks if partial assignments would lead to a solution
+        if (!constraints.checkHardConstraints(initializePr(new LinkedHashMap<Slot_Occupant,Slot>()))) {
+
+            System.out.println("Partial Solution has no solutions");
+            System.exit(0);
+        }
+
     }
 
     /**
@@ -92,9 +100,7 @@ public class OrTreeSearch {
         LinkedHashMap<Slot_Occupant,Slot> solution = new LinkedHashMap<>();
         solution = initializePr(solution);
         
-        // simply checks if partial assignments would lead to a solution
-        if (!constraints.checkHardConstraints(solution)) { return null; }
-        
+
         Slot_Occupant workingOccupant = null;
         if(root.myWorkingOccupant == null) {
         	//Get the first non null position;
@@ -218,25 +224,32 @@ public class OrTreeSearch {
     public LinkedHashMap<Slot_Occupant,Slot> mutateSearch(Map<Slot_Occupant,Slot> parentSolution){
     
     	 LinkedHashMap<Slot_Occupant,Slot> solution = new LinkedHashMap<>();
-         solution = initializePr(solution);
-         
-         //Get a random course/lab to mutate on that is not a partial assignments
-         do {
-        	 mutatedOccupant = parseData.getOccupants().get(randGen.nextInt(parseData.getOccupants().size()));
-         } while (solution.get(mutatedOccupant) != null);
-         
+         initializePr(solution);
+
+         possible_mutants = parseData.getOccupants();
+
+         //Remove partial assignments from possible mutants;'
+        for(Map.Entry<Slot_Occupant,Slot> so : solution.entrySet()) {
+
+            if(so.getValue() != null){
+                possible_mutants.remove(so.getKey());
+            }
+        }
+
          //if the path hasn't been travelled down before generate all alterns. 
          if(root.possibleSlots == null) {
         	 root.myWorkingOccupant = mutatedOccupant;
              root.possibleSlots = getPossibleSlots(solution, root.myWorkingOccupant); //Altern Function 
          }
-         
+
+         //Get the parent slot
          Slot parentSlot = parentSolution.get(root.myWorkingOccupant);
+
          while(!root.possibleSlots.isEmpty()){
-        	 
-        	 // checks if root occupant is the mutated occupant
-        	 // tries to pick a different slot unless no other slots are possible
-         	
+
+             //Get a random course/lab to mutate on that is not a partial assignments
+             mutatedOccupant = possible_mutants.get(randGen.nextInt(possible_mutants.size()));
+
          	//Randomly Select a possible slot
         	//If you can copy the parent, do so, if you can't random selection. 
         	Slot attemptedSlot;		// will never be null
@@ -248,13 +261,23 @@ public class OrTreeSearch {
         	else{
         		// ensures that mutatedOccupant does not take the same slot
         		// assuming theres more than 1 option for slots
-        		if (root.possibleSlots.contains(parentSlot) && root.possibleSlots.size() >= 2) {
+
+                Vector<Slot> nonParent_Slots = new Vector<>(root.possibleSlots);
+                nonParent_Slots.remove(parentSlot);
+
+                if(nonParent_Slots.size() == 0){
+                    attemptedSlot = parentSlot;
+                }
+                else{
+                    attemptedSlot = nonParent_Slots.elementAt(randGen.nextInt(nonParent_Slots.size()));
+                }
+        		/*if (root.possibleSlots.contains(parentSlot) && root.possibleSlots.size() >= 2) {
         			do {
          				attemptedSlot = root.possibleSlots.get(randGen.nextInt(root.possibleSlots.size()));
          			} while (parentSlot == attemptedSlot);
         		} else {
         			attemptedSlot = root.possibleSlots.get(randGen.nextInt(root.possibleSlots.size()));
-        		}
+        		}*/
         	}
              
              LinkedHashMap<Slot_Occupant,Slot> attemptedSolution = new LinkedHashMap<>(solution);
@@ -343,7 +366,7 @@ public class OrTreeSearch {
             //Randomly Select a possible slot
         	//If you can copy the parent, do so, if you can't random selection. 
         	Slot parentSlot = parent.get(currentNode.myWorkingOccupant); 
-        	Slot attemptedSlot;
+        	Slot attemptedSlot = null;
         	
         	// the case where workingOccupant != mutatedOccupant
         	if(parentSlot != null && currentNode.possibleSlots.contains(parentSlot) && !currentNode.myWorkingOccupant.equals(mutatedOccupant)){
@@ -352,14 +375,30 @@ public class OrTreeSearch {
         	else{
         		// ensures that mutatedOccupant does not take the same slot
         		// assuming theres more than 1 option for slots
-        		if (currentNode.possibleSlots.contains(parentSlot) && currentNode.possibleSlots.size() >= 2) {
+                if (currentNode.possibleSlots.size() == 0){
+                    possible_mutants.remove(mutatedOccupant);
+                    return null;
+                }
+                else{
+
+                    Vector<Slot> nonParent_Slots = new Vector<>(currentNode.possibleSlots);
+                    nonParent_Slots.remove(parentSlot);
+
+                    if(nonParent_Slots.size() == 0){
+                        attemptedSlot = parentSlot; // force to choose the parent.
+                    }
+                    else{
+                        attemptedSlot = nonParent_Slots.elementAt(randGen.nextInt(nonParent_Slots.size()));
+                    }
+                }
+        		/*else if (currentNode.possibleSlots.contains(parentSlot) && currentNode.possibleSlots.size() >= 2) {
         			do {
          				attemptedSlot = currentNode.possibleSlots.get(randGen.nextInt(currentNode.possibleSlots.size()));
          				System.out.println(attemptedSlot);
          			} while (parentSlot == attemptedSlot);
         		} else {
         			attemptedSlot = currentNode.possibleSlots.get(randGen.nextInt(currentNode.possibleSlots.size()));
-        		}
+        		}*/
         	}
            
 
@@ -420,6 +459,9 @@ public class OrTreeSearch {
 
         return givenData;
     }
+
+
+
 
 
 }
