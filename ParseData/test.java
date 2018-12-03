@@ -1,5 +1,6 @@
 package ParseData;
 
+import Parser.ParseError;
 import Slot_Occupant.Course;
 import Slot_Occupant.Slot_Occupant;
 
@@ -15,6 +16,8 @@ public class test {
 
         }catch(IOException e){
             System.out.println("File not found");
+        } catch (ParseError parseError) {
+            parseError.print();
         }
     }
 }

@@ -16,7 +16,7 @@ public class Parser {
 	private static int currentLineNum = 0;
 	private static TimeConverter timeConvert;
 
-    public static ParseData parse(String fileName) throws FileNotFoundException{
+    public static ParseData parse(String fileName) throws FileNotFoundException, ParseError {
 
         boolean courseSlots,labSlots,courses,labs,notCompat,unwanted,preference,pair,partialAssignments;
         courseSlots = labSlots = courses = labs = notCompat = unwanted = preference = pair = partialAssignments = false;
@@ -107,10 +107,6 @@ public class Parser {
         catch (IOException e){
             System.out.println("Failed to read a new line at: " + currentLineNum);
         }
-        catch (ParseError e){
-            e.print();
-        }
-
 
         try {
 			in.close();

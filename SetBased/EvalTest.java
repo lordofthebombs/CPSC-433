@@ -22,7 +22,12 @@ public class EvalTest {
 
     public void setUp(String fileName) throws FileNotFoundException {
 
-        parseData = Parser.parse(fileName);
+
+        try {
+            parseData = Parser.parse(fileName);
+        } catch (ParseError parseError) {
+            parseError.printStackTrace();
+        }
     }
 
     @Test

@@ -15,7 +15,7 @@ public class Driver {
 
     public static Random random = new Random();
     static ParseData parseData;
-    static int MAX_GEN = 20;
+    static int MAX_GEN = 5;
 
     public static void main(String args[]){
 
@@ -37,12 +37,6 @@ public class Driver {
 
             // parsing the input file and initializing all data types
             parseData = Parser.parse(fileName);
-            
-
-            //Gen the starting states with the Partial Assignments
-            //---- Check to make sure the partial assignment is valid if not post error.
-            //Then start.
-
 
 
             //-------------------------------
@@ -78,7 +72,7 @@ public class Driver {
             System.exit(0);
         } catch (SetSearch.ExhaustedError exhaustedError) {
             System.out.println("All solution exhausted");
-            //final solution after all generation ran
+            //final solution after all generation ran and exhausted or tree
             Pair<Map<Slot_Occupant, Slot>, Double> bestSolution = exhaustedError.solution;
             System.out.println("Final solution:\n");
             if(bestSolution != null) {
@@ -87,6 +81,8 @@ public class Driver {
                 System.out.println("There was no possible solution for this problem instance");
             }
 
+        } catch (ParseError parseError) {
+            parseError.print();
         }
 
     }
