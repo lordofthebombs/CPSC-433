@@ -60,13 +60,9 @@ public class ConstraintChecker {
 	
 	//private Vector<Slot_Occupant> allSlot_Occupants = new Vector<>();
 	private Vector<Slot_Occupant> courses500 = new Vector<>();
-	//private Vector<Slot_Occupant> all313Courses = new Vector<>();
-	//private Vector<Slot_Occupant> all413Courses = new Vector<>();
-	//private Slot_Occupant course813;
-	//private Slot_Occupant course913;
+	private Map<Slot_Occupant, HashSet<Slot_Occupant>> allNonCompatibles = new HashMap<>();
+	private Map<Slot, HashSet<Slot_Occupant>> allUnwanteds = new HashMap<>();
 
-
-	
 	/**
 	 * **REMOVES COURSE SLOT AT TUESDAY, 11.0**
 	 * 
@@ -79,7 +75,7 @@ public class ConstraintChecker {
     	//allSlot_Occupants.addAll(parseData.Labs);
     	
     	// removes course time slots at tuesdays 11.0f
-    	
+    	/*
         Iterator<Slot> iter = parseData.Course_Slots.iterator();
         LinkedList<Slot> toBeRemoved = new LinkedList();
         
@@ -89,11 +85,16 @@ public class ConstraintChecker {
         		toBeRemoved.add(currentSlot); 
         	}
         }
+        */
+    	
+        // removes course time slots at tuesdays 11.0f
+        int indexOfTue = parseData.Course_Slots.indexOf(new Slot(Day.Tues, 11.0f, -1, -1));
         
-        for(Slot s : toBeRemoved){
-        	parseData.Course_Slots.remove(s);
+        if (indexOfTue != -1) {
+        	parseData.Course_Slots.remove(indexOfTue);
         }
         
+    	
         // pairs courses to its corresponding labs
         for (Slot_Occupant c : parseData.Courses) {
         	Vector<Slot_Occupant> correspondingL = new Vector<Slot_Occupant>();
@@ -135,21 +136,25 @@ public class ConstraintChecker {
         	if (correspondingL != null) this.correspondingLabs.put(c, correspondingL);
         	
         }
-        /*
-        // pairs labs that have no lecture sections to all its corresponding courses
-        for (Slot_Occupant l : parseData.Labs) {
-        	if (((Lab)l).hasLectSect()) continue;
-        	
-        	Vector<Slot_Occupant> correspondingC = new Vector<>();
-        	for (Slot_Occupant c : parseData.Courses) {
-        		if (c.id.equals(l.id) && c.courseNum == l.courseNum) {
-        			correspondingC.add(c);
-        		}
-        	}
-        	
-        	this.correspondingCourses.put(l, correspondingC);
+       
+        
+        // all non-compatibles for every slot_occupant are stored in a map
+        Vector<Slot_Occupant> allSO = parseData.getOccupants();
+        Iterator<Slot_Occupant> allSO_Iter = allSO.iterator();
+        
+        while (allSO_Iter.hasNext()) {
+        	Slot_Occupant currentSO = allSO_Iter.next();
+        	allNonCompatibles.put(currentSO, parseData.Non_Compat.isNonCompatableWith(currentSO));
         }
-        */
+        
+        // all unwanteds for every slots are stored in a map
+        Vector<Slot> allS = parseData.getSlots();
+        Iterator<Slot> allS_Iter = allS.iterator();
+        
+        while (allS_Iter.hasNext()) {
+        	Slot currentS = allS_Iter.next();
+        	allUnwanteds.put(currentS, parseData.Unwanted.isUnwantedWith(currentS));
+        }
     }
     
     
@@ -237,32 +242,25 @@ public class ConstraintChecker {
     
     // checks if all the slots can be paired to their corresponding courses
     public boolean isSlotMaxValid(Map<Slot_Occupant, Slot> solution) {
-
         boolean output = true;
-
-       LinkedHashMap copyOfSolution = new LinkedHashMap(solution);
-       Vector<Slot> copyOfSlots = new Vector<Slot>(parseData.getSlots());
-
-       HashMap<Slot,Integer> Slot_Totals = new HashMap();
-
-        for(Object s : copyOfSolution.values()){
-
-            if(!Slot_Totals.containsKey(s)){
-                Slot_Totals.put((Slot)s,1);
-            }
-            else{
-                int oldTotal = Slot_Totals.get(s);
-                Slot_Totals.put((Slot)s,oldTotal+1);
-            }
-        }
-
-        for(Slot s : copyOfSlots){
-
-            if(Slot_Totals.containsKey(s)){
-                int numberInSolution = Slot_Totals.get(s);
-                if(numberInSolution > s.max){ return false; }
-            }
-        }
+        
+    	// iterate through keys that aren't null
+    	Iterator<Slot_Occupant> soIter = solution.keySet().iterator();
+    	
+    	while (soIter.hasNext()) {
+    		Slot currentSlot = solution.get(soIter.next());
+    		if (currentSlot == null) continue;
+    		
+    		if (currentSlot.max > 0) {
+    			currentSlot.max--;
+    		} else {
+    			output = false;
+    			break;
+    		}
+    	}
+    	
+    	// reset counter for time slots
+    	parseData.resetTimeSlots();
 
     	return output;
     }
@@ -314,7 +312,7 @@ public class ConstraintChecker {
 		   }
 		   // ensures that current slot_occupant is assigned a slot
 		   if (currentSO_Slot != null && currentSO != null) {
-			   HashSet<Slot_Occupant> non_compatibles = parseData.Non_Compat.isNonCompatableWith(currentSO);
+			   HashSet<Slot_Occupant> non_compatibles = allNonCompatibles.get(currentSO);
 			   
 			   Iterator<Slot_Occupant> non_compat_iter = non_compatibles.iterator();
 			   while (non_compat_iter.hasNext()) {
@@ -341,7 +339,7 @@ public class ConstraintChecker {
 		   Slot currentSO_Slot = data.get(currentSO);
 		   
 		   if (currentSO_Slot != null) {
-			   HashSet<Slot_Occupant> unwanteds = parseData.Unwanted.isUnwantedWith(currentSO_Slot);
+			   HashSet<Slot_Occupant> unwanteds = allUnwanteds.get(currentSO_Slot);
 			   
 			   // unsure if this works
 			   if (unwanteds.contains(currentSO)) return false;
