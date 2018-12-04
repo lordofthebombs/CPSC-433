@@ -44,7 +44,7 @@ public class Driver {
             //Set Based Search here
             //-------------------------------
             SetSearch setSearch = new SetSearch(parseData, configFile);
-            long endTime = System.currentTimeMillis() + (RUNTIME*1000)
+            long endTime = System.currentTimeMillis() + (RUNTIME*1000);
 
             for(int i = 0 ; i < MAX_GEN && System.currentTimeMillis() < endTime; i++ ) {
                 setSearch.runGeneration();

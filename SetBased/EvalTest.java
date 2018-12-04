@@ -1,4 +1,4 @@
-package SetBased;
+/*package SetBased;
 
 import ParseData.*;
 import Slot_Occupant.*;
@@ -13,7 +13,7 @@ import static junit.framework.TestCase.assertEquals;
 
 /**
  *
- */
+ /
 
 
 public class EvalTest {
@@ -598,3 +598,4 @@ public class EvalTest {
 
 
 }
+*/
