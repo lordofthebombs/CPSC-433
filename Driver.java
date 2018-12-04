@@ -16,6 +16,7 @@ public class Driver {
     public static Random random = new Random();
     static ParseData parseData;
     static int MAX_GEN = 15;
+    private static final int RUNTIME = 10000; //seconds
 
     public static void main(String args[]){
 
@@ -43,16 +44,17 @@ public class Driver {
             //Set Based Search here
             //-------------------------------
             SetSearch setSearch = new SetSearch(parseData, configFile);
+            long endTime = System.currentTimeMillis() + (RUNTIME*1000)
 
-            for(int i = 0 ; i < MAX_GEN ; i++ ) {
+            for(int i = 0 ; i < MAX_GEN && System.currentTimeMillis() < endTime; i++ ) {
                 setSearch.runGeneration();
                 System.out.printf("Best solution for generation %s:\n", i);
                 Pair<Map<Slot_Occupant, Slot>, Double> bestSolution = setSearch.getBestSolution();
-                if(bestSolution != null) {
-                    printSolution(bestSolution.getKey(), bestSolution.getValue());
-                }else{
-                    System.out.println("No solution was possible for this generation");
-                }
+                //if(bestSolution != null) {
+                  //  printSolution(bestSolution.getKey(), bestSolution.getValue());
+              //  }else{
+              //      System.out.println("No solution was possible for this generation");
+              //  }
 
             }
 
