@@ -15,8 +15,8 @@ public class Driver {
 
     public static Random random = new Random();
     static ParseData parseData;
-    static int MAX_GEN = 15;
-    private static final int RUNTIME = 10000; //seconds
+    static int MAX_GEN = 150000;
+    private static final int RUNTIME = 68400; //seconds
 
     public static void main(String args[]){
 
@@ -48,8 +48,8 @@ public class Driver {
 
             for(int i = 0 ; i < MAX_GEN && System.currentTimeMillis() < endTime; i++ ) {
                 setSearch.runGeneration();
-                System.out.printf("Best solution for generation %s:\n", i);
                 Pair<Map<Slot_Occupant, Slot>, Double> bestSolution = setSearch.getBestSolution();
+                System.out.printf("Best solution for generation %s: %s\n", i, bestSolution.getValue());
                 //if(bestSolution != null) {
                   //  printSolution(bestSolution.getKey(), bestSolution.getValue());
               //  }else{

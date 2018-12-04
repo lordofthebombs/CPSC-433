@@ -13,8 +13,8 @@ public class SetSearch{
 
   //CONFIG////////////////////////////////////////
   private static final int INIT_POPULATION = 200;
-  private static final int MAX_FACTS = 1000;
-  private static final int TRIM_NUM = 800; //number of facts after trim, maxfacts-trimnum=num of facts removed
+  private static final int MAX_FACTS = 2000;
+  private static final int TRIM_NUM = 1500; //number of facts after trim, maxfacts-trimnum=num of facts removed
   private static final int MAX_REPEATS = 3;
   private static final int MAX_CHILDREN_PER_PARENT = 10;
   //CONFIG ENDS//////////////////////////////////
@@ -168,7 +168,7 @@ public class SetSearch{
   private boolean addToSet(Map<Slot_Occupant, Slot> solution){
     double score = eval.eval(solution);
     Pair<Map<Slot_Occupant, Slot>, Double> fin = new Pair(solution, score);
-    
+
   /*  if(workingSet.size() > 0)
         if(score <= workingSet.get(0).getValue()){
             System.out.println(score + " " + workingSet.size());
