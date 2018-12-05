@@ -16,7 +16,7 @@ public class ParseData {
 
     public Vector<Slot> Course_Slots_Orig;
     public Vector<Slot> Course_Slots;
-    
+
     public Vector<Slot> Lab_Slots_Orig;
     public Vector<Slot> Lab_Slots;
 
@@ -48,6 +48,10 @@ public class ParseData {
     public Vector<Slot> getAllSlots(){
         return AllSlots;
     }
+		public void reset(){
+			AllSlots = null;
+			AllOccupants = null;
+		}
     public void setAllOccupants(){
        AllOccupants = getOccupants();
     }
@@ -62,13 +66,13 @@ public class ParseData {
     public void setLabs(Vector<Slot_Occupant> labs) {
         this.Labs = labs;
     }
-    
+
     // creates two copies of slots
     public void setCourse_Slots(Vector<Slot> Course_Slots){
     	this.Course_Slots_Orig = Course_Slots;
         this.Course_Slots = cloneSlots(Course_Slots_Orig);
     }
-    
+
     // creates two copies of slots
     public void setLab_Slots(Vector<Slot> Lab_Slots){
     	this.Lab_Slots_Orig = Lab_Slots;
@@ -85,10 +89,10 @@ public class ParseData {
     public Vector<Slot_Occupant> getOccupants(){
     	Vector<Slot_Occupant> occupants = new Vector<>();
     	occupants.addAll(this.Courses);
-    	occupants.addAll(this.Labs); 
-    	return occupants; 
+    	occupants.addAll(this.Labs);
+    	return occupants;
     }
-    
+
     // **ENSURE THAT THIS FUNCTION IS ONLY CALLED WHEN A NEW CANDIDATE SOLUTION IS CREATED**
     // resets the value of the maximum courses for all slots in Lab_Slots and Course_Slots
     // used because courseMax will be decremented whenever a new course is added to a slot
@@ -103,7 +107,7 @@ public class ParseData {
     			j++;
     		}
     	}
-    	
+
     	j = 0;
     	for(int i = 0; i < Lab_Slots_Orig.size(); i++) {
     		if (Lab_Slots_Orig.get(i).equals(Lab_Slots.get(j))) {
@@ -114,16 +118,16 @@ public class ParseData {
     	}
 
     }
-    
+
     // helper function for duplicating the time slots for courses and labs
     // relevant for checking hard constraints
     private Vector<Slot> cloneSlots(Vector<Slot> vSlot) {
     	Vector<Slot> copyVSlot = new Vector<Slot>();
-    	
+
     	for(Slot currentSlot : vSlot) {
     		copyVSlot.add(new Slot(currentSlot.day, currentSlot.time, currentSlot.max, currentSlot.min));
     	}
-    	
+
     	return copyVSlot;
     }
 

@@ -50,10 +50,13 @@ public class Driver {
                 setSearch.runGeneration();
                 Pair<Map<Slot_Occupant, Slot>, Double> bestSolution = setSearch.getBestSolution();
                 System.out.printf("Best solution for generation %s: %s\n", i, bestSolution.getValue());
-                if(bestSolution != null && i % 10 == 0) {
+                if(bestSolution != null && i % 50 == 0 && i!= 0) {
                     printSolution(bestSolution.getKey(), bestSolution.getValue());
-                }else{
-                    System.out.println("No solution was possible for this generation");
+                }//else{
+                    //System.out.println("No solution was possible for this generation");
+                //}
+                if(i % 250 == 0 && i != 0){
+                  setSearch.resetOrTree();
                 }
 
             }

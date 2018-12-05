@@ -67,6 +67,30 @@ public class Faster_OrTree {
 
         uniqueConstraint = new HashSet<Map<Slot_Occupant,Slot>>();
     }
+
+    public void reset(){
+      parseData.reset();
+      //The starting state of the OrTree will always be the same give the same parseData;
+      startingSolution = initializePr(new LinkedHashMap<>());
+
+      //Get the order that the or tree WILL ALWAYS follow;
+      occupantOrder = new LinkedList<>();
+
+      for(Map.Entry entry : startingSolution.entrySet()){
+          if(entry.getValue() == null){
+              occupantOrder.add((Slot_Occupant) entry.getKey());
+          }
+      }
+
+      parseData.setAllSlots();
+      parseData.setAllOccupants();
+
+      //This means we know what the root's occupant will be at this point
+      root = new OrTreeNode(null, occupantOrder.get(0));
+
+      uniqueConstraint = new HashSet<Map<Slot_Occupant,Slot>>();
+    }
+
     public LinkedHashMap<Slot_Occupant,Slot> fasterSearch(){
 
         //Always start at the
@@ -427,4 +451,3 @@ public class Faster_OrTree {
 
 
 }
-

@@ -68,6 +68,10 @@ public class SetSearch{
 
   }
 
+  public void resetOrTree(){
+    solGen.reset();
+  }
+
   private void makeEval(ParseData data, String file){
     double minFilledWeight = 0, prefWeight = 0, notPairedWeight = 0, secDiffWeight = 0;
     double pen_coursemin = 0 , pen_labmin = 0, pen_notPaired = 0 , pen_section = 0;
