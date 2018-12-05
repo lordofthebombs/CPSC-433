@@ -153,15 +153,14 @@ public class Eval {
 
         double prefPenalty = 0;
         for (Map.Entry<Slot_Occupant, Slot> entry : solution.entrySet()) {
-            if (pref.isPreference(entry.getKey(), entry.getValue())) {
-                HashSet<Slot> preferredWith = pref.getPreferredWith(entry.getKey());
-                for (Slot slot : preferredWith) {
-			if(!entry.getValue().equals(slot)){	
-                	    double val = pref.getPreferenceValue(entry.getKey(), slot);
-                    	    prefPenalty += val;
-			}
+            HashSet<Slot> preferredWith = pref.getPreferredWith(entry.getKey());
+            for (Slot slot : preferredWith) {
+                if (!entry.getValue().equals(slot)) {
+                    double val = pref.getPreferenceValue(entry.getKey(), slot);
+                    prefPenalty += val;
                 }
             }
+
         }
 
         return prefPenalty;
