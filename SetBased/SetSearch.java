@@ -27,7 +27,7 @@ public class SetSearch{
 
 
   //private OrTreeSearch solGen;
-  private Faster_OrTree solGen;
+  public Faster_OrTree solGen;
   private Random randGen;
   private int generation;
   private Eval eval;
