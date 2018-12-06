@@ -26,8 +26,8 @@ public class SetSearch{
   private ArrayList<Integer> badParents;
 
 
-  //private OrTreeSearch solGen;
-  private Faster_OrTree solGen;
+  public OrTreeSearch solGen;
+ // public Faster_OrTree solGen;
   private Random randGen;
   private int generation;
   private Eval eval;
@@ -45,7 +45,8 @@ public class SetSearch{
 
   public SetSearch(ParseData data, String file) throws ExhaustedError {
     makeEval(data, file);
-    solGen = new Faster_OrTree(data);
+    //solGen = new Faster_OrTree(data);
+    solGen = new OrTreeSearch(data);
     workingSet = new ArrayList<Pair<Map<Slot_Occupant, Slot>, Double>>(MAX_FACTS);
     badParents = new ArrayList<Integer>();
     randGen = new Random(System.currentTimeMillis());
@@ -55,7 +56,8 @@ public class SetSearch{
 
 
     for(int i = 0; i < INIT_POPULATION && repeats < INIT_POPULATION/2; i++){ //more leniant on repeats because we want as much as possible initialy
-      Map<Slot_Occupant, Slot> out = solGen.fasterSearch();
+      //Map<Slot_Occupant, Slot> out = solGen.fasterSearch();
+    	Map<Slot_Occupant, Slot> out = solGen.OrTreeRecursiveSearch();
       if(out == null){
         done = true;
         throw new ExhaustedError(getBestSolution());
@@ -63,13 +65,14 @@ public class SetSearch{
       else if(!addToSet(out)){
         i--;
         repeats++;
+//        System.out.println("working set size = " + workingSet.size());
       }
     }
 
   }
 
   public void resetOrTree(){
-    solGen.reset();
+    //solGen.reset();
   }
 
   private void makeEval(ParseData data, String file){
@@ -212,7 +215,9 @@ public class SetSearch{
     Map<Slot_Occupant, Slot> parent = workingSet.get(randnum).getKey();
 
     for(int i = 0; i < MAX_CHILDREN_PER_PARENT && repeats < MAX_REPEATS && workingSet.size() < MAX_FACTS; i++){
-      Map<Slot_Occupant, Slot> child = solGen.fasterMutate(parent); //acquire a mutant
+      //Map<Slot_Occupant, Slot> child = solGen.fasterMutate(parent); //acquire a mutant
+    	Map<Slot_Occupant, Slot> child = solGen.mutateSearch(parent);
+//    	System.out.println("working set size = " + workingSet.size());
       if(child == null) {
           break;
       }
