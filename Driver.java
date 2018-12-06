@@ -55,9 +55,9 @@ public class Driver {
                 }//else{
                     //System.out.println("No solution was possible for this generation");
                 //}
-                if(i % 250 == 0 && i != 0){
-                  setSearch.resetOrTree();
-                }
+                //if(i % 250 == 0 && i != 0){
+              //    setSearch.resetOrTree();
+              //  }
 
             }
 

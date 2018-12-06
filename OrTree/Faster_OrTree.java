@@ -45,7 +45,7 @@ public class Faster_OrTree {
 
         this.parseData = parseData;
         constraints = new ConstraintChecker(parseData);
-        randGen = new Random();
+        randGen = new Random(System.currentTimeMillis());
 
         //The starting state of the OrTree will always be the same give the same parseData;
         startingSolution = initializePr(new LinkedHashMap<>());
