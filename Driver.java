@@ -49,15 +49,18 @@ public class Driver {
             for(int i = 0 ; i < MAX_GEN && System.currentTimeMillis() < endTime; i++ ) {
                 setSearch.runGeneration();
                 Pair<Map<Slot_Occupant, Slot>, Double> bestSolution = setSearch.getBestSolution();
+                System.out.println("Is solution valid? " + setSearch.solGen.constraints.checkHardConstraints(bestSolution.getKey()));
                 System.out.printf("Best solution for generation %s: %s\n", i, bestSolution.getValue());
                 if(bestSolution != null && i % 50 == 0 && i!= 0) {
                     printSolution(bestSolution.getKey(), bestSolution.getValue());
                 }//else{
                     //System.out.println("No solution was possible for this generation");
                 //}
+                /*
                 if(i % 250 == 0 && i != 0){
                   setSearch.resetOrTree();
                 }
+                */
 
             }
 

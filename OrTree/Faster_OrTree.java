@@ -33,12 +33,12 @@ public class Faster_OrTree {
 
     //Faster_Or_Tree Fields:
     private LinkedList<Slot_Occupant> occupantOrder;
-    private ConstraintChecker constraints;
+    public ConstraintChecker constraints;
     private OrTreeNode root;
     private Random randGen;
     private ParseData parseData;
     private LinkedHashMap<Slot_Occupant,Slot> startingSolution;
-    private HashSet<Map<Slot_Occupant,Slot>> uniqueConstraint;
+   // private HashSet<Map<Slot_Occupant,Slot>> uniqueConstraint;
 
 
     public Faster_OrTree(ParseData parseData){
@@ -65,7 +65,7 @@ public class Faster_OrTree {
         //This means we know what the root's occupant will be at this point
         root = new OrTreeNode(null, occupantOrder.get(0));
 
-        uniqueConstraint = new HashSet<Map<Slot_Occupant,Slot>>();
+        //uniqueConstraint = new HashSet<Map<Slot_Occupant,Slot>>();
     }
 
     public void reset(){
@@ -88,7 +88,7 @@ public class Faster_OrTree {
       //This means we know what the root's occupant will be at this point
       root = new OrTreeNode(null, occupantOrder.get(0));
 
-      uniqueConstraint = new HashSet<Map<Slot_Occupant,Slot>>();
+      //uniqueConstraint = new HashSet<Map<Slot_Occupant,Slot>>();
     }
 
     public LinkedHashMap<Slot_Occupant,Slot> fasterSearch(){
@@ -104,7 +104,12 @@ public class Faster_OrTree {
 
         //Run until you get a solution or the whole tree has been exhausted
         while(!root.possibleSlots.isEmpty()){
-
+        	if (!currentNode.myWorkingOccupant.equals(this.occupantOrder.get(currentOccupant))) {
+        		System.out.println("Tree is not following the node order");
+        		System.out.println("Node occupant = " + currentNode.myWorkingOccupant + " when it should be: " + this.occupantOrder.get(currentOccupant));
+        	}
+        	
+        	//System.out.println("currently working on node " + currentNode.myWorkingOccupant);
             //reset values;
             attemptedSolution = new LinkedHashMap<>(this.startingSolution);
             currentOccupant = 0;
@@ -166,12 +171,12 @@ public class Faster_OrTree {
                         }
                     }
 
-                    if(!uniqueConstraint.add(attemptedSolution)){
-                        break;
-                    }
-                    else{
+//                    if(!uniqueConstraint.add(attemptedSolution)){
+//                        break;
+//                    }
+//                    else{
                         return attemptedSolution;
-                    }
+//                    }
                 }
 
                 //See if the current node has a transition already made for the slot
@@ -226,6 +231,10 @@ public class Faster_OrTree {
         Slot parentSlot;
 
         while(!root.possibleSlots.isEmpty()){
+        	if (!currentNode.myWorkingOccupant.equals(this.occupantOrder.get(currentOccupant))) {
+        		System.out.println("Tree is not following the node order");
+        		System.out.println("Node occupant = " + currentNode.myWorkingOccupant + " when it should be: " + this.occupantOrder.get(currentOccupant));
+        	}
 
             currentOccupant = 0;
             attemptedSolution = new LinkedHashMap<>(this.startingSolution);
@@ -252,13 +261,15 @@ public class Faster_OrTree {
             while(true){
 
                 //Now we are at the mutant, if we are already skrewed here don't try this mutant again.
+            	/*
                 if(currentNode.myWorkingOccupant.equals(mutant) && currentNode.possibleSlots.size() == 0){
                     possibleMutants.remove(mutant);
                     currentNode.parent.possibleSlots.remove(currentNode.parent.lastTried);
                     currentNode.parent.verifiedSlots.replace(currentNode.parent.lastTried,false);
                     break;
                 }
-
+				*/
+            	
                 parentSlot = parent.get(currentNode.myWorkingOccupant);
 
                 if(currentNode.myWorkingOccupant.equals(mutant)) {
@@ -312,12 +323,12 @@ public class Faster_OrTree {
                         }
                     }
 
-                    if(!uniqueConstraint.add(attemptedSolution)){
-                        break;
-                    }
-                    else{
+//                    if(!uniqueConstraint.add(attemptedSolution)){
+//                        break;
+//                    }
+//                    else{
                         return attemptedSolution;
-                    }
+//                    }
                 }
 
                 //See if the current node has a transition already made for the slot
@@ -378,12 +389,13 @@ public class Faster_OrTree {
             if(currentNode.verifiedSlots.containsKey(attemptedSlot)){
                 if(currentNode.verifiedSlots.get(attemptedSlot)){break;}
             }
-
+            
+            /*
             //Otherwise check if it is valid
             attemptedSolution = new LinkedHashMap<>(currentSolution);
             attemptedSolution.put(currentNode.myWorkingOccupant,attemptedSlot);
-
-            if(!constraints.checkHardConstraints(attemptedSolution)){
+			*/
+            if(!constraints.checkHardConstraints(currentSolution, currentNode.myWorkingOccupant,attemptedSlot)){
                 currentNode.possibleSlots.remove(attemptedSlot);
                 currentNode.verifiedSlots.put(attemptedSlot,false);
             }
@@ -417,12 +429,12 @@ public class Faster_OrTree {
             if(currentNode.verifiedSlots.containsKey(attemptedSlot)){
                 if(currentNode.verifiedSlots.get(attemptedSlot)){break;}
             }
-
+            /*
             //Otherwise check if it is valid
             attemptedSolution = new LinkedHashMap<>(currentSolution);
             attemptedSolution.put(currentNode.myWorkingOccupant,attemptedSlot);
-
-            if(!constraints.checkHardConstraints(attemptedSolution)){
+			*/
+            if(!constraints.checkHardConstraints(currentSolution, currentNode.myWorkingOccupant,attemptedSlot)){
                 currentNode.possibleSlots.remove(attemptedSlot);
                 currentNode.verifiedSlots.put(attemptedSlot,false);
             }
@@ -435,19 +447,5 @@ public class Faster_OrTree {
         }
         return attemptedSlot;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }

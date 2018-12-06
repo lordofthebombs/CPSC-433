@@ -162,13 +162,13 @@ public class ConstraintChecker {
         // partial assignments already contain 813/913 into corresponding lab slots
         for(Map.Entry<Slot_Occupant, Slot> assignment : allPartialAssignments.entrySet()){
             // must check if key is a real slot occupant
-            if(baseSol.containsKey(assignment.getKey())){
+           
             	if (checkHardConstraints(baseSol, assignment.getKey(), assignment.getValue())) {
                 	baseSol.put(assignment.getKey(), assignment.getValue());
             	} else {
             		System.out.println("Partial assignment invalid due to Slot Occupant " + assignment.getKey() + " and Slot: " + assignment.getValue());
             		System.exit(-1);
-            	}
+            	
             }
         }
 
@@ -236,8 +236,10 @@ public class ConstraintChecker {
     		//System.out.println("Corresponding courses and labs were scheduled in the same slot.");
  	   		return false;
  	   	}
-
- 	   	if (!isCompatibleValid(solution, so, s)) {
+ 	   	
+ 	   	Map<Slot_Occupant, Slot> cloneSol = new HashMap<>(solution);
+ 	   	cloneSol.put(so, s);
+ 	   	if (!isCompatibleValid(cloneSol)) {
  	  		//System.out.println("Courses were incompatible.");
 	   		return false;
  	   	}
@@ -399,9 +401,10 @@ public class ConstraintChecker {
 
     	HashMap<Slot,HashSet<Slot_Occupant>> nonCompatListSoFar = new HashMap<>();
     	HashSet<Slot_Occupant> temp;
-
+    	
+    	// iterate through every slot occupant
     	for(Map.Entry entry : data.entrySet()){
-
+    		
     		Slot currentSlot = (Slot) entry.getValue();
     		Slot_Occupant currentSlotOccupant = (Slot_Occupant) entry.getKey();
 
