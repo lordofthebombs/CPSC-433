@@ -26,7 +26,7 @@ public class Driver {
         // Deal with command line args:
         System.out.println("Running ...");
 
-        if(args.length != 2){
+        if(args.length < 2){
             System.out.println("Please provide the config file followed by the input file");
             System.out.println("Usage: java Driver [configFilePath] [inputFilePath]");
             System.exit(0);
