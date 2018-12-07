@@ -1,0 +1,186 @@
+Eval-value: 3525.0
+CPSC 203 LEC 1            : MO, 8:00  
+CPSC 203 LEC 1 LAB 1      : TU, 13:00 
+CPSC 203 LEC 1 LAB 2      : TU, 11:00 
+CPSC 203 LEC 1 LAB 3      : TU, 14:00 
+CPSC 203 LEC 1 LAB 4      : MO, 14:00 
+CPSC 203 LEC 1 LAB 5      : MO, 20:00 
+CPSC 203 LEC 1 LAB 6      : TU, 12:00 
+CPSC 203 LEC 2            : TU, 8:00  
+CPSC 203 LEC 2 LAB 10     : MO, 12:00 
+CPSC 203 LEC 2 LAB 11     : FR, 14:00 
+CPSC 203 LEC 2 LAB 12     : FR, 12:00 
+CPSC 203 LEC 2 LAB 7      : MO, 8:00  
+CPSC 203 LEC 2 LAB 8      : TU, 20:00 
+CPSC 203 LEC 2 LAB 9      : MO, 10:00 
+CPSC 203 LEC 3            : MO, 9:00  
+CPSC 203 LEC 3 LAB 13     : FR, 12:00 
+CPSC 203 LEC 3 LAB 14     : MO, 16:00 
+CPSC 203 LEC 3 LAB 15     : TU, 17:00 
+CPSC 203 LEC 3 LAB 16     : MO, 17:00 
+CPSC 203 LEC 3 LAB 17     : TU, 15:00 
+CPSC 203 LEC 3 LAB 18     : TU, 12:00 
+CPSC 203 LEC 4            : TU, 12:30 
+CPSC 203 LEC 4 LAB 19     : MO, 11:00 
+CPSC 203 LEC 4 LAB 20     : FR, 10:00 
+CPSC 203 LEC 4 LAB 21     : MO, 19:00 
+CPSC 203 LEC 4 LAB 22     : MO, 10:00 
+CPSC 203 LEC 4 LAB 23     : TU, 20:00 
+CPSC 203 LEC 4 LAB 24     : MO, 18:00 
+CPSC 203 LEC 95           : MO, 18:00 
+CPSC 203 LEC 95 LAB 90    : MO, 9:00  
+CPSC 203 LEC 95 LAB 95    : MO, 19:00 
+CPSC 203 LEC 95 LAB 96    : MO, 20:00 
+CPSC 203 LEC 95 LAB 97    : FR, 18:00 
+CPSC 203 LEC 95 LAB 98    : TU, 17:00 
+CPSC 203 LEC 95 LAB 99    : MO, 17:00 
+CPSC 215 LEC 1            : MO, 8:00  
+CPSC 215 LEC 1 LAB 1      : FR, 12:00 
+CPSC 215 LEC 1 LAB 2      : TU, 9:00  
+CPSC 215 LEC 1 LAB 3      : MO, 11:00 
+CPSC 215 LEC 1 LAB 4      : TU, 13:00 
+CPSC 231 LEC 1            : TU, 12:30 
+CPSC 231 LEC 1 LAB 1      : TU, 8:00  
+CPSC 231 LEC 1 LAB 2      : FR, 8:00  
+CPSC 231 LEC 1 LAB 3      : MO, 9:00  
+CPSC 231 LEC 1 LAB 4      : MO, 11:00 
+CPSC 231 LEC 1 LAB 5      : TU, 11:00 
+CPSC 231 LEC 1 LAB 6      : FR, 12:00 
+CPSC 233 LAB 1            : TU, 16:00 
+CPSC 233 LAB 2            : MO, 12:00 
+CPSC 233 LAB 3            : TU, 12:00 
+CPSC 233 LAB 4            : TU, 14:00 
+CPSC 233 LAB 5            : FR, 12:00 
+CPSC 233 LAB 6            : MO, 15:00 
+CPSC 233 LAB 7            : MO, 16:00 
+CPSC 233 LEC 1            : TU, 17:00 
+CPSC 233 LEC 2            : MO, 13:00 
+CPSC 265 LEC 1            : MO, 13:00 
+CPSC 265 LEC 1 LAB 1      : MO, 18:00 
+CPSC 265 LEC 1 LAB 2      : TU, 10:00 
+CPSC 265 LEC 1 LAB 3      : FR, 8:00  
+CPSC 265 LEC 1 LAB 4      : TU, 15:00 
+CPSC 265 LEC 2            : MO, 20:00 
+CPSC 265 LEC 2 LAB 5      : MO, 14:00 
+CPSC 265 LEC 2 LAB 6      : MO, 15:00 
+CPSC 265 LEC 2 LAB 7      : TU, 11:00 
+CPSC 265 LEC 2 LAB 8      : TU, 15:00 
+CPSC 313 LEC 1            : TU, 9:30  
+CPSC 313 LEC 1 LAB 1      : MO, 17:00 
+CPSC 313 LEC 1 LAB 2      : MO, 11:00 
+CPSC 313 LEC 1 LAB 3      : FR, 12:00 
+CPSC 321 LEC 1            : TU, 14:00 
+CPSC 331 LEC 1            : MO, 12:00 
+CPSC 331 LEC 1 LAB 1      : MO, 15:00 
+CPSC 331 LEC 1 LAB 2      : FR, 16:00 
+CPSC 331 LEC 1 LAB 3      : MO, 13:00 
+CPSC 331 LEC 1 LAB 4      : TU, 16:00 
+CPSC 333 LEC 1            : MO, 15:00 
+CPSC 333 LEC 1 LAB 1      : MO, 9:00  
+CPSC 335 LEC 1            : TU, 17:00 
+CPSC 335 LEC 1 LAB 1      : MO, 15:00 
+CPSC 335 LEC 1 LAB 2      : TU, 11:00 
+CPSC 349 LEC 1            : MO, 17:00 
+CPSC 349 LEC 1 LAB 1      : MO, 12:00 
+CPSC 349 LEC 1 LAB 2      : MO, 13:00 
+CPSC 349 LEC 1 LAB 3      : TU, 10:00 
+CPSC 355 LEC 1            : MO, 9:00  
+CPSC 355 LEC 1 LAB 1      : TU, 13:00 
+CPSC 411 LEC 1            : MO, 13:00 
+CPSC 411 LEC 1 LAB 1      : MO, 8:00  
+CPSC 411 LEC 1 LAB 2      : TU, 17:00 
+CPSC 411 LEC 1 LAB 3      : MO, 17:00 
+CPSC 411 LEC 1 LAB 4      : TU, 14:00 
+CPSC 413 LEC 1            : TU, 9:30  
+CPSC 413 LEC 1 LAB 1      : MO, 15:00 
+CPSC 413 LEC 1 LAB 2      : FR, 14:00 
+CPSC 413 LEC 1 LAB 3      : MO, 14:00 
+CPSC 421 LAB 1            : MO, 16:00 
+CPSC 421 LEC 1            : MO, 9:00  
+CPSC 433 LAB 1            : TU, 10:00 
+CPSC 433 LAB 2            : MO, 9:00  
+CPSC 433 LEC 1            : TU, 14:00 
+CPSC 441 LEC 1            : MO, 14:00 
+CPSC 441 LEC 1 LAB 1      : TU, 14:00 
+CPSC 441 LEC 1 LAB 2      : FR, 10:00 
+CPSC 441 LEC 1 LAB 3      : MO, 12:00 
+CPSC 441 LEC 2            : MO, 11:00 
+CPSC 441 LEC 2 LAB 4      : TU, 8:00  
+CPSC 441 LEC 2 LAB 5      : TU, 14:00 
+CPSC 441 LEC 2 LAB 6      : TU, 19:00 
+CPSC 453 LAB 1            : FR, 14:00 
+CPSC 453 LAB 2            : TU, 11:00 
+CPSC 453 LAB 3            : MO, 13:00 
+CPSC 453 LAB 4            : MO, 17:00 
+CPSC 453 LEC 1            : MO, 15:00 
+CPSC 455 LAB 1            : MO, 11:00 
+CPSC 455 LAB 2            : TU, 12:00 
+CPSC 455 LEC 1            : TU, 15:30 
+CPSC 457 LEC 1            : MO, 12:00 
+CPSC 457 LEC 1 LAB 1      : MO, 17:00 
+CPSC 457 LEC 1 LAB 2      : MO, 15:00 
+CPSC 457 LEC 2            : MO, 19:00 
+CPSC 457 LEC 2 LAB 3      : TU, 19:00 
+CPSC 457 LEC 2 LAB 4      : MO, 13:00 
+CPSC 471 LAB 1            : TU, 12:00 
+CPSC 471 LAB 2            : TU, 13:00 
+CPSC 471 LAB 3            : MO, 11:00 
+CPSC 471 LAB 4            : MO, 14:00 
+CPSC 471 LEC 1            : MO, 16:00 
+CPSC 481 LEC 1            : MO, 17:00 
+CPSC 481 LEC 1 LAB 1      : TU, 15:00 
+CPSC 481 LEC 1 LAB 2      : FR, 10:00 
+CPSC 481 LEC 1 LAB 3      : MO, 13:00 
+CPSC 481 LEC 1 LAB 4      : TU, 17:00 
+CPSC 510 LAB 1            : TU, 9:00  
+CPSC 510 LEC 1            : TU, 17:00 
+CPSC 511 LAB 1            : TU, 10:00 
+CPSC 511 LEC 1            : TU, 14:00 
+CPSC 517 LAB 1            : MO, 9:00  
+CPSC 517 LEC 1            : TU, 15:30 
+CPSC 519 LAB 1            : MO, 10:00 
+CPSC 519 LEC 1            : TU, 9:30  
+CPSC 523 LAB 1            : MO, 13:00 
+CPSC 523 LEC 1            : TU, 8:00  
+CPSC 525 LAB 1            : TU, 15:00 
+CPSC 525 LEC 1            : MO, 17:00 
+CPSC 557 LAB 1            : MO, 9:00  
+CPSC 557 LEC 1            : MO, 12:00 
+CPSC 559 LAB 1            : TU, 13:00 
+CPSC 559 LAB 2            : MO, 10:00 
+CPSC 559 LEC 1            : TU, 12:30 
+CPSC 565 LAB 1            : FR, 10:00 
+CPSC 565 LAB 2            : TU, 16:00 
+CPSC 565 LEC 1            : MO, 10:00 
+CPSC 581 LAB 1            : TU, 10:00 
+CPSC 581 LAB 2            : TU, 16:00 
+CPSC 581 LEC 1            : MO, 15:00 
+CPSC 587 LAB 1            : TU, 16:00 
+CPSC 587 LAB 2            : TU, 9:00  
+CPSC 587 LEC 1            : MO, 16:00 
+CPSC 589 LAB 1            : FR, 16:00 
+CPSC 589 LAB 2            : TU, 13:00 
+CPSC 589 LEC 1            : MO, 11:00 
+CPSC 591 LAB 1            : FR, 14:00 
+CPSC 591 LAB 2            : TU, 17:00 
+CPSC 591 LEC 1            : MO, 14:00 
+CPSC 594 LAB 1            : MO, 14:00 
+CPSC 594 LEC 1            : MO, 13:00 
+CPSC 813 LAB 1            : TU, 18:00 
+CPSC 913 LAB 1            : TU, 18:00 
+SENG 311 LAB 1            : TU, 10:00 
+SENG 311 LAB 2            : TU, 17:00 
+SENG 311 LAB 3            : MO, 10:00 
+SENG 311 LEC 1            : TU, 9:30  
+SENG 411 LAB 1            : FR, 10:00 
+SENG 411 LAB 2            : FR, 16:00 
+SENG 411 LAB 3            : TU, 15:00 
+SENG 411 LAB 4            : TU, 9:00  
+SENG 411 LAB 5            : TU, 16:00 
+SENG 411 LEC 1            : MO, 10:00 
+SENG 411 LEC 2            : TU, 12:30 
+SENG 511 LAB 1            : FR, 16:00 
+SENG 511 LAB 2            : FR, 14:00 
+SENG 511 LEC 1            : TU, 18:30 
+SENG 513 LAB 1            : FR, 16:00 
+SENG 513 LEC 1            : MO, 9:00 
