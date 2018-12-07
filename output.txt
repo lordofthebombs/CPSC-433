@@ -1,0 +1,1181 @@
+Script started on 2018-12-06 20:11:45-0700
+bader@bader-VirtualBox:~/Desktop/latest-or-tree$ exitjava -Xmx6G Driver configFile.txt deptinst2.txt [1P[1@9
+Running ...
+Warning: Course Slot exists for a time a course cannot be scheduled for on line: 20
+Warning: Duplicate Non Compat statement on line: 523
+Is solution valid? true
+Best solution for generation 0: 9229.0
+Is solution valid? true
+Best solution for generation 1: 9229.0
+Is solution valid? true
+Best solution for generation 2: 9229.0
+Is solution valid? true
+Best solution for generation 3: 9229.0
+Is solution valid? true
+Best solution for generation 4: 9229.0
+Is solution valid? true
+Best solution for generation 5: 9229.0
+Is solution valid? true
+Best solution for generation 6: 9229.0
+Is solution valid? true
+Best solution for generation 7: 9229.0
+Is solution valid? true
+Best solution for generation 8: 9229.0
+Is solution valid? true
+Best solution for generation 9: 9229.0
+Is solution valid? true
+Best solution for generation 10: 9229.0
+Is solution valid? true
+Best solution for generation 11: 9229.0
+Is solution valid? true
+Best solution for generation 12: 9229.0
+Is solution valid? true
+Best solution for generation 13: 9229.0
+Is solution valid? true
+Best solution for generation 14: 9229.0
+Is solution valid? true
+Best solution for generation 15: 9229.0
+Is solution valid? true
+Best solution for generation 16: 9229.0
+Is solution valid? true
+Best solution for generation 17: 9229.0
+Is solution valid? true
+Best solution for generation 18: 9222.0
+Is solution valid? true
+Best solution for generation 19: 9222.0
+Is solution valid? true
+Best solution for generation 20: 9222.0
+Is solution valid? true
+Best solution for generation 21: 9222.0
+Is solution valid? true
+Best solution for generation 22: 9222.0
+Is solution valid? true
+Best solution for generation 23: 9222.0
+Is solution valid? true
+Best solution for generation 24: 9222.0
+Is solution valid? true
+Best solution for generation 25: 9222.0
+Is solution valid? true
+Best solution for generation 26: 9222.0
+Is solution valid? true
+Best solution for generation 27: 9222.0
+Is solution valid? true
+Best solution for generation 28: 9222.0
+Is solution valid? true
+Best solution for generation 29: 9221.0
+Is solution valid? true
+Best solution for generation 30: 9212.0
+Is solution valid? true
+Best solution for generation 31: 9172.0
+Is solution valid? true
+Best solution for generation 32: 9172.0
+Is solution valid? true
+Best solution for generation 33: 9137.0
+Is solution valid? true
+Best solution for generation 34: 9137.0
+Is solution valid? true
+Best solution for generation 35: 9137.0
+Is solution valid? true
+Best solution for generation 36: 9137.0
+Is solution valid? true
+Best solution for generation 37: 9137.0
+Is solution valid? true
+Best solution for generation 38: 9129.0
+Is solution valid? true
+Best solution for generation 39: 9129.0
+Is solution valid? true
+Best solution for generation 40: 9119.0
+Is solution valid? true
+Best solution for generation 41: 9119.0
+Is solution valid? true
+Best solution for generation 42: 9119.0
+Is solution valid? true
+Best solution for generation 43: 9119.0
+Is solution valid? true
+Best solution for generation 44: 9112.0
+Is solution valid? true
+Best solution for generation 45: 9112.0
+Is solution valid? true
+Best solution for generation 46: 9112.0
+Is solution valid? true
+Best solution for generation 47: 9112.0
+Is solution valid? true
+Best solution for generation 48: 9112.0
+Is solution valid? true
+Best solution for generation 49: 9112.0
+Is solution valid? true
+Best solution for generation 50: 9112.0
+Eval-value: 9112.0
+CPSC 203 LEC 1            : MO, 16:00 
+CPSC 203 LEC 1 LAB 1      : FR, 16:00 
+CPSC 203 LEC 1 LAB 2      : MO, 18:00 
+CPSC 203 LEC 1 LAB 3      : FR, 8:00  
+CPSC 203 LEC 1 LAB 4      : FR, 12:00 
+CPSC 203 LEC 1 LAB 5      : MO, 8:00  
+CPSC 203 LEC 1 LAB 6      : TU, 17:00 
+CPSC 203 LEC 2            : MO, 8:00  
+CPSC 203 LEC 2 LAB 10     : TU, 20:00 
+CPSC 203 LEC 2 LAB 11     : MO, 18:00 
+CPSC 203 LEC 2 LAB 12     : FR, 10:00 
+CPSC 203 LEC 2 LAB 7      : MO, 14:00 
+CPSC 203 LEC 2 LAB 8      : TU, 10:00 
+CPSC 203 LEC 2 LAB 9      : TU, 11:00 
+CPSC 203 LEC 3            : MO, 13:00 
+CPSC 203 LEC 3 LAB 13     : FR, 18:00 
+CPSC 203 LEC 3 LAB 14     : MO, 10:00 
+CPSC 203 LEC 3 LAB 15     : MO, 14:00 
+CPSC 203 LEC 3 LAB 16     : FR, 8:00  
+CPSC 203 LEC 3 LAB 17     : MO, 17:00 
+CPSC 203 LEC 3 LAB 18     : TU, 20:00 
+CPSC 203 LEC 4            : TU, 9:30  
+CPSC 203 LEC 4 LAB 19     : TU, 11:00 
+CPSC 203 LEC 4 LAB 20     : FR, 10:00 
+CPSC 203 LEC 4 LAB 21     : FR, 14:00 
+CPSC 203 LEC 4 LAB 22     : MO, 8:00  
+CPSC 203 LEC 4 LAB 23     : MO, 15:00 
+CPSC 203 LEC 4 LAB 24     : MO, 20:00 
+CPSC 203 LEC 95           : TU, 18:30 
+CPSC 203 LEC 95 LAB 90    : MO, 17:00 
+CPSC 203 LEC 95 LAB 95    : MO, 14:00 
+CPSC 203 LEC 95 LAB 96    : MO, 16:00 
+CPSC 203 LEC 95 LAB 97    : TU, 11:00 
+CPSC 203 LEC 95 LAB 98    : TU, 8:00  
+CPSC 203 LEC 95 LAB 99    : MO, 9:00  
+CPSC 215 LEC 1            : MO, 8:00  
+CPSC 215 LEC 1 LAB 1      : MO, 10:00 
+CPSC 215 LEC 1 LAB 2      : TU, 19:00 
+CPSC 215 LEC 1 LAB 3      : TU, 12:00 
+CPSC 215 LEC 1 LAB 4      : MO, 13:00 
+CPSC 231 LEC 1            : MO, 20:00 
+CPSC 231 LEC 1 LAB 1      : MO, 9:00  
+CPSC 231 LEC 1 LAB 2      : FR, 14:00 
+CPSC 231 LEC 1 LAB 3      : TU, 19:00 
+CPSC 231 LEC 1 LAB 4      : FR, 12:00 
+CPSC 231 LEC 1 LAB 5      : FR, 10:00 
+CPSC 231 LEC 1 LAB 6      : TU, 13:00 
+CPSC 233 LAB 1            : FR, 18:00 
+CPSC 233 LAB 2            : MO, 13:00 
+CPSC 233 LAB 3            : MO, 17:00 
+CPSC 233 LAB 4            : TU, 16:00 
+CPSC 233 LAB 5            : TU, 9:00  
+CPSC 233 LAB 6            : FR, 14:00 
+CPSC 233 LAB 7            : TU, 14:00 
+CPSC 233 LEC 1            : TU, 9:30  
+CPSC 233 LEC 2            : TU, 12:30 
+CPSC 265 LEC 1            : TU, 12:30 
+CPSC 265 LEC 1 LAB 1      : TU, 15:00 
+CPSC 265 LEC 1 LAB 2      : MO, 19:00 
+CPSC 265 LEC 1 LAB 3      : TU, 13:00 
+CPSC 265 LEC 1 LAB 4      : TU, 9:00  
+CPSC 265 LEC 2            : MO, 14:00 
+CPSC 265 LEC 2 LAB 5      : MO, 16:00 
+CPSC 265 LEC 2 LAB 6      : MO, 20:00 
+CPSC 265 LEC 2 LAB 7      : MO, 17:00 
+CPSC 265 LEC 2 LAB 8      : FR, 10:00 
+CPSC 313 LEC 1            : TU, 12:30 
+CPSC 313 LEC 1 LAB 1      : MO, 10:00 
+CPSC 313 LEC 1 LAB 2      : TU, 17:00 
+CPSC 313 LEC 1 LAB 3      : MO, 13:00 
+CPSC 321 LEC 1            : MO, 15:00 
+CPSC 331 LEC 1            : MO, 14:00 
+CPSC 331 LEC 1 LAB 1      : TU, 10:00 
+CPSC 331 LEC 1 LAB 2      : MO, 12:00 
+CPSC 331 LEC 1 LAB 3      : MO, 9:00  
+CPSC 331 LEC 1 LAB 4      : TU, 12:00 
+CPSC 333 LEC 1            : MO, 11:00 
+CPSC 333 LEC 1 LAB 1      : MO, 15:00 
+CPSC 335 LEC 1            : MO, 9:00  
+CPSC 335 LEC 1 LAB 1      : TU, 10:00 
+CPSC 335 LEC 1 LAB 2      : TU, 10:00 
+CPSC 349 LEC 1            : MO, 19:00 
+CPSC 349 LEC 1 LAB 1      : FR, 10:00 
+CPSC 349 LEC 1 LAB 2      : MO, 11:00 
+CPSC 349 LEC 1 LAB 3      : TU, 14:00 
+CPSC 355 LEC 1            : TU, 15:30 
+CPSC 355 LEC 1 LAB 1      : TU, 12:00 
+CPSC 411 LEC 1            : MO, 13:00 
+CPSC 411 LEC 1 LAB 1      : FR, 14:00 
+CPSC 411 LEC 1 LAB 2      : MO, 9:00  
+CPSC 411 LEC 1 LAB 3      : TU, 8:00  
+CPSC 411 LEC 1 LAB 4      : FR, 10:00 
+CPSC 413 LEC 1            : TU, 9:30  
+CPSC 413 LEC 1 LAB 1      : TU, 13:00 
+CPSC 413 LEC 1 LAB 2      : MO, 11:00 
+CPSC 413 LEC 1 LAB 3      : TU, 9:00  
+CPSC 421 LAB 1            : MO, 12:00 
+CPSC 421 LEC 1            : MO, 15:00 
+CPSC 433 LAB 1            : MO, 17:00 
+CPSC 433 LAB 2            : TU, 16:00 
+CPSC 433 LEC 1            : TU, 14:00 
+CPSC 441 LEC 1            : TU, 17:00 
+CPSC 441 LEC 1 LAB 1      : TU, 16:00 
+CPSC 441 LEC 1 LAB 2      : MO, 13:00 
+CPSC 441 LEC 1 LAB 3      : MO, 14:00 
+CPSC 441 LEC 2            : MO, 10:00 
+CPSC 441 LEC 2 LAB 4      : MO, 13:00 
+CPSC 441 LEC 2 LAB 5      : MO, 14:00 
+CPSC 441 LEC 2 LAB 6      : FR, 16:00 
+CPSC 453 LAB 1            : FR, 16:00 
+CPSC 453 LAB 2            : MO, 16:00 
+CPSC 453 LAB 3            : MO, 17:00 
+CPSC 453 LAB 4            : TU, 11:00 
+CPSC 453 LEC 1            : MO, 9:00  
+CPSC 455 LAB 1            : TU, 12:00 
+CPSC 455 LAB 2            : MO, 12:00 
+CPSC 455 LEC 1            : MO, 17:00 
+CPSC 457 LEC 1            : MO, 11:00 
+CPSC 457 LEC 1 LAB 1      : FR, 12:00 
+CPSC 457 LEC 1 LAB 2      : FR, 14:00 
+CPSC 457 LEC 2            : MO, 16:00 
+CPSC 457 LEC 2 LAB 3      : MO, 14:00 
+CPSC 457 LEC 2 LAB 4      : TU, 13:00 
+CPSC 471 LAB 1            : MO, 15:00 
+CPSC 471 LAB 2            : FR, 14:00 
+CPSC 471 LAB 3            : FR, 12:00 
+CPSC 471 LAB 4            : TU, 14:00 
+CPSC 471 LEC 1            : MO, 14:00 
+CPSC 481 LEC 1            : MO, 12:00 
+CPSC 481 LEC 1 LAB 1      : TU, 13:00 
+CPSC 481 LEC 1 LAB 2      : TU, 17:00 
+CPSC 481 LEC 1 LAB 3      : FR, 12:00 
+CPSC 481 LEC 1 LAB 4      : TU, 16:00 
+CPSC 510 LAB 1            : TU, 11:00 
+CPSC 510 LEC 1            : MO, 11:00 
+CPSC 511 LAB 1            : MO, 15:00 
+CPSC 511 LEC 1            : TU, 14:00 
+CPSC 517 LAB 1            : MO, 16:00 
+CPSC 517 LEC 1            : TU, 15:30 
+CPSC 519 LAB 1            : MO, 12:00 
+CPSC 519 LEC 1            : TU, 9:30  
+CPSC 523 LAB 1            : MO, 11:00 
+CPSC 523 LEC 1            : MO, 15:00 
+CPSC 525 LAB 1            : MO, 11:00 
+CPSC 525 LEC 1            : MO, 18:00 
+CPSC 557 LAB 1            : TU, 11:00 
+CPSC 557 LEC 1            : TU, 8:00  
+CPSC 559 LAB 1            : TU, 15:00 
+CPSC 559 LAB 2            : MO, 11:00 
+CPSC 559 LEC 1            : MO, 17:00 
+CPSC 565 LAB 1            : FR, 16:00 
+CPSC 565 LAB 2            : TU, 9:00  
+CPSC 565 LEC 1            : TU, 17:00 
+CPSC 581 LAB 1            : TU, 10:00 
+CPSC 581 LAB 2            : FR, 12:00 
+CPSC 581 LEC 1            : MO, 9:00  
+CPSC 587 LAB 1            : MO, 9:00  
+CPSC 587 LAB 2            : TU, 12:00 
+CPSC 587 LEC 1            : TU, 12:30 
+CPSC 589 LAB 1            : MO, 11:00 
+CPSC 589 LAB 2            : TU, 17:00 
+CPSC 589 LEC 1            : MO, 13:00 
+CPSC 591 LAB 1            : MO, 16:00 
+CPSC 591 LAB 2            : TU, 9:00  
+CPSC 591 LEC 1            : MO, 14:00 
+CPSC 594 LAB 1            : TU, 15:00 
+CPSC 594 LEC 1            : MO, 10:00 
+CPSC 813 LAB 1            : TU, 18:00 
+CPSC 913 LAB 1            : TU, 18:00 
+SENG 311 LAB 1            : TU, 10:00 
+SENG 311 LAB 2            : MO, 15:00 
+SENG 311 LAB 3            : TU, 12:00 
+SENG 311 LEC 1            : MO, 10:00 
+SENG 411 LAB 1            : TU, 13:00 
+SENG 411 LAB 2            : MO, 10:00 
+SENG 411 LAB 3            : TU, 14:00 
+SENG 411 LAB 4            : FR, 16:00 
+SENG 411 LAB 5            : MO, 12:00 
+SENG 411 LEC 1            : TU, 15:30 
+SENG 411 LEC 2            : TU, 15:30 
+SENG 511 LAB 1            : FR, 16:00 
+SENG 511 LAB 2            : TU, 17:00 
+SENG 511 LEC 1            : MO, 12:00 
+SENG 513 LAB 1            : MO, 10:00 
+SENG 513 LEC 1            : MO, 16:00 
+Is solution valid? true
+Best solution for generation 51: 9112.0
+Is solution valid? true
+Best solution for generation 52: 9054.0
+Is solution valid? true
+Best solution for generation 53: 9054.0
+Is solution valid? true
+Best solution for generation 54: 9054.0
+Is solution valid? true
+Best solution for generation 55: 9054.0
+Is solution valid? true
+Best solution for generation 56: 9054.0
+Is solution valid? true
+Best solution for generation 57: 9029.0
+Is solution valid? true
+Best solution for generation 58: 9029.0
+^[[A    Is solution valid? true
+Best solution for generation 59: 9029.0
+Is solution valid? true
+Best solution for generation 60: 9029.0
+Is solution valid? true
+Best solution for generation 61: 9029.0
+Is solution valid? true
+Best solution for generation 62: 9029.0
+Is solution valid? true
+Best solution for generation 63: 9029.0
+Is solution valid? true
+Best solution for generation 64: 9029.0
+Is solution valid? true
+Best solution for generation 65: 9029.0
+Is solution valid? true
+Best solution for generation 66: 9029.0
+Is solution valid? true
+Best solution for generation 67: 9029.0
+Is solution valid? true
+Best solution for generation 68: 9029.0
+Is solution valid? true
+Best solution for generation 69: 9029.0
+Is solution valid? true
+Best solution for generation 70: 9029.0
+Is solution valid? true
+Best solution for generation 71: 9012.0
+Is solution valid? true
+Best solution for generation 72: 9012.0
+Is solution valid? true
+Best solution for generation 73: 9012.0
+Is solution valid? true
+Best solution for generation 74: 9012.0
+Is solution valid? true
+Best solution for generation 75: 9012.0
+Is solution valid? true
+Best solution for generation 76: 9004.0
+Is solution valid? true
+Best solution for generation 77: 9004.0
+Is solution valid? true
+Best solution for generation 78: 9004.0
+Is solution valid? true
+Best solution for generation 79: 9004.0
+Is solution valid? true
+Best solution for generation 80: 9004.0
+Is solution valid? true
+Best solution for generation 81: 9004.0
+Is solution valid? true
+Best solution for generation 82: 9004.0
+Is solution valid? true
+Best solution for generation 83: 9003.0
+Is solution valid? true
+Best solution for generation 84: 9003.0
+Is solution valid? true
+Best solution for generation 85: 9003.0
+Is solution valid? true
+Best solution for generation 86: 9003.0
+Is solution valid? true
+Best solution for generation 87: 9003.0
+Is solution valid? true
+Best solution for generation 88: 9003.0
+Is solution valid? true
+Best solution for generation 89: 9003.0
+Is solution valid? true
+Best solution for generation 90: 8993.0
+Is solution valid? true
+Best solution for generation 91: 8993.0
+Is solution valid? true
+Best solution for generation 92: 8993.0
+Is solution valid? true
+Best solution for generation 93: 8904.0
+Is solution valid? true
+Best solution for generation 94: 8904.0
+Is solution valid? true
+Best solution for generation 95: 8904.0
+Is solution valid? true
+Best solution for generation 96: 8904.0
+Is solution valid? true
+Best solution for generation 97: 8904.0
+Is solution valid? true
+Best solution for generation 98: 8904.0
+Is solution valid? true
+Best solution for generation 99: 8904.0
+Is solution valid? true
+Best solution for generation 100: 8904.0
+Eval-value: 8904.0
+CPSC 203 LEC 1            : TU, 8:00  
+CPSC 203 LEC 1 LAB 1      : MO, 10:00 
+CPSC 203 LEC 1 LAB 2      : MO, 15:00 
+CPSC 203 LEC 1 LAB 3      : MO, 16:00 
+CPSC 203 LEC 1 LAB 4      : MO, 14:00 
+CPSC 203 LEC 1 LAB 5      : TU, 14:00 
+CPSC 203 LEC 1 LAB 6      : TU, 17:00 
+CPSC 203 LEC 2            : MO, 8:00  
+CPSC 203 LEC 2 LAB 10     : TU, 8:00  
+CPSC 203 LEC 2 LAB 11     : TU, 17:00 
+CPSC 203 LEC 2 LAB 12     : MO, 17:00 
+CPSC 203 LEC 2 LAB 7      : TU, 19:00 
+CPSC 203 LEC 2 LAB 8      : MO, 16:00 
+CPSC 203 LEC 2 LAB 9      : FR, 14:00 
+CPSC 203 LEC 3            : TU, 8:00  
+CPSC 203 LEC 3 LAB 13     : FR, 12:00 
+CPSC 203 LEC 3 LAB 14     : MO, 18:00 
+CPSC 203 LEC 3 LAB 15     : MO, 20:00 
+CPSC 203 LEC 3 LAB 16     : MO, 15:00 
+CPSC 203 LEC 3 LAB 17     : MO, 16:00 
+CPSC 203 LEC 3 LAB 18     : MO, 10:00 
+CPSC 203 LEC 4            : TU, 9:30  
+CPSC 203 LEC 4 LAB 19     : TU, 12:00 
+CPSC 203 LEC 4 LAB 20     : MO, 14:00 
+CPSC 203 LEC 4 LAB 21     : FR, 14:00 
+CPSC 203 LEC 4 LAB 22     : TU, 8:00  
+CPSC 203 LEC 4 LAB 23     : TU, 13:00 
+CPSC 203 LEC 4 LAB 24     : MO, 10:00 
+CPSC 203 LEC 95           : MO, 20:00 
+CPSC 203 LEC 95 LAB 90    : MO, 13:00 
+CPSC 203 LEC 95 LAB 95    : MO, 17:00 
+CPSC 203 LEC 95 LAB 96    : MO, 12:00 
+CPSC 203 LEC 95 LAB 97    : TU, 20:00 
+CPSC 203 LEC 95 LAB 98    : MO, 19:00 
+CPSC 203 LEC 95 LAB 99    : TU, 19:00 
+CPSC 215 LEC 1            : MO, 8:00  
+CPSC 215 LEC 1 LAB 1      : MO, 11:00 
+CPSC 215 LEC 1 LAB 2      : MO, 9:00  
+CPSC 215 LEC 1 LAB 3      : MO, 19:00 
+CPSC 215 LEC 1 LAB 4      : MO, 14:00 
+CPSC 231 LEC 1            : MO, 10:00 
+CPSC 231 LEC 1 LAB 1      : MO, 17:00 
+CPSC 231 LEC 1 LAB 2      : TU, 17:00 
+CPSC 231 LEC 1 LAB 3      : MO, 11:00 
+CPSC 231 LEC 1 LAB 4      : TU, 12:00 
+CPSC 231 LEC 1 LAB 5      : FR, 10:00 
+CPSC 231 LEC 1 LAB 6      : TU, 16:00 
+CPSC 233 LAB 1            : FR, 12:00 
+CPSC 233 LAB 2            : TU, 13:00 
+CPSC 233 LAB 3            : MO, 12:00 
+CPSC 233 LAB 4            : TU, 12:00 
+CPSC 233 LAB 5            : MO, 13:00 
+CPSC 233 LAB 6            : MO, 17:00 
+CPSC 233 LAB 7            : MO, 16:00 
+CPSC 233 LEC 1            : TU, 17:00 
+CPSC 233 LEC 2            : TU, 12:30 
+CPSC 265 LEC 1            : TU, 17:00 
+CPSC 265 LEC 1 LAB 1      : MO, 10:00 
+CPSC 265 LEC 1 LAB 2      : MO, 9:00  
+CPSC 265 LEC 1 LAB 3      : FR, 16:00 
+CPSC 265 LEC 1 LAB 4      : TU, 9:00  
+CPSC 265 LEC 2            : MO, 16:00 
+CPSC 265 LEC 2 LAB 5      : FR, 18:00 
+CPSC 265 LEC 2 LAB 6      : MO, 14:00 
+CPSC 265 LEC 2 LAB 7      : TU, 14:00 
+CPSC 265 LEC 2 LAB 8      : MO, 11:00 
+CPSC 313 LEC 1            : MO, 13:00 
+CPSC 313 LEC 1 LAB 1      : TU, 9:00  
+CPSC 313 LEC 1 LAB 2      : TU, 20:00 
+CPSC 313 LEC 1 LAB 3      : MO, 16:00 
+CPSC 321 LEC 1            : TU, 14:00 
+CPSC 331 LEC 1            : MO, 12:00 
+CPSC 331 LEC 1 LAB 1      : TU, 15:00 
+CPSC 331 LEC 1 LAB 2      : TU, 13:00 
+CPSC 331 LEC 1 LAB 3      : FR, 10:00 
+CPSC 331 LEC 1 LAB 4      : FR, 18:00 
+CPSC 333 LEC 1            : MO, 16:00 
+CPSC 333 LEC 1 LAB 1      : MO, 13:00 
+CPSC 335 LEC 1            : TU, 9:30  
+CPSC 335 LEC 1 LAB 1      : FR, 10:00 
+CPSC 335 LEC 1 LAB 2      : TU, 15:00 
+CPSC 349 LEC 1            : MO, 15:00 
+CPSC 349 LEC 1 LAB 1      : TU, 14:00 
+CPSC 349 LEC 1 LAB 2      : TU, 12:00 
+CPSC 349 LEC 1 LAB 3      : TU, 13:00 
+CPSC 355 LEC 1            : MO, 17:00 
+CPSC 355 LEC 1 LAB 1      : TU, 14:00 
+CPSC 411 LEC 1            : TU, 14:00 
+CPSC 411 LEC 1 LAB 1      : TU, 15:00 
+CPSC 411 LEC 1 LAB 2      : MO, 12:00 
+CPSC 411 LEC 1 LAB 3      : TU, 13:00 
+CPSC 411 LEC 1 LAB 4      : MO, 11:00 
+CPSC 413 LEC 1            : TU, 17:00 
+CPSC 413 LEC 1 LAB 1      : FR, 14:00 
+CPSC 413 LEC 1 LAB 2      : MO, 9:00  
+CPSC 413 LEC 1 LAB 3      : TU, 15:00 
+CPSC 421 LAB 1            : FR, 16:00 
+CPSC 421 LEC 1            : MO, 9:00  
+CPSC 433 LAB 1            : FR, 10:00 
+CPSC 433 LAB 2            : TU, 12:00 
+CPSC 433 LEC 1            : TU, 12:30 
+CPSC 441 LEC 1            : TU, 15:30 
+CPSC 441 LEC 1 LAB 1      : MO, 13:00 
+CPSC 441 LEC 1 LAB 2      : FR, 8:00  
+CPSC 441 LEC 1 LAB 3      : MO, 9:00  
+CPSC 441 LEC 2            : TU, 15:30 
+CPSC 441 LEC 2 LAB 4      : MO, 11:00 
+CPSC 441 LEC 2 LAB 5      : FR, 16:00 
+CPSC 441 LEC 2 LAB 6      : MO, 16:00 
+CPSC 453 LAB 1            : TU, 14:00 
+CPSC 453 LAB 2            : MO, 12:00 
+CPSC 453 LAB 3            : MO, 15:00 
+CPSC 453 LAB 4            : MO, 14:00 
+CPSC 453 LEC 1            : TU, 9:30  
+CPSC 455 LAB 1            : MO, 13:00 
+CPSC 455 LAB 2            : TU, 17:00 
+CPSC 455 LEC 1            : MO, 14:00 
+CPSC 457 LEC 1            : TU, 18:30 
+CPSC 457 LEC 1 LAB 1      : TU, 16:00 
+CPSC 457 LEC 1 LAB 2      : FR, 8:00  
+CPSC 457 LEC 2            : MO, 13:00 
+CPSC 457 LEC 2 LAB 3      : FR, 12:00 
+CPSC 457 LEC 2 LAB 4      : TU, 10:00 
+CPSC 471 LAB 1            : TU, 14:00 
+CPSC 471 LAB 2            : TU, 16:00 
+CPSC 471 LAB 3            : TU, 10:00 
+CPSC 471 LAB 4            : TU, 9:00  
+CPSC 471 LEC 1            : MO, 12:00 
+CPSC 481 LEC 1            : MO, 10:00 
+CPSC 481 LEC 1 LAB 1      : FR, 10:00 
+CPSC 481 LEC 1 LAB 2      : TU, 11:00 
+CPSC 481 LEC 1 LAB 3      : MO, 12:00 
+CPSC 481 LEC 1 LAB 4      : TU, 10:00 
+CPSC 510 LAB 1            : MO, 15:00 
+CPSC 510 LEC 1            : MO, 9:00  
+CPSC 511 LAB 1            : FR, 16:00 
+CPSC 511 LEC 1            : TU, 12:30 
+CPSC 517 LAB 1            : TU, 10:00 
+CPSC 517 LEC 1            : TU, 9:30  
+CPSC 519 LAB 1            : TU, 11:00 
+CPSC 519 LEC 1            : TU, 15:30 
+CPSC 523 LAB 1            : TU, 16:00 
+CPSC 523 LEC 1            : MO, 14:00 
+CPSC 525 LAB 1            : TU, 16:00 
+CPSC 525 LEC 1            : MO, 15:00 
+CPSC 557 LAB 1            : TU, 15:00 
+CPSC 557 LEC 1            : MO, 12:00 
+CPSC 559 LAB 1            : TU, 17:00 
+CPSC 559 LAB 2            : MO, 17:00 
+CPSC 559 LEC 1            : MO, 19:00 
+CPSC 565 LAB 1            : MO, 8:00  
+CPSC 565 LAB 2            : TU, 15:00 
+CPSC 565 LEC 1            : MO, 13:00 
+CPSC 581 LAB 1            : MO, 15:00 
+CPSC 581 LAB 2            : TU, 17:00 
+CPSC 581 LEC 1            : TU, 14:00 
+CPSC 587 LAB 1            : TU, 12:00 
+CPSC 587 LAB 2            : FR, 16:00 
+CPSC 587 LEC 1            : MO, 16:00 
+CPSC 589 LAB 1            : MO, 8:00  
+CPSC 589 LAB 2            : TU, 9:00  
+CPSC 589 LEC 1            : MO, 10:00 
+CPSC 591 LAB 1            : MO, 20:00 
+CPSC 591 LAB 2            : MO, 17:00 
+CPSC 591 LEC 1            : TU, 17:00 
+CPSC 594 LAB 1            : TU, 11:00 
+CPSC 594 LEC 1            : MO, 11:00 
+CPSC 813 LAB 1            : TU, 18:00 
+CPSC 913 LAB 1            : TU, 18:00 
+SENG 311 LAB 1            : FR, 12:00 
+SENG 311 LAB 2            : TU, 10:00 
+SENG 311 LAB 3            : FR, 12:00 
+SENG 311 LEC 1            : MO, 14:00 
+SENG 411 LAB 1            : FR, 14:00 
+SENG 411 LAB 2            : TU, 9:00  
+SENG 411 LAB 3            : FR, 12:00 
+SENG 411 LAB 4            : MO, 13:00 
+SENG 411 LAB 5            : MO, 9:00  
+SENG 411 LEC 1            : MO, 16:00 
+SENG 411 LEC 2            : MO, 16:00 
+SENG 511 LAB 1            : TU, 11:00 
+SENG 511 LAB 2            : FR, 16:00 
+SENG 511 LEC 1            : MO, 17:00 
+SENG 513 LAB 1            : MO, 11:00 
+SENG 513 LEC 1            : MO, 18:00 
+Is solution valid? true
+Best solution for generation 101: 8904.0
+Is solution valid? true
+Best solution for generation 102: 8904.0
+Is solution valid? true
+Best solution for generation 103: 8904.0
+Is solution valid? true
+Best solution for generation 104: 8902.0
+Is solution valid? true
+Best solution for generation 105: 8902.0
+Is solution valid? true
+Best solution for generation 106: 8902.0
+Is solution valid? true
+Best solution for generation 107: 8902.0
+Is solution valid? true
+Best solution for generation 108: 8902.0
+Is solution valid? true
+Best solution for generation 109: 8902.0
+Is solution valid? true
+Best solution for generation 110: 8902.0
+Is solution valid? true
+Best solution for generation 111: 8902.0
+Is solution valid? true
+Best solution for generation 112: 8902.0
+Is solution valid? true
+Best solution for generation 113: 8902.0
+Is solution valid? true
+Best solution for generation 114: 8902.0
+Is solution valid? true
+Best solution for generation 115: 8902.0
+Is solution valid? true
+Best solution for generation 116: 8893.0
+Is solution valid? true
+Best solution for generation 117: 8893.0
+Is solution valid? true
+Best solution for generation 118: 8893.0
+Is solution valid? true
+Best solution for generation 119: 8879.0
+Is solution valid? true
+Best solution for generation 120: 8879.0
+Is solution valid? true
+Best solution for generation 121: 8879.0
+Is solution valid? true
+Best solution for generation 122: 8879.0
+Is solution valid? true
+Best solution for generation 123: 8879.0
+Is solution valid? true
+Best solution for generation 124: 8879.0
+Is solution valid? true
+Best solution for generation 125: 8879.0
+Is solution valid? true
+Best solution for generation 126: 8879.0
+Is solution valid? true
+Best solution for generation 127: 8878.0
+Is solution valid? true
+Best solution for generation 128: 8878.0
+Is solution valid? true
+Best solution for generation 129: 8878.0
+Is solution valid? true
+Best solution for generation 130: 8878.0
+Is solution valid? true
+Best solution for generation 131: 8878.0
+Is solution valid? true
+Best solution for generation 132: 8878.0
+Is solution valid? true
+Best solution for generation 133: 8878.0
+Is solution valid? true
+Best solution for generation 134: 8878.0
+Is solution valid? true
+Best solution for generation 135: 8878.0
+Is solution valid? true
+Best solution for generation 136: 8878.0
+Is solution valid? true
+Best solution for generation 137: 8878.0
+Is solution valid? true
+Best solution for generation 138: 8878.0
+Is solution valid? true
+Best solution for generation 139: 8878.0
+Is solution valid? true
+Best solution for generation 140: 8878.0
+Is solution valid? true
+Best solution for generation 141: 8878.0
+Is solution valid? true
+Best solution for generation 142: 8878.0
+Is solution valid? true
+Best solution for generation 143: 8878.0
+Is solution valid? true
+Best solution for generation 144: 8868.0
+Is solution valid? true
+Best solution for generation 145: 8868.0
+Is solution valid? true
+Best solution for generation 146: 8868.0
+Is solution valid? true
+Best solution for generation 147: 8868.0
+Is solution valid? true
+Best solution for generation 148: 8868.0
+Is solution valid? true
+Best solution for generation 149: 8868.0
+Is solution valid? true
+Best solution for generation 150: 8868.0
+Eval-value: 8868.0
+CPSC 203 LEC 1            : TU, 8:00  
+CPSC 203 LEC 1 LAB 1      : MO, 10:00 
+CPSC 203 LEC 1 LAB 2      : MO, 15:00 
+CPSC 203 LEC 1 LAB 3      : MO, 16:00 
+CPSC 203 LEC 1 LAB 4      : MO, 14:00 
+CPSC 203 LEC 1 LAB 5      : TU, 14:00 
+CPSC 203 LEC 1 LAB 6      : TU, 17:00 
+CPSC 203 LEC 2            : MO, 8:00  
+CPSC 203 LEC 2 LAB 10     : TU, 8:00  
+CPSC 203 LEC 2 LAB 11     : TU, 17:00 
+CPSC 203 LEC 2 LAB 12     : MO, 17:00 
+CPSC 203 LEC 2 LAB 7      : TU, 19:00 
+CPSC 203 LEC 2 LAB 8      : MO, 16:00 
+CPSC 203 LEC 2 LAB 9      : FR, 14:00 
+CPSC 203 LEC 3            : TU, 8:00  
+CPSC 203 LEC 3 LAB 13     : FR, 12:00 
+CPSC 203 LEC 3 LAB 14     : MO, 18:00 
+CPSC 203 LEC 3 LAB 15     : MO, 20:00 
+CPSC 203 LEC 3 LAB 16     : MO, 15:00 
+CPSC 203 LEC 3 LAB 17     : MO, 16:00 
+CPSC 203 LEC 3 LAB 18     : MO, 10:00 
+CPSC 203 LEC 4            : TU, 9:30  
+CPSC 203 LEC 4 LAB 19     : TU, 12:00 
+CPSC 203 LEC 4 LAB 20     : MO, 13:00 
+CPSC 203 LEC 4 LAB 21     : FR, 14:00 
+CPSC 203 LEC 4 LAB 22     : TU, 8:00  
+CPSC 203 LEC 4 LAB 23     : TU, 13:00 
+CPSC 203 LEC 4 LAB 24     : MO, 10:00 
+CPSC 203 LEC 95           : MO, 20:00 
+CPSC 203 LEC 95 LAB 90    : MO, 13:00 
+CPSC 203 LEC 95 LAB 95    : MO, 17:00 
+CPSC 203 LEC 95 LAB 96    : TU, 17:00 
+CPSC 203 LEC 95 LAB 97    : TU, 20:00 
+CPSC 203 LEC 95 LAB 98    : MO, 19:00 
+CPSC 203 LEC 95 LAB 99    : TU, 19:00 
+CPSC 215 LEC 1            : MO, 8:00  
+CPSC 215 LEC 1 LAB 1      : MO, 11:00 
+CPSC 215 LEC 1 LAB 2      : MO, 9:00  
+CPSC 215 LEC 1 LAB 3      : MO, 19:00 
+CPSC 215 LEC 1 LAB 4      : MO, 14:00 
+CPSC 231 LEC 1            : MO, 10:00 
+CPSC 231 LEC 1 LAB 1      : MO, 17:00 
+CPSC 231 LEC 1 LAB 2      : TU, 17:00 
+CPSC 231 LEC 1 LAB 3      : MO, 11:00 
+CPSC 231 LEC 1 LAB 4      : TU, 12:00 
+CPSC 231 LEC 1 LAB 5      : FR, 10:00 
+CPSC 231 LEC 1 LAB 6      : TU, 16:00 
+CPSC 233 LAB 1            : TU, 13:00 
+CPSC 233 LAB 2            : MO, 9:00  
+CPSC 233 LAB 3            : MO, 12:00 
+CPSC 233 LAB 4            : TU, 12:00 
+CPSC 233 LAB 5            : MO, 13:00 
+CPSC 233 LAB 6            : MO, 17:00 
+CPSC 233 LAB 7            : MO, 16:00 
+CPSC 233 LEC 1            : TU, 17:00 
+CPSC 233 LEC 2            : TU, 12:30 
+CPSC 265 LEC 1            : TU, 17:00 
+CPSC 265 LEC 1 LAB 1      : MO, 15:00 
+CPSC 265 LEC 1 LAB 2      : MO, 9:00  
+CPSC 265 LEC 1 LAB 3      : FR, 16:00 
+CPSC 265 LEC 1 LAB 4      : TU, 9:00  
+CPSC 265 LEC 2            : MO, 16:00 
+CPSC 265 LEC 2 LAB 5      : FR, 18:00 
+CPSC 265 LEC 2 LAB 6      : MO, 14:00 
+CPSC 265 LEC 2 LAB 7      : TU, 14:00 
+CPSC 265 LEC 2 LAB 8      : MO, 11:00 
+CPSC 313 LEC 1            : MO, 13:00 
+CPSC 313 LEC 1 LAB 1      : TU, 9:00  
+CPSC 313 LEC 1 LAB 2      : TU, 20:00 
+CPSC 313 LEC 1 LAB 3      : MO, 16:00 
+CPSC 321 LEC 1            : TU, 14:00 
+CPSC 331 LEC 1            : MO, 12:00 
+CPSC 331 LEC 1 LAB 1      : TU, 15:00 
+CPSC 331 LEC 1 LAB 2      : TU, 13:00 
+CPSC 331 LEC 1 LAB 3      : FR, 10:00 
+CPSC 331 LEC 1 LAB 4      : FR, 18:00 
+CPSC 333 LEC 1            : MO, 16:00 
+CPSC 333 LEC 1 LAB 1      : MO, 13:00 
+CPSC 335 LEC 1            : TU, 9:30  
+CPSC 335 LEC 1 LAB 1      : FR, 10:00 
+CPSC 335 LEC 1 LAB 2      : TU, 15:00 
+CPSC 349 LEC 1            : MO, 15:00 
+CPSC 349 LEC 1 LAB 1      : TU, 14:00 
+CPSC 349 LEC 1 LAB 2      : TU, 12:00 
+CPSC 349 LEC 1 LAB 3      : TU, 13:00 
+CPSC 355 LEC 1            : MO, 17:00 
+CPSC 355 LEC 1 LAB 1      : TU, 14:00 
+CPSC 411 LEC 1            : TU, 14:00 
+CPSC 411 LEC 1 LAB 1      : TU, 15:00 
+CPSC 411 LEC 1 LAB 2      : MO, 12:00 
+CPSC 411 LEC 1 LAB 3      : TU, 13:00 
+CPSC 411 LEC 1 LAB 4      : MO, 11:00 
+CPSC 413 LEC 1            : TU, 17:00 
+CPSC 413 LEC 1 LAB 1      : FR, 14:00 
+CPSC 413 LEC 1 LAB 2      : MO, 9:00  
+CPSC 413 LEC 1 LAB 3      : TU, 15:00 
+CPSC 421 LAB 1            : FR, 16:00 
+CPSC 421 LEC 1            : MO, 9:00  
+CPSC 433 LAB 1            : FR, 10:00 
+CPSC 433 LAB 2            : TU, 12:00 
+CPSC 433 LEC 1            : TU, 12:30 
+CPSC 441 LEC 1            : TU, 15:30 
+CPSC 441 LEC 1 LAB 1      : MO, 16:00 
+CPSC 441 LEC 1 LAB 2      : FR, 8:00  
+CPSC 441 LEC 1 LAB 3      : MO, 9:00  
+CPSC 441 LEC 2            : TU, 15:30 
+CPSC 441 LEC 2 LAB 4      : FR, 10:00 
+CPSC 441 LEC 2 LAB 5      : FR, 16:00 
+CPSC 441 LEC 2 LAB 6      : TU, 15:00 
+CPSC 453 LAB 1            : TU, 14:00 
+CPSC 453 LAB 2            : MO, 12:00 
+CPSC 453 LAB 3            : MO, 15:00 
+CPSC 453 LAB 4            : MO, 14:00 
+CPSC 453 LEC 1            : TU, 9:30  
+CPSC 455 LAB 1            : MO, 13:00 
+CPSC 455 LAB 2            : TU, 17:00 
+CPSC 455 LEC 1            : MO, 14:00 
+CPSC 457 LEC 1            : MO, 11:00 
+CPSC 457 LEC 1 LAB 1      : TU, 16:00 
+CPSC 457 LEC 1 LAB 2      : FR, 8:00  
+CPSC 457 LEC 2            : MO, 13:00 
+CPSC 457 LEC 2 LAB 3      : FR, 12:00 
+CPSC 457 LEC 2 LAB 4      : MO, 15:00 
+CPSC 471 LAB 1            : TU, 14:00 
+CPSC 471 LAB 2            : TU, 16:00 
+CPSC 471 LAB 3            : TU, 10:00 
+CPSC 471 LAB 4            : TU, 9:00  
+CPSC 471 LEC 1            : MO, 12:00 
+CPSC 481 LEC 1            : MO, 10:00 
+CPSC 481 LEC 1 LAB 1      : FR, 10:00 
+CPSC 481 LEC 1 LAB 2      : MO, 15:00 
+CPSC 481 LEC 1 LAB 3      : TU, 15:00 
+CPSC 481 LEC 1 LAB 4      : TU, 10:00 
+CPSC 510 LAB 1            : MO, 12:00 
+CPSC 510 LEC 1            : MO, 9:00  
+CPSC 511 LAB 1            : FR, 16:00 
+CPSC 511 LEC 1            : TU, 12:30 
+CPSC 517 LAB 1            : TU, 10:00 
+CPSC 517 LEC 1            : TU, 9:30  
+CPSC 519 LAB 1            : TU, 11:00 
+CPSC 519 LEC 1            : TU, 15:30 
+CPSC 523 LAB 1            : MO, 11:00 
+CPSC 523 LEC 1            : MO, 17:00 
+CPSC 525 LAB 1            : TU, 16:00 
+CPSC 525 LEC 1            : MO, 15:00 
+CPSC 557 LAB 1            : MO, 9:00  
+CPSC 557 LEC 1            : MO, 14:00 
+CPSC 559 LAB 1            : TU, 17:00 
+CPSC 559 LAB 2            : MO, 14:00 
+CPSC 559 LEC 1            : MO, 19:00 
+CPSC 565 LAB 1            : MO, 8:00  
+CPSC 565 LAB 2            : FR, 14:00 
+CPSC 565 LEC 1            : MO, 13:00 
+CPSC 581 LAB 1            : MO, 17:00 
+CPSC 581 LAB 2            : MO, 13:00 
+CPSC 581 LEC 1            : MO, 12:00 
+CPSC 587 LAB 1            : TU, 12:00 
+CPSC 587 LAB 2            : FR, 16:00 
+CPSC 587 LEC 1            : MO, 16:00 
+CPSC 589 LAB 1            : MO, 8:00  
+CPSC 589 LAB 2            : TU, 9:00  
+CPSC 589 LEC 1            : MO, 10:00 
+CPSC 591 LAB 1            : MO, 20:00 
+CPSC 591 LAB 2            : TU, 11:00 
+CPSC 591 LEC 1            : MO, 18:00 
+CPSC 594 LAB 1            : TU, 11:00 
+CPSC 594 LEC 1            : MO, 11:00 
+CPSC 813 LAB 1            : TU, 18:00 
+CPSC 913 LAB 1            : TU, 18:00 
+SENG 311 LAB 1            : FR, 12:00 
+SENG 311 LAB 2            : TU, 10:00 
+SENG 311 LAB 3            : FR, 12:00 
+SENG 311 LEC 1            : MO, 14:00 
+SENG 411 LAB 1            : FR, 14:00 
+SENG 411 LAB 2            : TU, 9:00  
+SENG 411 LAB 3            : FR, 12:00 
+SENG 411 LAB 4            : TU, 13:00 
+SENG 411 LAB 5            : MO, 12:00 
+SENG 411 LEC 1            : MO, 15:00 
+SENG 411 LEC 2            : MO, 16:00 
+SENG 511 LAB 1            : TU, 11:00 
+SENG 511 LAB 2            : FR, 16:00 
+SENG 511 LEC 1            : TU, 17:00 
+SENG 513 LAB 1            : MO, 11:00 
+SENG 513 LEC 1            : TU, 14:00 
+Is solution valid? true
+Best solution for generation 151: 8868.0
+Is solution valid? true
+Best solution for generation 152: 8868.0
+Is solution valid? true
+Best solution for generation 153: 8868.0
+Is solution valid? true
+Best solution for generation 154: 8868.0
+Is solution valid? true
+Best solution for generation 155: 8868.0
+Is solution valid? true
+Best solution for generation 156: 8868.0
+Is solution valid? true
+Best solution for generation 157: 8868.0
+Is solution valid? true
+Best solution for generation 158: 8868.0
+Is solution valid? true
+Best solution for generation 159: 8868.0
+Is solution valid? true
+Best solution for generation 160: 8868.0
+Is solution valid? true
+Best solution for generation 161: 8868.0
+Is solution valid? true
+Best solution for generation 162: 8868.0
+Is solution valid? true
+Best solution for generation 163: 8868.0
+Is solution valid? true
+Best solution for generation 164: 8868.0
+Is solution valid? true
+Best solution for generation 165: 8868.0
+Is solution valid? true
+Best solution for generation 166: 8868.0
+Is solution valid? true
+Best solution for generation 167: 8868.0
+Is solution valid? true
+Best solution for generation 168: 8868.0
+Is solution valid? true
+Best solution for generation 169: 8867.0
+Is solution valid? true
+Best solution for generation 170: 8867.0
+Is solution valid? true
+Best solution for generation 171: 8867.0
+Is solution valid? true
+Best solution for generation 172: 8867.0
+Is solution valid? true
+Best solution for generation 173: 8867.0
+Is solution valid? true
+Best solution for generation 174: 8867.0
+Is solution valid? true
+Best solution for generation 175: 8867.0
+Is solution valid? true
+Best solution for generation 176: 8867.0
+Is solution valid? true
+Best solution for generation 177: 8867.0
+Is solution valid? true
+Best solution for generation 178: 8867.0
+Is solution valid? true
+Best solution for generation 179: 8867.0
+Is solution valid? true
+Best solution for generation 180: 8867.0
+Is solution valid? true
+Best solution for generation 181: 8867.0
+Is solution valid? true
+Best solution for generation 182: 8867.0
+Is solution valid? true
+Best solution for generation 183: 8867.0
+Is solution valid? true
+Best solution for generation 184: 8867.0
+Is solution valid? true
+Best solution for generation 185: 8867.0
+Is solution valid? true
+Best solution for generation 186: 8866.0
+Is solution valid? true
+Best solution for generation 187: 8866.0
+Is solution valid? true
+Best solution for generation 188: 8866.0
+Is solution valid? true
+Best solution for generation 189: 8866.0
+Is solution valid? true
+Best solution for generation 190: 8866.0
+Is solution valid? true
+Best solution for generation 191: 8866.0
+Is solution valid? true
+Best solution for generation 192: 8866.0
+Is solution valid? true
+Best solution for generation 193: 8866.0
+^Z
+[1]+  Stopped                 java -Xmx9G Driver configFile.txt deptinst2.txt
+bader@bader-VirtualBox:~/Desktop/latest-or-tree$ date +%T -s :[K"19:00:00"
+date: cannot set date: Operation not permitted
+19:00:00
+bader@bader-VirtualBox:~/Desktop/latest-or-tree$ date +%T -s "19:00:00"[1@s[1@u[C[1@d[1@o[1@ 
+[sudo] password for bader: 
+19:00:00
+bader@bader-VirtualBox:~/Desktop/latest-or-tree$ fg
+java -Xmx9G Driver configFile.txt deptinst2.txt
+Is solution valid? true
+Best solution for generation 194: 8866.0
+^Z
+[1]+  Stopped                 java -Xmx9G Driver configFile.txt deptinst2.txt
+bader@bader-VirtualBox:~/Desktop/latest-or-tree$ hwclock --shopw[K[Kw
+hwclock: Cannot access the Hardware Clock via any known method.
+hwclock: Use the --debug option to see the details of our search for an access method.
+bader@bader-VirtualBox:~/Desktop/latest-or-tree$ sudo -s
+root@bader-VirtualBox:~/Desktop/latest-or-tree# exitjava -Xmx6G Driver configFile.txt deptinst2.txt exit[K[Khwclock --show
+2018-12-07 08:40:12.362290-0700
+root@bader-VirtualBox:~/Desktop/latest-or-tree# hwclock --show[K[K[Ket --"date=[1Pdate=[C[C[C[C[C"2018-12-7 19:00:00" --localtim e
+root@bader-VirtualBox:~/Desktop/latest-or-tree# hwclock --set --date="2018-12-7 19:00:00" --localtimee[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Chow[K
+[K[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cet --date="2018-12-7 19:00:00" --localtimee[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K
+[K[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cfg
+bash: fg: current: no such job
+root@bader-VirtualBox:~/Desktop/latest-or-tree# exit
+bader@bader-VirtualBox:~/Desktop/latest-or-tree$ sudo -shwclock --show[7Psudo -s[Kfg
+java -Xmx9G Driver configFile.txt deptinst2.txt
+Is solution valid? true
+Best solution for generation 195: 8866.0
+Is solution valid? true
+Best solution for generation 196: 8866.0
+Is solution valid? true
+Best solution for generation 197: 8866.0
+Is solution valid? true
+Best solution for generation 198: 8866.0
+Is solution valid? true
+Best solution for generation 199: 8866.0
+Is solution valid? true
+Best solution for generation 200: 8866.0
+Eval-value: 8866.0
+CPSC 203 LEC 1            : TU, 8:00  
+CPSC 203 LEC 1 LAB 1      : MO, 10:00 
+CPSC 203 LEC 1 LAB 2      : MO, 15:00 
+CPSC 203 LEC 1 LAB 3      : MO, 16:00 
+CPSC 203 LEC 1 LAB 4      : MO, 14:00 
+CPSC 203 LEC 1 LAB 5      : TU, 14:00 
+CPSC 203 LEC 1 LAB 6      : TU, 17:00 
+CPSC 203 LEC 2            : MO, 8:00  
+CPSC 203 LEC 2 LAB 10     : TU, 8:00  
+CPSC 203 LEC 2 LAB 11     : TU, 17:00 
+CPSC 203 LEC 2 LAB 12     : MO, 17:00 
+CPSC 203 LEC 2 LAB 7      : TU, 19:00 
+CPSC 203 LEC 2 LAB 8      : MO, 16:00 
+CPSC 203 LEC 2 LAB 9      : FR, 14:00 
+CPSC 203 LEC 3            : MO, 11:00 
+CPSC 203 LEC 3 LAB 13     : FR, 12:00 
+CPSC 203 LEC 3 LAB 14     : MO, 18:00 
+CPSC 203 LEC 3 LAB 15     : MO, 20:00 
+CPSC 203 LEC 3 LAB 16     : MO, 15:00 
+CPSC 203 LEC 3 LAB 17     : MO, 16:00 
+CPSC 203 LEC 3 LAB 18     : MO, 10:00 
+CPSC 203 LEC 4            : TU, 9:30  
+CPSC 203 LEC 4 LAB 19     : TU, 12:00 
+CPSC 203 LEC 4 LAB 20     : MO, 13:00 
+CPSC 203 LEC 4 LAB 21     : FR, 14:00 
+CPSC 203 LEC 4 LAB 22     : TU, 8:00  
+CPSC 203 LEC 4 LAB 23     : TU, 13:00 
+CPSC 203 LEC 4 LAB 24     : MO, 10:00 
+CPSC 203 LEC 95           : MO, 20:00 
+CPSC 203 LEC 95 LAB 90    : MO, 13:00 
+CPSC 203 LEC 95 LAB 95    : MO, 17:00 
+CPSC 203 LEC 95 LAB 96    : MO, 18:00 
+CPSC 203 LEC 95 LAB 97    : TU, 20:00 
+CPSC 203 LEC 95 LAB 98    : FR, 18:00 
+CPSC 203 LEC 95 LAB 99    : TU, 19:00 
+CPSC 215 LEC 1            : MO, 8:00  
+CPSC 215 LEC 1 LAB 1      : MO, 11:00 
+CPSC 215 LEC 1 LAB 2      : MO, 9:00  
+CPSC 215 LEC 1 LAB 3      : MO, 19:00 
+CPSC 215 LEC 1 LAB 4      : MO, 14:00 
+CPSC 231 LEC 1            : MO, 10:00 
+CPSC 231 LEC 1 LAB 1      : MO, 17:00 
+CPSC 231 LEC 1 LAB 2      : TU, 17:00 
+CPSC 231 LEC 1 LAB 3      : MO, 11:00 
+CPSC 231 LEC 1 LAB 4      : TU, 12:00 
+CPSC 231 LEC 1 LAB 5      : MO, 14:00 
+CPSC 231 LEC 1 LAB 6      : TU, 16:00 
+CPSC 233 LAB 1            : TU, 13:00 
+CPSC 233 LAB 2            : MO, 9:00  
+CPSC 233 LAB 3            : MO, 12:00 
+CPSC 233 LAB 4            : TU, 12:00 
+CPSC 233 LAB 5            : MO, 13:00 
+CPSC 233 LAB 6            : MO, 17:00 
+CPSC 233 LAB 7            : MO, 16:00 
+CPSC 233 LEC 1            : TU, 17:00 
+CPSC 233 LEC 2            : TU, 12:30 
+CPSC 265 LEC 1            : TU, 17:00 
+CPSC 265 LEC 1 LAB 1      : MO, 15:00 
+CPSC 265 LEC 1 LAB 2      : MO, 9:00  
+CPSC 265 LEC 1 LAB 3      : FR, 16:00 
+CPSC 265 LEC 1 LAB 4      : TU, 9:00  
+CPSC 265 LEC 2            : MO, 16:00 
+CPSC 265 LEC 2 LAB 5      : FR, 18:00 
+CPSC 265 LEC 2 LAB 6      : MO, 20:00 
+CPSC 265 LEC 2 LAB 7      : TU, 14:00 
+CPSC 265 LEC 2 LAB 8      : MO, 11:00 
+CPSC 313 LEC 1            : MO, 13:00 
+CPSC 313 LEC 1 LAB 1      : TU, 9:00  
+CPSC 313 LEC 1 LAB 2      : TU, 20:00 
+CPSC 313 LEC 1 LAB 3      : MO, 15:00 
+CPSC 321 LEC 1            : TU, 14:00 
+CPSC 331 LEC 1            : MO, 12:00 
+CPSC 331 LEC 1 LAB 1      : TU, 15:00 
+CPSC 331 LEC 1 LAB 2      : TU, 13:00 
+CPSC 331 LEC 1 LAB 3      : FR, 10:00 
+CPSC 331 LEC 1 LAB 4      : FR, 12:00 
+CPSC 333 LEC 1            : MO, 16:00 
+CPSC 333 LEC 1 LAB 1      : MO, 13:00 
+CPSC 335 LEC 1            : TU, 9:30  
+CPSC 335 LEC 1 LAB 1      : FR, 10:00 
+CPSC 335 LEC 1 LAB 2      : TU, 15:00 
+CPSC 349 LEC 1            : MO, 15:00 
+CPSC 349 LEC 1 LAB 1      : TU, 14:00 
+CPSC 349 LEC 1 LAB 2      : TU, 12:00 
+CPSC 349 LEC 1 LAB 3      : TU, 13:00 
+CPSC 355 LEC 1            : MO, 17:00 
+CPSC 355 LEC 1 LAB 1      : TU, 14:00 
+CPSC 411 LEC 1            : TU, 14:00 
+CPSC 411 LEC 1 LAB 1      : TU, 15:00 
+CPSC 411 LEC 1 LAB 2      : FR, 14:00 
+CPSC 411 LEC 1 LAB 3      : FR, 10:00 
+CPSC 411 LEC 1 LAB 4      : MO, 15:00 
+CPSC 413 LEC 1            : TU, 17:00 
+CPSC 413 LEC 1 LAB 1      : FR, 14:00 
+CPSC 413 LEC 1 LAB 2      : MO, 9:00  
+CPSC 413 LEC 1 LAB 3      : TU, 15:00 
+CPSC 421 LAB 1            : FR, 16:00 
+CPSC 421 LEC 1            : MO, 9:00  
+CPSC 433 LAB 1            : FR, 10:00 
+CPSC 433 LAB 2            : TU, 12:00 
+CPSC 433 LEC 1            : TU, 12:30 
+CPSC 441 LEC 1            : TU, 15:30 
+CPSC 441 LEC 1 LAB 1      : TU, 12:00 
+CPSC 441 LEC 1 LAB 2      : FR, 8:00  
+CPSC 441 LEC 1 LAB 3      : MO, 9:00  
+CPSC 441 LEC 2            : MO, 15:00 
+CPSC 441 LEC 2 LAB 4      : FR, 10:00 
+CPSC 441 LEC 2 LAB 5      : FR, 16:00 
+CPSC 441 LEC 2 LAB 6      : MO, 16:00 
+CPSC 453 LAB 1            : TU, 14:00 
+CPSC 453 LAB 2            : MO, 12:00 
+CPSC 453 LAB 3            : MO, 15:00 
+CPSC 453 LAB 4            : MO, 14:00 
+CPSC 453 LEC 1            : TU, 9:30  
+CPSC 455 LAB 1            : MO, 13:00 
+CPSC 455 LAB 2            : TU, 17:00 
+CPSC 455 LEC 1            : MO, 14:00 
+CPSC 457 LEC 1            : MO, 10:00 
+CPSC 457 LEC 1 LAB 1      : TU, 11:00 
+CPSC 457 LEC 1 LAB 2      : FR, 8:00  
+CPSC 457 LEC 2            : MO, 13:00 
+CPSC 457 LEC 2 LAB 3      : FR, 12:00 
+CPSC 457 LEC 2 LAB 4      : MO, 14:00 
+CPSC 471 LAB 1            : TU, 14:00 
+CPSC 471 LAB 2            : TU, 16:00 
+CPSC 471 LAB 3            : TU, 10:00 
+CPSC 471 LAB 4            : MO, 14:00 
+CPSC 471 LEC 1            : MO, 12:00 
+CPSC 481 LEC 1            : MO, 17:00 
+CPSC 481 LEC 1 LAB 1      : FR, 10:00 
+CPSC 481 LEC 1 LAB 2      : TU, 11:00 
+CPSC 481 LEC 1 LAB 3      : MO, 12:00 
+CPSC 481 LEC 1 LAB 4      : TU, 10:00 
+CPSC 510 LAB 1            : TU, 13:00 
+CPSC 510 LEC 1            : MO, 9:00  
+CPSC 511 LAB 1            : FR, 16:00 
+CPSC 511 LEC 1            : TU, 12:30 
+CPSC 517 LAB 1            : TU, 10:00 
+CPSC 517 LEC 1            : TU, 9:30  
+CPSC 519 LAB 1            : TU, 11:00 
+CPSC 519 LEC 1            : TU, 15:30 
+CPSC 523 LAB 1            : MO, 11:00 
+CPSC 523 LEC 1            : MO, 17:00 
+CPSC 525 LAB 1            : TU, 16:00 
+CPSC 525 LEC 1            : MO, 15:00 
+CPSC 557 LAB 1            : TU, 15:00 
+CPSC 557 LEC 1            : MO, 14:00 
+CPSC 559 LAB 1            : TU, 17:00 
+CPSC 559 LAB 2            : MO, 17:00 
+CPSC 559 LEC 1            : MO, 18:00 
+CPSC 565 LAB 1            : MO, 8:00  
+CPSC 565 LAB 2            : TU, 15:00 
+CPSC 565 LEC 1            : MO, 13:00 
+CPSC 581 LAB 1            : TU, 11:00 
+CPSC 581 LAB 2            : TU, 17:00 
+CPSC 581 LEC 1            : MO, 12:00 
+CPSC 587 LAB 1            : MO, 8:00  
+CPSC 587 LAB 2            : TU, 13:00 
+CPSC 587 LEC 1            : MO, 16:00 
+CPSC 589 LAB 1            : MO, 12:00 
+CPSC 589 LAB 2            : TU, 9:00  
+CPSC 589 LEC 1            : MO, 10:00 
+CPSC 591 LAB 1            : MO, 10:00 
+CPSC 591 LAB 2            : MO, 17:00 
+CPSC 591 LEC 1            : TU, 14:00 
+CPSC 594 LAB 1            : TU, 11:00 
+CPSC 594 LEC 1            : MO, 11:00 
+CPSC 813 LAB 1            : TU, 18:00 
+CPSC 913 LAB 1            : TU, 18:00 
+SENG 311 LAB 1            : FR, 12:00 
+SENG 311 LAB 2            : MO, 12:00 
+SENG 311 LAB 3            : TU, 10:00 
+SENG 311 LEC 1            : MO, 14:00 
+SENG 411 LAB 1            : FR, 14:00 
+SENG 411 LAB 2            : TU, 9:00  
+SENG 411 LAB 3            : FR, 12:00 
+SENG 411 LAB 4            : MO, 13:00 
+SENG 411 LAB 5            : MO, 9:00  
+SENG 411 LEC 1            : MO, 16:00 
+SENG 411 LEC 2            : MO, 11:00 
+SENG 511 LAB 1            : TU, 11:00 
+SENG 511 LAB 2            : FR, 16:00 
+SENG 511 LEC 1            : TU, 18:30 
+SENG 513 LAB 1            : TU, 9:00  
+SENG 513 LEC 1            : TU, 17:00 
+^Cbader@bader-VirtualBox:~/Desktop/latest-or-tree$ exit
+exit
+
+Script done on 2018-12-07 09:14:55-0700
